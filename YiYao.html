@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置背景图片</title>
+    <style>
+        body {
+            margin: 0;
+            font-size: small;
+            background: url("resource/中医药背景.png") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .xic {  /* 导航栏 父元素设置 */
+                display: flex; /* 定义为弹性盒子 */
+                justify-content: center; /* 定义主轴对齐方式 居中 */
+                flex-wrap: wrap; /* 允许子元素在需要时换行 */
+                margin: 0;
+                padding: 20px;
+                padding-left: 150px;
+            }
+
+            .cid {  /* 导航栏 子元素设置 */
+                padding: 10px; /* 设置内边距,使内容与边框之间有一定的间隔*/
+                margin: 5px; /* 设置外边距,使子元素之间有一定的距离*/
+                text-align: center; /* 文本内容居中对齐。 */
+                font-size: 35px; /* 设置字体大小 */
+                flex: 1 1 auto; /* 使子元素等宽,可根据内容自动调整宽度 */
+                min-width: 50px; /* 设置最小宽度 */
+            }
+
+            .cid a {  /* 导航栏 子元素 链接设置 */
+                text-decoration: none; /* 去掉链接的下划线 */
+                color: black; /* 设置链接文字颜色 */
+            }
+
+        .main .child {
+            color: black;
+            font-size: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<!-- 设置头部标识栏 -->
+<div style="border: 0px solid #225686; background-color: #225686; margin: 0; padding: 15px; z-index: 100;">
+    <p style="color: white; font: 30px 微软雅黑; text-align: center;"><b>lkdx</b></p>
+</div>
+
+<body>
+    <!-- 导航栏设置 -->
+    <div class="xic">
+        <div class="cid">
+            <a href="ZhongYiChangShi.html" target="_blank"><b>中医基础</b></a> <!--啥也没用-->
+        </div>
+        <div class="cid">
+            <a href="ZhongYaoChangShi.html" target="_blank"><b>中药基础</b></a>
+        </div>
+    </div>
+
+    <!-- 内容框架 -->
+    <div class="main">
+        <!-- 子元素 图片 内容1 -->
+        <div class="child">
+            <p>详解：</p>
+        </div>
+    </div>
+</body>
+</html>

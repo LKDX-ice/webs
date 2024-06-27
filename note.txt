@@ -1,0 +1,22 @@
+Flex布局（弹性布局）
+display: flex;
+flex-direction: row; // 主轴方向，row表示从左到右，column表示从上到下
+justify-content: flex-start; // 主轴对齐方式，flex-start表示向左对齐，flex-end表示向右对齐，center表示居中对齐，space-between表示两端对齐，space-around表示两侧均匀分布
+align-items: flex-start; // 交叉轴对齐方式，flex-start表示向上对齐，flex-end表示向下对齐，center表示居中对齐，baseline表示基线对齐
+flex-wrap: nowrap; // 换行方式，nowrap表示不换行，wrap表示换行，wrap-reverse表示反向换行
+flex: 0 1 auto; // 弹性比例，第一个值表示主轴方向的长度，第二个值表示交叉轴方向的长度，auto表示自动分配剩余空间
+align-self: auto; // 覆盖align-items属性，单独设置某一个子元素的对齐方式
+order: 0; // 子元素的排列顺序，数值越小越靠前
+flex-grow: 0; // 弹性放大比例，数值越大放大比例越大
+flex-shrink: 1; // 弹性缩小比例，数值越小缩小比例越大
+flex-basis: auto; // 弹性长度，auto表示自动分配剩余空间
+align-content: flex-start; // 多根轴线的对齐方式，flex-start表示向左对齐，flex-end表示向右对齐，center表示居中对齐，space-between表示两端对齐，space-around表示两侧均匀分布
+
+
+<!-- css创意动画:https://codepen.io/chrisgannon/pen/ZaPmKp -->
+
+
+<p><b>地址：</b>北京市海淀区中关村南大街10号</p>
+<p><b>电话：</b>13811111111</p>
+<p><b>邮箱：</b>13811111111@qq.com</p>
+<p><b>营业时间：</b>8:00-22:00</p>
