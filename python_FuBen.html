@@ -13,7 +13,10 @@
             margin: 0;
             gap: 60px;
             /* 设置子元素之间的间隔 */
-            height: 87vh;
+            height: 100vh;
+            /* 设置整体高度为视口高度 */
+            overflow: hidden;
+            /* 防止整体页面滚动 */
         }
 
         .address {
@@ -33,6 +36,18 @@
             scroll-behavior: smooth;
             /* 平滑滚动 */
             background-color: #0a3bcc;
+        }
+
+        .address::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        .address {
+            -ms-overflow-style: none;
+            /* 适用于 Internet Explorer 和 Edge */
+            scrollbar-width: none;
+            /* 适用于 Firefox */
         }
 
         .text {
@@ -62,6 +77,24 @@
             /* 设置内边距 */
             flex: 1;
             /* 使内容框架部分占据剩余空间 */
+            height: 87vh;
+            /* 设为视口高度 */
+            overflow-y: auto;
+            /* 启用纵向滚动条 */
+            scroll-behavior: smooth;
+            /* 平滑滚动 */
+        }
+
+        .main-content::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        .main-content {
+            -ms-overflow-style: none;
+            /* 适用于 Internet Explorer 和 Edge */
+            scrollbar-width: none;
+            /* 适用于 Firefox */
         }
 
         .xic {
@@ -105,19 +138,6 @@
             /* 设置链接文字颜色 */
         }
 
-        .main{
-            /* 内容框架 父元素设置 */
-            overflow-y: auto;
-            /* 启用纵向滚动条 */
-            scroll-behavior: smooth;
-            /* 平滑滚动 */
-        }
-
-        .main::-webkit-scrollbar {
-            display: none;
-            /* 隐藏滚动条 */
-        }
-
         .child {
             /* 内容框架 子元素设置 */
             background-color: rgb(170, 192, 73);
@@ -144,7 +164,7 @@
         <div class="address" style="background-color:#668aff; padding: 10px;">
             <!-- 内容1 logo -->
             <div class="text">
-                <img src="resource/python图标.png" alt="Logo" width="100px" , height="70px">
+                <img src="resource/python图标.png" alt="Logo" width="100px" height="70px">
             </div>
             <div class="text">
                 <a href="#"><b>字面量, 变量、字符串和数字，输入与输出，注释</b></a>
@@ -162,7 +182,7 @@
                 <a href="#"><b>数据结构:列表</b></a>
             </div>
             <div class="text">
-                <a href="#"><b>数据结构:元组,集合，可变与不可变类型数据</b></a>
+                <a href="#"><b>数据结构:元组,集合,可变与不可变类型数据</b></a>
             </div>
             <div class="text">
                 <a href="#"><b>for循环,while循环,python常用函数1</b></a>
@@ -222,12 +242,12 @@
                     <a href="#"><b>办公自动化</b></a>
                 </div>
                 <div class="cid">
-                    <a href="#"><b>大数据分析基础</b></a>
+                    <a href="#"><b>大数据分析基础</b <a href="#"><b>大数据分析基础</b></a>
                 </div>
             </div>
 
             <!-- 内容框架 -->
-            <div class="main">
+            <div class="main-content">
                 <!-- 子元素 图片 内容1 -->
                 <div class="child" style="color: black; font-size: 30px; text-align: center;">
                     <p>Content 1</p>
@@ -236,7 +256,17 @@
                 <div class="child" style="color: black; font-size: 30px; text-align: center;">
                     <p>Content 2</p>
                 </div>
+                <!-- 添加更多内容框架子元素 -->
+                <div class="child" style="color: black; font-size: 30px; text-align: center;">
+                    <p>Content 3</p>
                 </div>
+                <div class="child" style="color: black; font-size: 30px; text-align: center;">
+                    <p>Content 4</p>
+                </div>
+                <div class="child" style="color: black; font-size: 30px; text-align: center;">
+                    <p>Content 5</p>
+                </div>
+                <!-- 你可以继续添加更多的内容框架子元素 -->
             </div>
         </div>
     </div>
