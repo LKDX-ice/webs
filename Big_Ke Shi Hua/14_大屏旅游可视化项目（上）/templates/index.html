@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  </head>
+
+  <body>
+    <header>
+      <h1 class="gradient-text">
+          旅游数据全景图
+      </h1>
+      <div class="showTime"></div>
+    </header>
+    <section class="mainbox">
+      <div class="column">
+        <div class="panel">
+            <div class="chart" id="bar"></div>
+        </div>
+        <div class="panel">
+            <div class="chart" id="line"></div>
+        </div>
+        <div class="panel">
+            <div class="chart" id="pie"></div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="no">
+            <div class="no-hd">
+            <ul>
+              <li class="month_number"></li>
+              <li class="year_number"></li>
+            </ul>
+          </div>
+          <div class="no-bd">
+            <ul>
+              <li>本月报名人次</li>
+              <li>全年累计报名人次</li>
+            </ul>
+          </div>
+        </div>
+        <div class="map">
+          <div class="map1"></div>
+          <div class="map2"></div>
+          <div class="map3"></div>
+          <div id="china_map"></div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="panel">
+            <div class="chart" id="radar"></div>
+        </div>
+        <div class="panel">
+            <div class="chart" id="funnel"></div>
+        </div>
+        <div class="panel">
+            <div class="chart" id="gauge"></div>
+        </div>
+      </div>
+    </section>
+    <script src="{{ url_for('static', filename='js/flexible.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/china.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/myMap.js') }}"></script>
+
+    <script>
+        $(
+            function () {
+                let bar = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/barChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            bar.setOption(result);
+                        }
+                    });
+
+                    let line = echarts.init(document.getElementById('line'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/lineChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            line.setOption(result);
+                        }
+                    });
+
+                    let pie = echarts.init(document.getElementById('pie'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/pieChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            pie.setOption(result);
+                        }
+                    });
+
+                    let radar = echarts.init(document.getElementById('radar'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/radarChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            radar.setOption(result);
+                        }
+                    });
+
+                    let funnel = echarts.init(document.getElementById('funnel'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/funnelChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            funnel.setOption(result);
+                        }
+                    });
+
+                    let gauge = echarts.init(document.getElementById('gauge'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/gaugeChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            gauge.setOption(result);
+                        }
+                    });
+
+                    $.get('/load_number', function(result){
+                        $('.month_number').text(result[0])
+                        $('.year_number').text(result[1])
+                    })
+
+
+                    let china_map = echarts.init(document.getElementById('china_map'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/mapChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            china_map.setOption(result);
+                        }
+                    });
+
+                   /* let geo = echarts.init(document.getElementById('china_map'), 'white', {renderer: 'canvas'});
+                    $.ajax({
+                        type: "GET",
+                        url: "/geoChart",
+                        dataType: 'json',
+                        success: function (result) {
+                            geo.setOption(result);
+                        }
+                    });*/
+
+
+        var t = null;
+        t = setTimeout(time, 1000); //開始运行
+        function time() {
+          clearTimeout(t); //清除定时器
+          dt = new Date();
+          var y = dt.getFullYear();
+          var mt = dt.getMonth() + 1;
+          var day = dt.getDate();
+          var h = dt.getHours(); //获取时
+          var m = dt.getMinutes(); //获取分
+          var s = dt.getSeconds(); //获取秒
+          document.querySelector(".showTime").innerHTML =
+            "当前时间：" +
+            y +
+            "/" +
+            mt +
+            "/" +
+            day +
+            " " +
+            h +
+            ":" +
+            m +
+            ":" +
+            s;
+          t = setTimeout(time, 1000); //设定定时器，循环运行
+        }
+
+
+            }
+        )
+    </script>
+  </body>
+</html>
