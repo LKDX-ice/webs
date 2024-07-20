@@ -416,7 +416,8 @@ def get_gauge_chart():
     return gauge.dump_options_with_quotes()
 
 
+# if __name__ == '__main__':
+#     app.run()
+
 if __name__ == '__main__':
-    app.run()
-
-
+    app.run(host='0.0.0.0', port=5000)  # 确保使用非特权端口
