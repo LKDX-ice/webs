@@ -167,64 +167,6 @@ use-glyph-orientation：对于 SVG 元素
                 <a href="https://9477802jpjq8.vicp.fun/" target="_blank"><b> 大屏可视化示例(旅游数据) </b></a> <!--此处链接在当前页面打开-->
             </div>
 
-        <!-- /* 点击跳转(手动) */
-            '''
-            点击跳转功能依赖于 fetch API，如果浏览器不支持该 API，则无法使用该功能
-            点击跳转功能依赖于 handleLinkClick 函数，该函数接收两个参数：目标链接和备用链接
-            '''
-            <a href="https://www.your-actual-link.com" onclick="handleLinkClick(event)">点击跳转</a> 中的 https://www.your-actual-link.com 是实际的目标链接
-            var fallbackUrl = "https://www.example-fallback.com"; 中的 https://www.example-fallback.com 是实际的备用链接
-        -->
-            <!-- <script>
-                function handleLinkClick(event) {
-                    event.preventDefault(); // 阻止默认的链接跳转行为
-                    var targetUrl = event.target.href; // 获取目标链接
-                    var fallbackUrl = "https://www.example-fallback.com"; // 设置备用链接
-                    fetch(targetUrl, { method: 'HEAD', mode: 'no-cors' })
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = targetUrl; // 如果目标链接可访问，则跳转到目标链接
-                            } else {
-                                window.location.href = fallbackUrl; // 如果目标链接不可访问，则跳转到备用链接
-                            }
-                        })
-                        .catch(error => {
-                            window.location.href = fallbackUrl; // 如果发生错误，则跳转到备用链接
-                        });
-                }
-            </script>
-        <body>
-            <a href="https://www.your-actual-link.com" onclick="handleLinkClick(event)">点击跳转</a>
-        </body> -->
-
-        <!-- 自动跳转 -->
-            <!--
-                '''
-                自动跳转功能依赖于使用window.onload事件来确保页面加载完成后执行链接检查和跳转逻辑
-                handleLinkClick函数接受目标链接和备用链接作为参数，并在检查链接后自动进行跳转
-                '''
-                将targetUrl和fallbackUrl替换为你实际的链接
-            -->
-            <!-- <script>
-                function handleLinkClick(targetUrl, fallbackUrl) {
-                    fetch(targetUrl, { method: 'HEAD', mode: 'no-cors' })
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = targetUrl; // 如果目标链接可访问，则跳转到目标链接
-                            } else {
-                                window.location.href = fallbackUrl; // 如果目标链接不可访问，则跳转到备用链接
-                            }
-                        })
-                        .catch(error => {
-                            window.location.href = fallbackUrl; // 如果发生错误，则跳转到备用链接
-                        });
-                }
-                window.onload = function () {
-                    var targetUrl = "https://9477802jpjq8.vicp.fun/"; // 设置目标链接
-                    var fallbackUrl = "https://lkdxice.com/BKS_xj.html"; // 设置备用链接
-                    handleLinkClick(targetUrl, fallbackUrl);
-                };
-            </script> -->
 
             <div class="text" style="color: black; font-size: 20px; ">
                 <a href="https://codepen.io/chrisgannon/pen/ZaPmKp" target="_blank"><b>创意示例</b></a>
