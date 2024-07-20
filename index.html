@@ -167,6 +167,26 @@ use-glyph-orientation：对于 SVG 元素
                 <a href="https://9477802jpjq8.vicp.fun/" target="_blank"><b> 大屏可视化示例(旅游数据) </b></a> <!--此处链接在当前页面打开-->
             </div>
 
+            <script>
+                function handleLinkClick(targetUrl, fallbackUrl) {
+                    fetch(targetUrl, { method: 'HEAD', mode: 'no-cors' })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.replace(targetUrl); // 如果目标链接可访问，则跳转到目标链接
+                            } else {
+                                window.location.replace(fallbackUrl); // 如果目标链接不可访问，则跳转到备用链接
+                            }
+                        })
+                        .catch(error => {
+                            window.location.replace(fallbackUrl); // 如果发生错误，则跳转到备用链接
+                        });
+                }
+                window.onload = function () {
+                    var targetUrl = "https://9477802jpjq8.vicp.fun/"; // 设置目标链接
+                    var fallbackUrl = "https://lkdxice.com/BKS_xj.html"; // 设置备用链接
+                    handleLinkClick(targetUrl, fallbackUrl);
+                };
+            </script>
 
             <div class="text" style="color: black; font-size: 20px; ">
                 <a href="https://codepen.io/chrisgannon/pen/ZaPmKp" target="_blank"><b>创意示例</b></a>
@@ -532,10 +552,11 @@ use-glyph-orientation：对于 SVG 元素
                     </script>
                 </body>
 
+                <!-- 使用ws/wss请求链接 -->
                 </html>
                 <script>
                     (function () {
-                        var ws = new WebSocket('ws://' + window.location.host +
+                        var ws = new WebSocket('wss://' + window.location.host +
                             '/jb-server-page?reloadMode=RELOAD_ON_SAVE&' +
                             'referrer=' + encodeURIComponent(window.location.pathname));
                         ws.onmessage = function (msg) {
@@ -569,7 +590,14 @@ use-glyph-orientation：对于 SVG 元素
                             }
                         };
                     })();
+                    //这段代码可以实现使用 WebSocket 安全协议（wss）请求链接，它的主要功能是通过 WebSocket 连接到服务器，并在接收到特定消息时重新加载页面或更新 CSS 样式表。
+                    // 主要功能：
+                    // - 建立 WebSocket 连接：通过 `new WebSocket('wss://' + window.location.host + '/jb-server-page?reloadMode=RELOAD_ON_SAVE&referrer=' + encodeURIComponent(window.location.pathname))` 建立 WebSocket 连接。
+                    // - 处理消息：通过 `ws.onmessage` 监听服务器发送的消息。
+                    // - 重新加载页面：如果接收到的消息是 `'reload'`，则调用 `window.location.reload()` 重新加载页面。
+                    // - 更新 CSS：如果接收到的消息以 `'update-css '` 开头，则更新页面中的 CSS 链接。
                 </script>
+
             </div>
         </div>
     </div>
