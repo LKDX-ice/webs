@@ -101,19 +101,19 @@ use-glyph-orientation：对于 SVG 元素
                 <a href="https://xiaoice.com" target="_blank"><b>小冰</b></a>
             </div>
             <div class="cid">
-                <a href="css.html" target="_blank"><b>演示</b></a>
+                <a href="Xice/css.html" target="_blank"><b>演示</b></a>
             </div>
             <div class="cid">
-                <a href="xice.html" target="_blank"><b>介绍</b></a>
+                <a href="Xice/xice.html" target="_blank"><b>介绍</b></a>
             </div>
             <div class="cid">
-                <a href="history.html" target="_blank"><b>历史</b></a>
+                <a href="History/history.html" target="_blank"><b>历史</b></a>
             </div>
             <div class="cid">
-                <a href="YiYao.html" target="_blank"><b>中医药</b></a>
+                <a href="Chinese medicine/YiYao.html" target="_blank"><b>中医药</b></a>
             </div>
             <div class="cid">
-                <a href="python.html" target="_blank"><b>python基础</b></a>
+                <a href="Learn py/python.html" target="_blank"><b>python基础</b></a>
             </div>
         </div>
 
@@ -490,10 +490,10 @@ use-glyph-orientation：对于 SVG 元素
                     </html>
                     <script>
                     (function() {
-                    var ws = new WebSocket('ws://' + window.location.host + 
+                    var wss = new WebSocket('wss://' + window.location.host + 
                                 '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
                                 'referrer=' + encodeURIComponent(window.location.pathname));
-                    ws.onmessage = function (msg) {
+                    wss.onmessage = function (msg) {
                         if (msg.data === 'reload') {
                             window.location.reload();
                     }

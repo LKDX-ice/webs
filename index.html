@@ -139,19 +139,19 @@ use-glyph-orientation：对于 SVG 元素
             <a href="https://xiaoice.com" target="_blank"><b>小冰</b></a>
         </div>
         <div class="cid">
-            <a href="css.html" target="_blank"><b>演示</b></a>
+            <a href="Xice/css.html" target="_blank"><b>演示</b></a>
         </div>
         <div class="cid">
-            <a href="xice.html" target="_blank"><b>介绍</b></a>
+            <a href="Xice/xice.html" target="_blank"><b>介绍</b></a>
         </div>
         <div class="cid">
-            <a href="history.html" target="_blank"><b>历史</b></a>
+            <a href="History/history.html" target="_blank"><b>历史</b></a>
         </div>
         <div class="cid">
-            <a href="YiYao.html" target="_blank"><b>中医药</b></a>
+            <a href="Chinese medicine/YiYao.html" target="_blank"><b>中医药</b></a>
         </div>
         <div class="cid">
-            <a href="python.html" target="_blank"><b>python基础</b></a>
+            <a href="Learn py/python.html" target="_blank"><b>python基础</b></a>
         </div>
     </div>
 
@@ -167,26 +167,6 @@ use-glyph-orientation：对于 SVG 元素
                 <a href="https://9477802jpjq8.vicp.fun/" target="_blank"><b> 大屏可视化示例(旅游数据) </b></a> <!--此处链接在当前页面打开-->
             </div>
 
-            <script>
-                function handleLinkClick(targetUrl, fallbackUrl) {
-                    fetch(targetUrl, { method: 'HEAD', mode: 'no-cors' })
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.replace(targetUrl); // 如果目标链接可访问，则跳转到目标链接
-                            } else {
-                                window.location.replace(fallbackUrl); // 如果目标链接不可访问，则跳转到备用链接
-                            }
-                        })
-                        .catch(error => {
-                            window.location.replace(fallbackUrl); // 如果发生错误，则跳转到备用链接
-                        });
-                }
-                window.onload = function () {
-                    var targetUrl = "https://9477802jpjq8.vicp.fun/"; // 设置目标链接
-                    var fallbackUrl = "https://lkdxice.com/BKS_xj.html"; // 设置备用链接
-                    handleLinkClick(targetUrl, fallbackUrl);
-                };
-            </script>
 
             <div class="text" style="color: black; font-size: 20px; ">
                 <a href="https://codepen.io/chrisgannon/pen/ZaPmKp" target="_blank"><b>创意示例</b></a>
@@ -224,13 +204,11 @@ use-glyph-orientation：对于 SVG 元素
             <div class="child">
                 <!DOCTYPE html>
                 <html>
-
                 <head>
                     <meta charset="UTF-8">
                     <title>Awesome-pyecharts</title>
                     <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
                 </head>
-
                 <body>
                     <div id="250f836b5dcb457eb8e898ac56633288" class="chart-container"
                         style="width:900px; height:500px; padding-left:200px ;"></div>
