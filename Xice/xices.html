@@ -16,6 +16,7 @@
             font-family: 'Roboto', sans-serif;
             background-color: #f0f8ff;
             color: #333;
+            overflow-y: scroll;
         }
 
         /* 容器样式 */
@@ -32,7 +33,7 @@
             padding: 10px;
             text-align: center;
             height: 5%;
-            position: fixed;
+            /* position: fixed; */
             width: 100%;
             z-index: 100;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -41,38 +42,39 @@
         /* 内容区域样式 */
         .content {
             display: flex;
-            height: 95%;
+            /* height: 95%; */ /* 此处无注释则剩余区域空白占位填充 */
             padding-top: 5%;
+            justify-content: center;
         }
 
         /* 侧边栏样式 */
-        .sidebar {
+        /* .sidebar {
             width: 20%;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             padding: 10px;
-        }
+        } */
 
         /* 侧边栏项目样式 */
-        .sidebar-item {
+        /* .sidebar-item {
             margin-bottom: 20px;
             flex-shrink: 0;
             transition: transform 0.3s ease;
-        }
+        } */
 
         /* 侧边栏项目悬停效果 */
-        .sidebar-item:hover {
+        /* .sidebar-item:hover {
             transform: scale(1.05);
-        }
+        } */
 
         /* 侧边栏图片和视频样式 */
-        .sidebar-item img, .sidebar-item video {
+        /* .sidebar-item img, .sidebar-item video {
             width: 100%;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+        } */
 
         /* 主要内容区域样式 */
         .main-content {
@@ -124,10 +126,19 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
+        /* 整体标签内容展示区 */
+        .address {
+            display: flex;
+            flex-direction: column; /* 定义主轴方向为纵向 */
+            gap: 10px;
+            /* align-items: flex-start; 子元素左对齐 */
+        }
+
         /* 标签样式 */
         .tabs {
             display: flex;
             margin-bottom: 20px;
+            padding-left: 20%;
         }
 
         /* 单个标签样式 */
@@ -249,44 +260,6 @@
             50% { border-color: #4a90e2; }
         }
 
-        /* 技能图表样式 */
-        .skill-chart {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        /* 技能条样式 */
-        .skill-bar {
-            width: 60px;
-            height: 200px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* 技能等级样式 */
-        .skill-level {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: #4a90e2;
-            transition: height 1s ease-in-out;
-        }
-
-        /* 技能名称样式 */
-        .skill-name {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            color: white;
-        }
-
         /* 心情指示器样式 */
         .mood-indicator {
             width: 50px;
@@ -295,8 +268,21 @@
             margin: 10px auto;
             transition: background-color 0.5s ease;
         }
+
+        iframe {
+            border: none;
+        }
+        /* 隐藏iframe内部的滚动条 */
+        iframe::-webkit-scrollbar {
+            display: none; /* 对于WebKit浏览器（如Chrome和Safari） */
+        }
+        iframe {
+            -ms-overflow-style: none; /* 对于IE和Edge */
+            scrollbar-width: none; /* 对于Firefox */
+        }
     </style>
 </head>
+
 <body>
     <!-- 浮动背景 -->
     <div class="floating-bg">
@@ -304,7 +290,7 @@
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
     </div>
-    
+
     <div class="container">
         <!-- 头部 -->
         <header class="header">
@@ -312,11 +298,6 @@
         </header>
 
         <div class="content">
-            <!-- 左侧边栏 -->
-            <aside class="sidebar">
-                <!-- 侧边栏内容 -->
-            </aside>
-
             <!-- 主要内容区域 -->
             <main class="main-content">
                 <!-- 信息栏 -->
@@ -331,57 +312,33 @@
                     <!-- 心情指示器 -->
                     <div class="mood-indicator" id="moodIndicator"></div>
                 </div>
-                
-                <!-- 标签栏 -->
-                <div class="tabs">
-                    <button class="tab active" onclick="openTab(event, 'intro')">简介</button>
-                    <button class="tab" onclick="openTab(event, 'works')">作品</button>
-                    <button class="tab" onclick="openTab(event, 'activities')">活动</button>
-                </div>
-                
-                <!-- 简介标签内容 -->
-                <div id="intro" class="tab-content active">
-                    <h2>我的技能</h2>
-                    <!-- 技能图表 -->
-                    <div class="skill-chart">
-                        <div class="skill-bar">
-                            <div class="skill-level" style="height: 80%;">
-                                <span class="skill-name">写作</span>
-                            </div>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="height: 75%;">
-                                <span class="skill-name">绘画</span>
-                            </div>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="height: 90%;">
-                                <span class="skill-name">音乐</span>
-                            </div>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="height: 85%;">
-                                <span class="skill-name">对话</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 其他标签内容 -->
-                <div id="works" class="tab-content">
-                    <h2>作品</h2>
-                    <p>这里列出小冰的作品...</p>
-                </div>
-                <div id="activities" class="tab-content">
-                    <h2>活动</h2>
-                    <p>这里是小冰参与的活动信息...</p>
-                </div>
             </main>
-            
-            <!-- 右侧边栏 -->
-            <aside class="sidebar">
-                <!-- 侧边栏内容 -->
-            </aside>
+        </div>
+
+        <div class="address">
+            <!-- 标签栏 -->
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'intro')">简介</button>
+                <button class="tab" onclick="openTab(event, 'works')">作品</button>
+                <button class="tab" onclick="openTab(event, 'activities')">活动</button>
+            </div>
+
+            <!-- 简介标签内容 -->
+            <div id="intro" class="tab-content active">
+                <!-- <h2>我的技能</h2> -->
+                <iframe src="./xice.html" width="100%" height="5800px"></iframe>
+                <!-- <div id="xice-content" class="xice-scope" style="background: #1a1a1a;color: #fa95af;"></div> -->
+            </div>
+
+            <!-- 其他标签内容 -->
+            <div id="works" class="tab-content">
+                <h2>作品集</h2>
+                <p>这里是小冰的作品列表，包括诗歌、绘画、音乐等...</p>
+            </div>
+            <div id="activities" class="tab-content">
+                <h2>近期活动</h2>
+                <p>小冰最近参与了多项AI艺术创作活动，与人类艺术家合作...</p>
+            </div>
         </div>
     </div>
 
@@ -408,7 +365,7 @@
         }
 
         // 监听滚动事件
-        window.onscroll = function() {scrollFunction()};
+        window.onscroll = function () { scrollFunction() };
 
         // 控制返回顶部按钮的显示和隐藏
         function scrollFunction() {
@@ -455,65 +412,58 @@
         }
         updateMood();
 
-        // 为技能条添加动画效果
-        function animateSkillBars() {
-            const skillLevels = document.querySelectorAll('.skill-level');
-            skillLevels.forEach(level => {
-                // 获取每个技能条的目标高度
-                const targetHeight = level.style.height;
-                // 先将高度设置为0
-                level.style.height = '0%';
-                // 使用 setTimeout 来延迟动画，创造逐个填充的效果
-                setTimeout(() => {
-                    level.style.height = targetHeight;
-                }, 300);
-            });
-        }
-        // 页面加载完成后执行技能条动画
-        window.addEventListener('load', animateSkillBars);
-
         // 模拟加载内容的函数
-        function loadContent(tabName) {
-            // 这里可以使用 AJAX 请求来加载实际内容
-            // 现在我们只是模拟一个加载过程
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    let content = '';
-                    if (tabName === 'works') {
-                        content = '<h2>作品集</h2><p>这里是小冰的作品列表，包括诗歌、绘画、音乐等...</p>';
-                    } else if (tabName === 'activities') {
-                        content = '<h2>近期活动</h2><p>小冰最近参与了多项AI艺术创作活动，与人类艺术家合作...</p>';
-                    }
-                    resolve(content);
-                }, 1000); // 模拟1秒的加载时间
-            });
-        }
+        // function loadContent(tabName) {
+        //     // 这里可以使用 AJAX 请求来加载实际内容
+        //     // 现在我们只是模拟一个加载过程
+        //     return new Promise((resolve) => {
+        //         setTimeout(() => {
+        //             let content = '';
+        //             if (tabName === 'works') {
+        //                 content = '<h2>作品集</h2><p>这里是小冰的作品列表，包括诗歌、绘画、音乐等...</p>';
+        //             } else if (tabName === 'activities') {
+        //                 content = '<h2>近期活动</h2><p>小冰最近参与了多项AI艺术创作活动，与人类艺术家合作...</p>';
+        //             }
+        //             resolve(content);
+        //         }, 1000); // 模拟1秒的加载时间
+        //     });
+        // }
+        // // 优化标签切换功能，添加内容加载
+        // async function openTab(evt, tabName) {
+        //     var i, tabcontent, tablinks;
+        //     tabcontent = document.getElementsByClassName("tab-content");
+        //     for (i = 0; i < tabcontent.length; i++) {
+        //         tabcontent[i].style.display = "none";
+        //     }
+        //     tablinks = document.getElementsByClassName("tab");
+        //     for (i = 0; i < tablinks.length; i++) {
+        //         tablinks[i].className = tablinks[i].className.replace(" active", "");
+        //     }
+        //     const targetTab = document.getElementById(tabName);
+        //     targetTab.style.display = "block";
+        //     evt.currentTarget.className += " active";
+        //     // 如果是作品或活动标签，则加载内容
+        //     if (tabName === 'works' || tabName === 'activities') {
+        //         targetTab.innerHTML = '<p>加载中...</p>'; // 显示加载提示
+        //         const content = await loadContent(tabName);
+        //         targetTab.innerHTML = content; // 更新内容
+        //     }
+        // }
 
-        // 优化标签切换功能，添加内容加载
-        async function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tab");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            const targetTab = document.getElementById(tabName);
-            targetTab.style.display = "block";
-            evt.currentTarget.className += " active";
-
-            // 如果是作品或活动标签，则加载内容
-            if (tabName === 'works' || tabName === 'activities') {
-                targetTab.innerHTML = '<p>加载中...</p>'; // 显示加载提示
-                const content = await loadContent(tabName);
-                targetTab.innerHTML = content; // 更新内容
-            }
-        }
+        //记载引入的html文件的内容
+        document.addEventListener('DOMContentLoaded', function () {
+            const xiceContainer = document.getElementById('xice-content');
+            const shadowRoot = xiceContainer.attachShadow({ mode: 'open' });
+            fetch('xice.html')
+                .then(response => response.text())
+                .then(data => {
+                    shadowRoot.innerHTML = data;
+                })
+                .catch(error => console.error('Error loading xice.html:', error));
+        });
 
         // 添加页面滚动效果
-        function addScrollEffect() {
+        function addScrollEffect() {  //页面滚动效果
             const content = document.querySelector('.main-content');
             content.addEventListener('scroll', () => {
                 const scrollPosition = content.scrollTop;
@@ -530,15 +480,16 @@
         addScrollEffect();
 
         // 初始化页面
-        function initPage() {
-            createFloatingShapes();
-            updateMood();
-            animateSkillBars();
-            addScrollEffect();
+        function initPage() {  //定义 initPage 函数,内部执行以下操作：
+            createFloatingShapes(); //调用用于创建浮动形状的函数
+            updateMood();           //调用用于更新心情状态的函数
+            animateSkillBars();     //调用用于为技能条添加动画效果的函数
+            addScrollEffect();      //调用用于添加滚动效果的函数
         }
 
         // 当 DOM 加载完成后初始化页面
-        document.addEventListener('DOMContentLoaded', initPage);
+        document.addEventListener('DOMContentLoaded', initPage); //document.addEventListener 方法为 DOMContentLoaded 事件添加监听器
+        //当 DOM 文档加载完成时,会触发执行 initPage 函数,以执行此前调用的所有函数进行初始化页面
     </script>
 </body>
 </html>
