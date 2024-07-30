@@ -326,7 +326,7 @@
             <!-- 简介标签内容 -->
             <div id="intro" class="tab-content active">
                 <!-- <h2>我的技能</h2> -->
-                <iframe src="./xice.html" width="100%" height="5800px"></iframe>
+                <iframe src="./Xice.html" width="100%" height="5800px"></iframe>
                 <!-- <div id="xice-content" class="xice-scope" style="background: #1a1a1a;color: #fa95af;"></div> -->
             </div>
 
@@ -454,7 +454,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const xiceContainer = document.getElementById('xice-content');
             const shadowRoot = xiceContainer.attachShadow({ mode: 'open' });
-            fetch('xice.html')
+            fetch('./xice.html')
                 .then(response => response.text())
                 .then(data => {
                     shadowRoot.innerHTML = data;
