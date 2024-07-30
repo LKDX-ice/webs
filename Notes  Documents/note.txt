@@ -1,4 +1,6 @@
-Flex布局（弹性布局）
+提交更改 命令：git config pull.rebase false
+
+Flex布局(弹性布局)
 display: flex;
 flex-direction: row; // 主轴方向，row表示从左到右，column表示从上到下
 justify-content: flex-start; // 主轴对齐方式，flex-start表示向左对齐，flex-end表示向右对齐，center表示居中对齐，space-between表示两端对齐，space-around表示两侧均匀分布
