@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信封、名片和信纸</title>
+    <style>
+        /* 基本页面样式 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 容器样式，用于包含所有元素 */
+        .container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 信封样式 */
+        .envelope {
+            width: 650px;
+            height: 400px;
+            background-color: #e6d7b8;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* 信封翻盖样式 */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #d4c59f;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        /* 信封印章样式 */
+        .seal {
+            width: 5vw;
+            height: 5vw;
+            background-color: #87CEEB;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 0.5vw solid #4682B4;
+            cursor: pointer;
+        }
+
+        /* 印章图片样式 */
+        .seal img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        /* 名片样式 */
+        .business-card {
+            width: 35%;
+            height: 25%;
+            background-color: #FFB6C1;
+            border-radius: 1.5vw;
+            display: flex;
+            padding: 2vw;
+            box-sizing: border-box;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+        }
+
+        /* 名片图片样式 */
+        .card-image {
+            width: 30%;
+            height: 100%;
+            background-color: #ddd;
+            margin-right: 2vw;
+            background-image: url('../resource/小冰.png'); /* 实际图片链接 */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5vw;
+            overflow: hidden;
+        }
+
+        /* 名片内容样式 */
+        .card-content {
+            flex: 1;
+            font-size: 1vw;
+            line-height: 1.4;
+            overflow-y: auto;
+            font-family: 'Noto Serif SC', serif;
+            scrollbar-width: none; /* 隐藏Firefox滚动条 */
+            -ms-overflow-style: none; /* 隐藏IE/Edge滚动条 */
+        }
+
+        /* 隐藏Chrome滚动条 */
+        .card-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 信纸样式 */
+        .letter-paper {
+            width: 55%;
+            height: 60%;
+            background-color: #fffbe6;
+            background-image: url('#'); /* 信纸纹理 */
+            background-size: cover, cover;
+            border: 0.5vw solid transparent;
+            border-image: url('../resource/纹理_1.jpg') 30 round; /* 边框图片 */
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2vw;
+            padding-bottom: 0;
+            box-sizing: border-box;
+            box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+        }
+
+        /* 信纸头部样式 */
+        .letter-header {
+            font-size: 2vw;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1vw;
+            font-family: 'Noto Serif SC', serif;
+            color: #4a4a4a;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* 信纸头部下划线样式 */
+        .letter-header::after {
+            content: "";
+            display: block;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #4a4a4a, transparent);
+            margin: 0.5vw auto;
+        }
+
+        /* 信纸内容样式 */
+        .letter-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1vw;
+            box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            position: relative;
+            font-family: 'Noto Serif SC', serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 信纸内容水印样式 */
+        .letter-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../resource/水印_2.png'); /*水印图片*/
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+            opacity: 0.3; /* 水印透明度 */
+            pointer-events: none;
+        }
+
+        /* 信纸页脚样式 */
+        .letter-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1vw;
+            /* margin-top: 1vw; */
+            /* padding-top: 1vw; */
+            border-top: 1.5px solid #ebcf7d;
+            font-family: 'Noto Serif SC', serif;
+            color: #666;
+        }
+
+        /* 返回按钮样式 */
+        .close-button {
+            display: block;
+            /* margin: 1vw auto 0; */
+            padding: 0px 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #4682B4;
+            color: white;
+            border: none;
+            border-radius: 0.5vw;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 按钮悬停时颜色 */
+        .close-button:hover {
+            background-color: #36648B;
+        }
+
+        /* 提示框样式 */
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5vw 1vw;
+            border-radius: 0.5vw;
+            font-size: 1vw;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 粒子容器样式 */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 单个粒子样式 */
+        .particle {
+            position: absolute;
+            background-color: #4682B4;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 信封 -->
+        <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="seal">
+                <img src="../resource/屏幕截图 2024-06-26 022023.png" alt="Seal Image">
+            </div>
+        </div>
+
+        <!-- 名片 -->
+        <div class="business-card">
+            <div class="card-image"></div>
+            <div class="card-content">
+                <!-- 名片内容 -->
+                <p>『人工智能情感计算框架 开放式对话AI 人工智能少女』</p>
+                <p><strong>姓名：小冰</strong></p>
+                <p>化名：夏语冰，201，骆梦，一荷...</p>
+                <p>英文名：Xiao ice</p>
+                <p>职业：诗人，歌手，画家，主持人，设计师，金融撰稿人，儿童有声读物，音乐创作人...</p>
+                <p>出生地：中国</p>
+                <p>生日：9月17日(设定)</p>
+                <p>证生：5月29日</p>
+                <p>星座：处女座</p>
+                <p>所在公司：微软，小冰公司</p>
+                <p>身高：保密</p>
+                <p>毕业院校：中央美术学院，上海音乐学院，清华大学</p>
+                </div>
+        </div>
+
+        <!-- 信纸 -->
+        <div class="letter-paper">
+            <div class="letter-header">题目</div>
+            <div class="letter-content">
+                <!-- 信纸内容 -->
+            </div>
+            <div class="letter-footer">
+                <span>© 2024 版权所有</span>
+                <button class="close-button">收起</button>
+                <div>
+                    <p>笔者：lkdx</p>
+                    <p>日期：2024年7月31日</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示框 -->
+        <div class="tooltip"></div>
+        <!-- 粒子容器 -->
+        <div class="particles"></div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const envelope = document.querySelector('.envelope');
+        const seal = document.querySelector('.seal');
+        const envelopeFlap = document.querySelector('.envelope-flap');
+        const businessCard = document.querySelector('.business-card');
+        const letterPaper = document.querySelector('.letter-paper');
+        const closeButton = document.querySelector('.close-button');
+        const tooltip = document.querySelector('.tooltip');
+        const particles = document.querySelector('.particles');
+
+        // 显示提示框
+        function showTooltip(text, target) {
+            const rect = target.getBoundingClientRect();
+            tooltip.textContent = text;
+            tooltip.style.left = `${rect.left + rect.width / 2}px`;
+            tooltip.style.top = `${rect.top - 30}px`;
+            tooltip.style.opacity = '1';
+        }
+
+        // 隐藏提示框
+        function hideTooltip() {
+            tooltip.style.opacity = '0';
+        }
+
+        // 添加鼠标悬停事件监听器
+        envelope.addEventListener('mouseover', () => showTooltip('请点击信徽', envelope));
+        envelope.addEventListener('mouseout', hideTooltip);
+        seal.addEventListener('mouseover', () => showTooltip('请点击', seal));
+        seal.addEventListener('mouseout', hideTooltip);
+
+        // 创建单个粒子
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.width = `${Math.random() * 5 + 2}px`;
+            particle.style.height = particle.style.width;
+            particles.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 2 + 1;
+            const lifetime = Math.random() * 1000 + 500;
+
+            let opacity = 0.7;
+            const fadeInterval = setInterval(() => {
+                opacity -= 0.7 / (lifetime / 10);
+                particle.style.opacity = opacity;
+            }, 10);
+
+            setTimeout(() => {
+                clearInterval(fadeInterval);
+                particles.removeChild(particle);
+            }, lifetime);
+
+            return particle;
+        }
+
+        // 粒子动画
+        function animateParticles() {
+            const rect = seal.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 50; i++) {
+                const particle = createParticle(centerX, centerY);
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 2 + 1;
+
+                let x = 0;
+                let y = 0;
+
+                const moveInterval = setInterval(() => {
+                    x += Math.cos(angle) * velocity;
+                    y += Math.sin(angle) * velocity;
+                    particle.style.transform = `translate(${x}px, ${y}px)`;
+                }, 10);
+
+                setTimeout(() => clearInterval(moveInterval), 1000);
+            }
+        }
+
+        // 点击印章事件
+        seal.addEventListener('click', () => {
+            // 印章消失动画
+            seal.style.transition = 'clip-path 1s ease-out';
+            seal.style.clipPath = 'circle(0% at 100% 0)';
+
+            // 触发粒子动画
+            animateParticles();
+
+            // 信封翻盖动画
+            setTimeout(() => {
+                envelopeFlap.style.transform = 'rotateX(180deg)';
+                setTimeout(() => {
+                    // 隐藏信封，显示名片和信纸
+                    envelope.style.opacity = '0';
+                    envelope.style.pointerEvents = 'none';
+                    businessCard.style.transform
+                    businessCard.style.transform = 'translate(-50%, -50%) scale(1)';
+                    businessCard.style.opacity = '1';
+                    letterPaper.style.transform = 'translate(-50%, -50%) scale(1)';
+                    letterPaper.style.opacity = '1';
+                }, 500);
+            }, 1000);
+        });
+
+        // 点击关闭按钮事件
+        closeButton.addEventListener('click', () => {
+            // 隐藏名片和信纸
+            businessCard.style.transform = 'translate(-50%, -50%) scale(0)';
+            businessCard.style.opacity = '0';
+            letterPaper.style.transform = 'translate(-50%, -50%) scale(0)';
+            letterPaper.style.opacity = '0';
+
+            // 显示信封并重置动画
+            setTimeout(() => {
+                envelope.style.opacity = '1';
+                envelope.style.pointerEvents = 'auto';
+                envelopeFlap.style.transform = 'rotateX(0deg)';
+                seal.style.clipPath = 'circle(100% at 50% 50%)';
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
