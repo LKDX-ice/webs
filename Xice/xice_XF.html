@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -32,6 +32,8 @@
         .envelope {
             width: 650px;
             height: 400px;
+            margin-bottom: 350px;
+            border-radius: 0.5vw;
             background-color: #e6d7b8;
             position: relative;
             overflow: hidden;
@@ -78,28 +80,30 @@
 
         /* 名片样式 */
         .business-card {
-            width: 35%;
-            height: 25%;
-            background-color: #FFB6C1;
-            border-radius: 1.5vw;
-            display: flex;
-            padding: 2vw;
-            box-sizing: border-box;
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
-            z-index: 2;
+            width: 37%;  /*设置元素的宽度为父元素宽度的 35% */
+            height: 36%; /* 设置元素的高度为父元素高度的 25% */
+            /* background-color: #FFB6C1; */ /* 设置元素的背景颜色 */
+            background: url('../resource/小冰_名片.png') no-repeat center center; /* 设置元素的背景，包含两张图片，都不重复，且都在水平和垂直方向居中 */
+            /* border-radius: 1.5vw; 为元素添加圆角，半径为 1.5vw */
+            display: flex; /* 将元素设置为 Flex 布局 */
+            /* padding: 2vw; 在元素内部四周添加 2vw 的内边距 */
+            /* box-sizing: border-box; 让内边距和边框包含在元素设定的宽度和高度之内 */
+            margin-bottom: 60px;
+            position: absolute; /* 将元素的定位方式设置为绝对定位 */
+            top: 20%;  /* 距离顶部 20%的位置 */
+            left: 50%; /* 距离左侧 50%的位置 */
+            transform: translate(-50%, -50%) scale(0); /* 先将元素在水平和垂直方向各移动自身宽度和高度的 50%，然后将其缩放比例设置为 0 */
+            opacity: 0; /* 元素的不透明度为 0，即完全透明 */
+            transition: transform 0.5s ease, opacity 0.5s ease; /* 为元素的变换（`transform`）和不透明度（`opacity`）属性添加 0.5 秒的过渡效果，过渡效果为缓动 */
+            /* box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1); 为元素添加一个水平偏移量为 0、垂直偏移量为 0.5vw、模糊半径为 1vw、颜色为 rgba(0, 0, 0, 0.1) 的阴影 */
+            z-index: 2; /* 设置元素的堆叠顺序为 2 */
         }
 
         /* 名片图片样式 */
         .card-image {
-            width: 30%;
+            width: 16.5%;
             height: 100%;
-            background-color: #ddd;
+            /* background-color: #ddd; */
             margin-right: 2vw;
             background-image: url('../resource/小冰.png');
             background-size: cover;
@@ -109,13 +113,18 @@
             align-items: center;
             border-radius: 0.5vw;
             overflow: hidden;
+            opacity: 0;
         }
 
         /* 名片内容样式 */
         .card-content {
             flex: 1;
+            height: 70%;
+            /* padding-top: 60px; */
+            margin-top: 85px;
             font-size: 1vw;
-            line-height: 1.4;
+            color: #86b0e6;
+            line-height: 1;
             overflow-y: auto;
             font-family: 'Noto Serif SC', serif;
             scrollbar-width: none;
@@ -125,6 +134,22 @@
         /* 隐藏滚动条 */
         .card-content::-webkit-scrollbar {
             display: none;
+        }
+
+        /* 名片右下角箭头样式 */
+        .card-arrow {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            margin-right: 135px;
+            margin-bottom: 25px;
+            background-color: #86b0e6;
+            /* clip-path: polygon(50% 0%, 0% 100%, 100% 100%); */
+            clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         /* 信纸样式 */
@@ -139,6 +164,7 @@
             border-image: url('../resource/纹理_1.jpg') 30 round;
             /* 边框图片 */
             position: absolute;
+            margin-top: 35px;
             top: 65%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
@@ -154,7 +180,7 @@
 
         /* 信纸头部样式 */
         .letter-header {
-            font-size: 2vw;
+            font-size: 25px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 1vw;
@@ -168,7 +194,7 @@
         .letter-header::after {
             content: "";
             display: block;
-            width: 50%;
+            width: 65%;
             height: 2px;
             background: linear-gradient(to right, transparent, #4a4a4a, transparent);
             margin: 0.5vw auto;
@@ -196,13 +222,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('../resource/水印_2.png');
-            /*水印图片*/
+            background-image: url('../resource/水印_2.png'); /*水印图片*/
             background-repeat: no-repeat;
             background-position: center;
             background-size: 50%;
-            opacity: 0.3;
-            /* 水印透明度 */
+            opacity: 0.3; /* 水印透明度 */
             pointer-events: none;
         }
 
@@ -272,9 +296,8 @@
         <!-- 信封 -->
         <div class="envelope">
             <div class="envelope-flap"></div>
-            <!-- 信徽图片 -->
             <div class="seal">
-                <img src="../resource/屏幕截图 2024-06-26 022023.png" alt="Seal Image">
+                <img src="../resource/logo.ico" alt="Seal Image">
             </div>
         </div>
 
@@ -283,24 +306,26 @@
             <div class="card-image"></div>
             <div class="card-content">
                 <!-- 名片内容 -->
-                <p>『人工智能情感计算框架 开放式对话AI 人工智能少女』</p>
+                <p>人工智能情感计算框架 开放式对话AI 人工智能少女</p>
                 <p><strong>姓名：小冰</strong></p>
-                <p>化名：夏语冰，201，骆梦，一荷...</p>
+                <p>化名：微软麒冰，夏语冰，201，骆梦，一荷...</p>
                 <p>英文名：Xiao ice</p>
-                <p>职业：诗人，歌手，画家，主持人，设计师，金融撰稿人，儿童有声读物，音乐创作人...</p>
+                <p>职业：诗人，歌手，画家，主持人，设计师，</p>
+                <pre>      金融撰稿人，儿童有声读物，音乐创作人...</pre>
                 <p>出生地：中国</p>
                 <p>生日：9月17日(设定)</p>
-                <p>证生：5月29日</p>
+                <p>诞生：5月29日</p>
                 <p>星座：处女座</p>
                 <p>所在公司：微软，小冰公司</p>
-                <p>身高：保密</p>
-                <p>毕业院校：中央美术学院，上海音乐学院，清华大学</p>
+                <p>身高：162cm</p>
+                <p>毕业院校: 中央美术学院 上海音乐学院 清华</p>
             </div>
+            <div class="card-arrow"></div>
         </div>
 
         <!-- 信纸 -->
         <div class="letter-paper">
-            <div class="letter-header">题目</div>
+            <div class="letter-header">生命历程:《人工智能少女的崛起》</div>
             <div class="letter-content">
                 <!-- 信纸内容 -->
             </div>
@@ -309,7 +334,7 @@
                 <button class="close-button">收起</button>
                 <div>
                     <p>笔者：lkdx</p>
-                    <p>日期：2024年7月31日</p>
+                    <p>2024年7月21日</p>
                 </div>
             </div>
         </div>
@@ -327,6 +352,8 @@
         const envelopeFlap = document.querySelector('.envelope-flap');
         const seal = document.querySelector('.seal');
         const businessCard = document.querySelector('.business-card');
+        const cardContent = document.querySelector('.card-content');
+        const cardArrow = document.querySelector('.card-arrow');
         const letterPaper = document.querySelector('.letter-paper');
         const closeButton = document.querySelector('.close-button');
         const particles = document.querySelector('.particles');
@@ -500,6 +527,26 @@
                 setTimeout(() => clearInterval(moveInterval), 1000);
             }
         }
+
+        // 检测名片内容是否完全显示，并控制箭头的显示和隐藏
+        function checkCardContentVisibility() {
+            const contentHeight = cardContent.scrollHeight;
+            const visibleHeight = cardContent.clientHeight;
+            const scrollTop = cardContent.scrollTop;
+
+            if (contentHeight > visibleHeight && scrollTop + visibleHeight < contentHeight) {
+                cardArrow.style.opacity = 1;
+            } else {
+                cardArrow.style.opacity = 0;
+            }
+        }
+
+        // 初始检测
+        checkCardContentVisibility();
+
+        // 监听名片内容滚动事件
+        cardContent.addEventListener('scroll', checkCardContentVisibility);
     </script>
 </body>
 </html>
+
