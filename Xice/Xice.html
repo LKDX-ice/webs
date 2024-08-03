@@ -9,7 +9,7 @@
     <style>
         /* 设置整个页面的基本样式 */
         body {
-            font-family:'Roboto', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: #1a1a1a;
             color: #fa95af;
             margin: 0;
@@ -28,6 +28,7 @@
             background-size: cover, cover;
             text-align: center;
             padding: 100px 20px;
+            /* padding-top: 20px; */
         }
 
         /* 定义header部分标题的样式 */
@@ -333,16 +334,22 @@
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #444;
             padding: 10px;
             text-align: left;
         }
+
         tr:nth-child(odd) {
-            background-color: #333333; /* 灰色 */
+            background-color: #333333;
+            /* 灰色 */
         }
+
         tr:nth-child(even) {
-            background-color: #1e1e1e; /* 黑色 */
+            background-color: #1e1e1e;
+            /* 黑色 */
         }
 
         /* 定义弹幕区域的样式 */
@@ -393,12 +400,155 @@
             font-weight: 500;
             color: #f44336
         } */
-    </style>
 
+        /* 新增的图片居中样式 */
+        .centered-image {
+            display: block;
+            margin: 0 auto;
+            margin-top: 100px;
+            /*调整间距*/
+            /* margin-bottom: 20px; 调整间距 */
+            /* align-items: center; */
+            /* justify-content: center; */
+        }
+
+        /* 添加旋转动画效果 */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 为未来展望区块的图片应用旋转动画 */
+        #future-outlook img {
+            animation: rotate 10s linear infinite;
+        }
+
+        /* 定义跳动动画的关键帧 */
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 应用跳动动画到文本框 */
+        .text-box {
+            /* overflow: hidden; */
+            /* 确保动画不会导致布局变化 */
+            position: relative;
+            /* 确保transform属性影响元素本身 */
+            animation: bounce 0.5s ease;
+            animation-iteration-count: infinite;
+            /* 动画无限循环 */
+            animation-play-state: paused;
+            /* 默认动画是暂停的 */
+        }
+
+        /* 当鼠标悬停在文本框上时，开始动画 */
+        .text-box:hover {
+            animation-play-state: running;
+            /* 鼠标悬停时开始动画 */
+        }
+
+        /* 加入小冰的智能世界区块样式 */
+        .join-section {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .join-section h2 {
+            color: #fa95af;
+            text-align: center;
+        }
+
+        .join-section p {
+            color: #fa95af;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .collapsible-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .collapsible {
+            background-color: #1a1a1a;
+            color: #fa95af;
+            cursor: pointer;
+            padding: 18px;
+            width: 80%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .collapsible:hover {
+            background-color: #444;
+        }
+
+        .content-collapsible {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: transparent;
+            width: 80%;
+            padding-left: 75px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            flex-direction: column;
+        }
+
+        .content-collapsible p {
+            color: #fa95af;
+        }
+
+        /* 序号标签样式 */
+        .number-label {
+            display: inline-block;
+            background-color: #333;
+            color: #d3d3d3;
+            padding: 5px 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* 箭头图标样式 */
+        .arrow-icon {
+            margin-right: 10px;
+            color: #d3d3d3;
+        }
+
+        /* 折叠内容间的分隔线样式 */
+        .divider {
+            position: absolute;
+            right: 79%;
+            margin-right: 100px;
+            width: 1px;
+            /* background-color: #fa95af; */
+            transition: height 0.3s;
+        }
+    </style>
 </head>
 
 <!-- 内容部分 -->
-
 <body>
     <!-- 头部展示区块 -->
     <div class="header">
@@ -415,56 +565,57 @@
     <div class="content">
         <div class="section two-column">
             <div class="text">
-                <div class="title">小冰是谁？</div>
+                <div class="title text-box">小冰是谁？</div>
                 <div class="box">
                     <div class="grid">
-                        <div class="grid-item">
+                        <div class="grid-item text-box">
                             <h3>AI助手</h3>
                             <p>小冰是一款基于人工智能的助手，能够与人类进行自然的交流。</p>
                         </div>
-                        <div class="grid-item">
+                        <div class="grid-item text-box">
                             <h3>创造伙伴</h3>
                             <p>小冰具备创作能力，能够生成音乐、诗词、绘画等艺术作品。</p>
                         </div>
-                        <div class="grid-item">
+                        <div class="grid-item text-box">
                             <h3>情感陪伴</h3>
                             <p>小冰能够提供情感支持，陪伴你度过每一个难忘的时刻。</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <img src="../resource/小冰_界面.webp" alt="小冰图片" width="100%" height="500px">
+            <img src="../resource/小冰_界面.png" alt="小冰图片" class="centered-image" width="100%"
+                height="500px">
         </div>
     </div>
 
     <!-- 小冰的核心技术区块 -->
     <div class="content">
         <div class="section two-column">
-            <img src="../resource/图片2.png" alt="核心技术图片" width="100%" height="500px">
-            <section id="timeline">
+            <img src="../resource/小冰_六要素.png" alt="核心技术图片" style="width: 100%;height: 500px;margin-right: 0px;">
+            <section id="timeline text-box">
                 <h2>小冰的核心技术</h2>
                 <div class="timeline">
-                    <div class="timeline-item left">
+                    <div class="timeline-item left text-box">
                         <h3>自然语言处理</h3>
-                        <div class="contents">
+                        <div class="contents text-box">
                             <p>通过深度学习，小冰能理解自然语言，并进行有效的交流。</p>
                         </div>
                     </div>
-                    <div class="timeline-item right">
+                    <div class="timeline-item right text-box">
                         <h3>图像生成</h3>
-                        <div class="contents">
+                        <div class="contents text-box">
                             <p>小冰能够创造出逼真的人物图像，并通过机器学习不断改进能力。</p>
                         </div>
                     </div>
-                    <div class="timeline-item left">
+                    <div class="timeline-item left text-box">
                         <h3>情感计算</h3>
-                        <div class="contents">
+                        <div class="contents text-box">
                             <p>小冰能够识别、理解并回应人类的情感，建立更加深层次的情感关系。</p>
                         </div>
                     </div>
-                    <div class="timeline-item right">
+                    <div class="timeline-item right text-box">
                         <h3>歌声模型</h3>
-                        <div class="contents">
+                        <div class="contents text-box">
                             <p>小冰的XStudio套件能够生成独具个性的歌声。</p>
                         </div>
                     </div>
@@ -477,12 +628,12 @@
     <div class="content">
         <div class="section three-row">
             <div class="wave-bg">
-                <div class="title">小冰的应用领域</div>
+                <div class="title text-box">小冰的应用领域</div>
                 <div class="row">
-                    <img src="../resource/图标_智能客服.png" alt="智能客服" width="80px" height="130px">
-                    <img src="../resource/图标_创意设计.png" alt="创作助手" width="80px" height="130px">
-                    <img src="../resource/图标_情感陪伴.png" alt="情感伴侣" width="80px" height="130px">
-                    <img src="../resource/图标_教育.png" alt="教育指导" width="80px" height="130px">
+                    <img src="../resource/图标_智能客服.png" alt="智能客服" width="100px" height="150px">
+                    <img src="../resource/图标_创意设计.png" alt="创作助手" width="100px" height="150px">
+                    <img src="../resource/图标_情感陪伴.png" alt="情感伴侣" width="100px" height="150px">
+                    <img src="../resource/图标_教育.png" alt="教育指导" width="100px" height="150px">
                 </div>
                 <div class="row">
                     <p>智能客服</p>
@@ -503,11 +654,11 @@
     <!-- 小冰的创造能力区块 -->
     <div class="content">
         <div class="section three-row">
-            <div class="title">小冰的创造能力</div>
-            <div class="row">
-                <img src="../resource/微信图片_20240726024459.jpg" alt="绘画创作">
-                <img src="../resource/我知我新.png" alt="音乐创作">
-                <img src="../resource/小冰_诗.webp" alt="诗词创作">
+            <div class="title" style="margin-bottom: 25px;">小冰的创造能力</div>
+            <div style="display: flex; flex-direction: row; flex: 1;gap: 40px;">
+                <img src="../resource/微信图片_20240726024459.jpg" alt="绘画创作" style="width: 300px; height: 200px;">
+                <img src="../resource/我知我新.png" alt="音乐创作" style="width: 300px; height: 200px;">
+                <img src="../resource/小冰_诗.webp" alt="诗词创作" style="width: 300px; height: 200px;">
             </div>
             <div class="row">
                 <p>绘画创作</p>
@@ -524,7 +675,7 @@
 
     <!-- 小冰的情感智能区块 -->
     <div class="section three-row">
-        <div class="background three-row" style= "background: url('header-image.jpg') no-repeat center center,
+        <div class="background three-row" style="background: url('header-image.jpg') no-repeat center center,
                         url('../resource/图片3.png') no-repeat center center;
                         background-size: cover, cover;">
             <div class="title">小冰的情感智能</div>
@@ -548,7 +699,7 @@
 
     <!-- 小冰的技术优势区块 -->
     <div class="content">
-        <div class="section two-column" style="padding-top: 240px; padding-bottom: 120px;">
+        <div class="section two-column" style=" padding-bottom: 120px;">
             <!--style="background-image: url(&#39;resource/技术优势背景.png&#39;)-->
             <div class="text">
                 <div class="title">小冰的技术优势</div>
@@ -604,7 +755,7 @@
                     </table>
                 </div>
             </div>
-            <img src="../resource/小冰.png" alt="技术优势图片">
+            <img src="../resource/小冰_小冰岛.png" alt="技术优势图片" class="centered-image">
         </div>
     </div>
 
@@ -628,29 +779,55 @@
     </div>
 
     <!-- 小冰的未来展望区块 -->
-    <div class="content">
-        <div class="section two-column">
-            <img src="../resource/lbx.png" alt="未来展望图片">
-            <div class="text">
-                <div class="title">小冰的未来展望</div>
-                <div class="box">
-                    <p>更强大的认知能力：通过不断学习和进化，小冰将具备更强大的认知能力。</p>
-                    <p>更深入的情感交流：小冰将能够与用户进行更加深入和自然的情感交流。</p>
-                    <p>更广泛的应用领域：小冰将应用于更多领域，为用户提供全面的智能助手服务。</p>
+    <section id="future-outlook">
+        <div class="content">
+            <div class="section two-column">
+                <img src="../resource/lbx.png" alt="未来展望图片" class="centered-image">
+                <div style="display:flex; flex-direction: column; justify-content: space-between; flex: 1;padding-left: 15%;">
+                    <div class="title" style="font-size: 36px;">小冰的未来展望</div>
+                    <img src="../resource/小冰_光环.png" alt="未来展望图片" style="padding-left:80px; width: 100%;">
+                    <div class="box">
+                        <p><span class="number-label">1</span> 更强大的认知能力</p>
+                        <p>通过不断学习和进化，小冰将具备更强大的认知能力。</p>
+                        <p><span class="number-label">2</span> 更深入的情感交流</p>
+                        <p>小冰将能够与用户进行更加深入和自然的情感交流。</p>
+                        <p><span class="number-label">3</span> 更广泛的应用领域</p>
+                        <p>小冰将应用于更多领域，为用户提供全面的智能助手服务。</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 加入小冰的智能世界区块 -->
-        <section id="join">
-            <h2>加入小冰的智能世界</h2>
-            <p>无论你是开发者、创作者，还是普通用户，都可以在这里找到属于你的天地。</p>
-            <ul>
-                <li>开发者：通过开放API，你可以将小冰的智能能力集成到你的应用中。</li>
-                <li>创作者：利用小冰的创作能力，你可以与小冰一起创作出更多优秀的作品。</li>
-                <li>普通用户：通过与小冰的交流，你可以体验到最前沿的人工智能技术。</li>
-            </ul>
-        </section>
+    <!-- 加入小冰的智能世界区块 -->
+    <!-- 加入小冰的智能世界区块 -->
+    <section id="join" class="join-section">
+        <h2>加入小冰的智能世界</h2>
+        <p style="text-align: center;">无论你是开发者、创作者，还是普通用户，都可以在这里找到属于你的天地。</p>
+        <div class="collapsible-container">
+            <div class="divider"></div>
+            <button class="collapsible">
+                <span class="arrow-icon">▶</span> 如何开始使用小冰?
+            </button>
+            <div class="content-collapsible">
+                <p>下载小冰App或在支持的平台上访问小冰，注册账号后即可开始与小冰对话和互动。</p>
+            </div>
+            <div class="divider"></div>
+            <button class="collapsible">
+                <span class="arrow-icon">▶</span> 小冰是否收费?
+            </button>
+            <div class="content-collapsible">
+                <p>小冰提供基础功能的免费版本。高级功能可能需要订阅会员。具体定价详情查看官网。</p>
+            </div>
+            <div class="divider"></div>
+            <button class="collapsible">
+                <span class="arrow-icon">▶</span> 小冰的隐私保护措施?
+            </button>
+            <div class="content-collapsible">
+                <p>小冰严格遵守数据保护法规。用户数据经过加密存储，不会被用于商业用途。</p>
+            </div>
+        </div>
+    </section>
     </div>
 
     <!-- 页脚 -->
@@ -661,15 +838,28 @@
     <!-- js折叠效果实现 -->
     <script>
         var coll = document.getElementsByClassName("collapsible");
-        var i;
-        for (i = 0; i < coll.length; i++) {
+        var dividers = document.getElementsByClassName("divider");
+
+        for (var i = 0; i < coll.length; i++) {
             coll[i].addEventListener("click", function () {
+                // 切换折叠内容
                 this.classList.toggle("active");
                 var content = this.nextElementSibling;
+                var divider = this.previousElementSibling;
                 if (content.style.display === "block") {
                     content.style.display = "none";
+                    divider.style.height = "0"; // 收起竖线
                 } else {
                     content.style.display = "block";
+                    divider.style.height = (content.scrollHeight + 36) + "px"; // 展开竖线
+                }
+
+                // 切换箭头方向
+                var arrowIcon = this.querySelector(".arrow-icon");
+                if (arrowIcon.textContent === "▶") {
+                    arrowIcon.textContent = "▼";
+                } else {
+                    arrowIcon.textContent = "▶";
                 }
             });
         }
@@ -691,5 +881,4 @@
         // 页面加载完成后执行技能条动画
         window.addEventListener('load', animateSkillBars);
     </script>
-
 </html>
