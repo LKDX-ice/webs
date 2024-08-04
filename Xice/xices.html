@@ -152,6 +152,13 @@
             transition: background-color 0.3s ease;
         }
 
+        a {
+            text-decoration: none;
+            /* 去掉链接的下划线 */
+            color: black;
+            /* 设置链接文字颜色 */
+        }
+
         /* 激活状态的标签样式 */
         .tab.active {
             background-color: #fff;
@@ -321,7 +328,8 @@
             <div class="tabs">
                 <button class="tab active" onclick="openTab(event, 'intro')">简介</button>
                 <button class="tab" onclick="openTab(event, 'works')">作品</button>
-                <button class="tab" onclick="openTab(event, 'activities')">活动</button>
+                <!-- <button class="tab" onclick="openTab(event, 'activities')">活动</button> -->
+                <button class="tab" onclick="openTab(event, 'activities')"><a href="Xice.html" target="_blank">详情</a></button>
             </div>
 
             <!-- 简介标签内容 -->
@@ -337,9 +345,12 @@
                 <h2>作品集</h2>
                 <p>这里是小冰的作品列表，包括诗歌、绘画、音乐等...</p>
             </div>
-            <div id="activities" class="tab-content">
-                <h2>近期活动</h2>
-                <p>小冰最近参与了多项AI艺术创作活动，与人类艺术家合作...</p>
+            <div id="activities" class="tab-content" style="text-align: center;padding-top: 150px;">
+                <!-- <h2>近期活动</h2> -->
+                <h2>加载中...</h2>
+                <p>初始化界面...</p>
+                <p>小冰曾参与多项AI艺术创作活动，与人类艺术家合作...</p>
+                <p>点击按钮中“详情”字样查看页面...</p>
             </div>
         </div>
     </div>
@@ -453,7 +464,7 @@
         // }
 
         //记载引入的html文件的内容
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {  //导入html单独树请求
             const xiceContainer = document.getElementById('xice_XF-content');
             const shadowRoot = xiceContainer.attachShadow({ mode: 'open' });
             fetch('xice_XF.html')
