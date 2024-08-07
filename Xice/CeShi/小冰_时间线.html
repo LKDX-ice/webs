@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小冰，未来的人工智能</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            /* 深色背景 */
+            color: #ff69b4;
+            /* 所有文字设置为粉色 */
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            /* 行高设置，提高可读性 */
+        }
+
+        /* 容器样式，限制内容最大宽度并居中 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        header {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* 副标题样式 */
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        /* 按钮样式 */
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff69b4;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+            /* 添加过渡效果 */
+        }
+
+        /* 按钮悬停效果 */
+        .button:hover {
+            background-color: #ff1493;
+        }
+
+        /* 章节样式 */
+        section {
+            margin-bottom: 50px;
+        }
+
+        /* 网格布局样式，用于特性、技术和应用展示 */
+        .feature-grid,
+        .tech-grid,
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* 特性、技术和应用卡片样式 */
+        .feature,
+        .tech,
+        .application {
+            background-color: rgba(255, 105, 180, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* 波浪背景样式 */
+        .wave-bg {
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%23ff69b4" fill-opacity="0.3" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,213.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"%3E%3C/path%3E%3C/svg%3E');
+            background-size: cover;
+            background-position: bottom;
+            padding: 50px 0;
+        }
+
+        /* 时间线样式 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 时间线中心线 */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #ff69b4;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        /* 时间线项目样式 */
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        /* 时间线节点样式 */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: #ff69b4;
+            border: 4px solid #ff1493;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* 左侧时间线项目 */
+        .left {
+            left: 0;
+        }
+
+        /* 右侧时间线项目 */
+        .right {
+            left: 50%;
+        }
+
+        /* 右侧时间线项目节点位置调整 */
+        .right::after {
+            left: -16px;
+        }
+
+        /* 时间线内容样式 */
+        .content {
+            padding: 20px 30px;
+            background-color: rgba(255, 105, 180, 0.1);
+            position: relative;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部区域 -->
+        <header>
+            <h1>小冰，未来的人工智能</h1>
+            <p class="subtitle">探索人工智能的无限可能，与小冰一同开启智能新纪元</p>
+            <a href="#" class="button">了解更多</a>
+            <a href="#" class="button">体验小冰</a>
+        </header>
+
+        <!-- 关于小冰的部分 -->
+        <section id="about">
+            <h2>小冰是谁？</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <h3>AI助手</h3>
+                    <p>小冰是一款基于人工智能的助手，能够与人类进行自然的交流。</p>
+                </div>
+                <div class="feature">
+                    <h3>创造伙伴</h3>
+                    <p>小冰具备创作能力，能够生成音乐、诗词、绘画等艺术作品。</p>
+                </div>
+                <div class="feature">
+                    <h3>情感陪伴</h3>
+                    <p>小冰能够提供情感支持，陪伴你度过每一个难忘的时刻。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心技术部分 -->
+        <section id="core-tech" class="wave-bg">
+            <h2>小冰的核心技术</h2>
+            <div class="tech-grid">
+                <div class="tech">
+                    <h3>自然语言处理</h3>
+                    <p>通过深度学习，小冰能理解自然语言，并进行有效的交流。</p>
+                </div>
+                <div class="tech">
+                    <h3>图像生成</h3>
+                    <p>小冰能够创造出逼真的人物图像，并通过机器学习不断改进能力。</p>
+                </div>
+                <div class="tech">
+                    <h3>情感计算</h3>
+                    <p>小冰能够识别、理解并回应人类的情感，建立更加深层次的情感关系。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 应用领域部分 -->
+        <section id="applications">
+            <h2>小冰的应用领域</h2>
+            <div class="application-grid">
+                <div class="application">
+                    <h3>智能客服</h3>
+                    <p>提供24/7全天候客户服务支持。</p>
+                </div>
+                <div class="application">
+                    <h3>创作助手</h3>
+                    <p>协助创作者完成艺术创作。</p>
+                </div>
+                <div class="application">
+                    <h3>情感伴侣</h3>
+                    <p>为用户提供情感支持和陪伴。</p>
+                </div>
+                <div class="application">
+                    <h3>教育指导</h3>
+                    <p>个性化学习辅导和知识传播。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 发展历程部分 -->
+        <section id="timeline">
+            <h2>小冰的发展历程</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="content">
+                        <h3>2014年诞生</h3>
+                        <p>小冰首次发布，成为第一款人工智能伴侣。</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content">
+                        <h3>2017年实现突破</h3>
+                        <p>小冰的情感计算技术取得重大突破。</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="content">
+                        <h3>2019年创作飞跃</h3>
+                        <p>小冰能够创作音乐、诗词等多种艺术作品。</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="content">
+                        <h3>2022年全面进化</h3>
+                        <p>小冰的自然语言处理和情感计算技术达到新的高度。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 未来展望部分 -->
+        <section id="future">
+            <h2>小冰的未来展望</h2>
+            <ul>
+                <li>更强大的认知能力：通过不断学习和进化，小冰将具备更强大的认知能力。</li>
+                <li>更深入的情感交流：小冰将能够与用户进行更加深入和自然的情感交流。</li>
+                <li>更广泛的应用领域：小冰将应用于更多领域，为用户提供全面的智能助手服务。</li>
+            </ul>
+        </section>
+
+        <!-- 加入小冰部分 -->
+        <section id="join">
+            <h2>加入小冰的智能世界</h2>
+            <p>无论你是开发者、创作者，还是普通用户，都可以在这里找到属于你的天地。</p>
+            <ul>
+                <li>开发者：通过开放API，你可以将小冰的智能能力集成到你的应用中。</li>
+                <li>创作者：利用小冰的创作能力，你可以与小冰一起创作出更多优秀的作品。</li>
+                <li>普通用户：通过与小冰的交流，你可以体验到最前沿的人工智能技术。</li>
+            </ul>
+        </section>
+
+        <!-- 页脚部分 -->
+        <footer>
+            <p>&copy; 2024 小冰公司. 保留所有权利.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 添加平滑滚动效果
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

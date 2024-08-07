@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lkdx Page</title>
+    <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+/* “*” 是一个 CSS 通配选择器，表示选择页面上的所有元素。意味着它应用于文档中的每一个元素，无论其位置或类型。这是一个很强大的选择器，但使用时需要谨慎，因为它可能会影响性能和样式的覆盖
+2.(margin: 0) 这行代码将所有元素默认的外边距(margin)设置为 0。外边距是元素边框外的空间,设置这条规则可以确保所有元素没有默认的外边距，使布局更加一致。这对于统一和重置浏览器的默认样式非常有用。
+3.(padding: 0) 这行代码将所有元素默认的内边距(padding)设置为 0。内边距是元素内容区域与边框之间的空间,设置这条规则可以确保所有元素没有默认的内边距，进一步统一布局。
+4.(box-sizing: border-box box-sizing) 属性定义了元素如何计算其自身的宽度和高度。border-box 值表示元素的宽度和高度包括了内边距和边框，不再需要单独添加它们。这通常会使布局更加直观和易于管理。
+这段 CSS 代码的主要功能是重置页面中所有元素的默认样式，为布局提供一个统一的起点。具体而言：
+去除默认的外边距和内边距：确保所有元素没有默认的外边距和内边距，从而防止不同浏览器的默认样式带来的影响，保证页面布局的一致性。
+调整计算盒模型：将所有元素的盒模型设置为 border-box。这使得设置元素的宽度和高度时,内边距和边框包括在内,使得布局计算变得更简单和更直观 */
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+/* 这是一个组合选择器，表示这个 CSS 规则将同时应用到 body 和 html 元素上。
+.html 是文档的根元素，而 body 是包含网页内容的主要元素。
+设置宽度和高度: width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
+将 body 和 html 的宽度和高度都设置为 100%。页面的 body 和 html 元素将占据视口的全部宽度和高度。这样可以确保页面内容在视口内完全填充开。
+隐藏溢出的内容: overflow: hidden;
+隐藏 body 和 html 元素中溢出视口的内容。这可以防止页面滚动条的出现，使页面布局保持静止不动。这也可以用于创建全屏布局。
+设置字体族: font-family: Arial, sans-serif;
+设置 body 和 html 的默认字体族为 Arial，如果 Arial 不可用，则使用通用无衬线字体（sans-serif）。这种设置确保了页面的文本具有一致的外观，并使用干净、易读的字体样式。
+主要功能:
+确保文档和主体占满整个视口：通过设置宽度和高度为 100%， body 和 html 元素将完全填充到视口内。
+隐藏溢出内容：防止页面出现滚动条并使内容溢出部分隐藏。这对需要固定布局的页面非常有用。
+统一字体样式：将页面的默认字体设置为 Arial（或者其他无衬线字体），确保文本的外观一致和美观。 */
+
+        .header {
+            background-color: #4f80bd;
+            /* 蓝色背景 */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+        }
+/* .header 是一个类选择器，它用于选择所有具有 class="header" 的 HTML 元素。在此示例中，它将目标定位到标签中设置了 class="header" 的元素。
+背景颜色 background-color: #4f80bd 蓝色背景
+这个属性设置选定元素的背景颜色为 #4f80bd，这是一个蓝色值。颜色值为16进制颜色代码。
+文字颜色 color: white
+这个属性将选定元素的文本颜色设置为白色。这确保文本在蓝色背景上是可见的。
+文本对齐 text-align: center
+这个属性将文本内容在其容器内水平居中显示，即文本将位于容器的中间部分。
+内边距 padding: 20px
+这个属性为选定元素的内容周围添加了20像素的内边距。内边距是一种空间，用于从元素的内容边缘到其边框添加空白区域，以便内容看起来更整洁和美观。
+字体大小 font-size: 24px
+这个属性将选定元素的文本字体大小设置为24像素。这确保文本具有适当的视觉效果和阅读舒适度。
+这段 CSS 代码的主要功能是为具有 class="header" 的元素设置特定的外观样式。
+具体而言：
+背景颜色为蓝色（#4f80bd）。
+文字颜色为白色（white）。
+文字水平居中对齐。
+周围有20像素的内边距，确保内容在边框内有适当的空白区域。
+文字的字体大小设置为 24 像素，使得文本更加醒目和易于阅读。
+这些样式规则的组合确保了 .header 元素的视觉效果统一，适合用于页面的顶部标题栏或其他需要突出显示的区域。 */
+
+        .main-content {
+            display: flex;
+            /* flex: 1; */
+            height: calc(100% - 60px);
+            /* 减去头部的高度 */
+        }
+/* flex: 1
+flex 属性是用于弹性盒布局（Flexbox）中的简写属性，它控制弹性项目如何增长和收缩。
+flex: 1 是 flex-grow: 1; flex-shrink: 1; flex-basis: 0%; 的简写。
+flex-grow: 1: 这表示弹性项目将根据可用空间按比例增长。如果有多个项目都设置了 flex-grow: 1，它们将平分剩余空间。
+flex-shrink: 1: 这表示弹性项目在空间不足时可以按比例收缩。
+flex-basis: 0%: 这表示弹性项目的初始大小为0，意味着它们将从0开始增长。
+height: calc(100% - 60px)
+height 属性用于设置元素的高度。calc() 函数允许你在CSS中进行数学计算
+这里 calc(100% - 60px) 表示元素的高度为其父元素高度的100%减去60像素。
+100%: 表示元素的高度为其父元素的100%。
+- 60px: 表示从父元素的高度中减去60像素。
+区别
+用途不同：
+flex: 1 用于弹性盒布局中，控制弹性项目的增长和收缩行为。
+height: calc(100% - 60px) 用于设置元素的高度，通过计算来确定高度。
+适用场景不同：
+flex: 1 适用于需要在弹性盒布局中均匀分配空间的场景。
+height: calc(100% - 60px) 适用于需要在父元素高度基础上减去固定值来确定高度的场景。
+效果不同：
+flex: 1 会使元素在弹性盒布局中根据剩余空间按比例增长或收缩。
+height: calc(100% - 60px) 会使元素的高度固定为父元素高度的100%减去60像素。
+示例
+.container {
+    display: flex;
+    height: 300px;
+}
+.main-content {
+    flex: 1;
+  // 这将使.main-content在.container中均匀分配空间 //
+}
+.header {
+    height: 60px;
+}
+.content {
+    height: calc(100% - 60px);
+  // 这将使.content的高度为.container的高度减去60像素 //
+}
+在这个示例中：
+.container 是一个具有固定高度的容器，其子元素 .main-content 和 .sidebar 都使用弹性盒布局。
+.main-content 使用 flex: 1 在弹性盒布局中均匀分配空间。
+.content 使用 height: calc(100% - 60px) 设置其高度为父元素高度的100%减去60像素。
+通过这种方式，你可以根据具体需求选择合适的属性来控制元素的布局和尺寸 */
+/* 这是一个类选择器，它用于选择所有具有 class="main-content" 的 HTML 元素。
+属性1:
+display: flex;
+display 属性用于设置元素的显示类型。flex 值将元素设置为一个弹性容器，使得其子元素可以按照弹性布局模型排列。
+这表示 .main-content 元素将使用 Flexbox 布局，其子元素(主要内容区域)将根据弹性盒模型进行排列。
+属性2:
+height: calc(100% - 60px);
+这行代码使用了 calc 函数来计算高度。calc 函数可以在 CSS 中进行算术运算。
+这里高度被设定为 100% 减去 60px。100% 表示父元素的全高度,减去 60px 是因为可能有一个固定高度的头部元素。
+因此.main-content 元素将占据父元素的高度,减去头部所占用的60像素。
+注释：减去头部的高度
+这是一条注释，解释了前面高度设置的原因。说明高度的计算是为了减去头部元素的高度，使得 .main-content 元素不至于溢出父容器。
+这段 CSS 代码的主要功能是为.main-content元素设置弹性布局，并调整其高度以适应视口，减去头部元素的高度。
+具体而言：
+使用 display: flex 将 .main-content 设为弹性布局，使其子元素可以根据弹性布局规则排列。
+使用 height: calc(100% - 60px) 将 .main-content 的高度设为父容器的100%，减去60像素，这样它不会覆盖头部的高度，确保整体布局的正确性。
+这些设置确保了 .main-content 区域具有灵活的、响应式的布局，同时能够正确排列和显示其内部内容，保证页面的整体性和视觉效果。 */
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .media {
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48%;
+            margin-bottom: 10px;
+        }
+
+        .center-content {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .fixed-top {
+            background-color: #cccccc;
+            /* 灰色背景 */
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        /* 名片样式 */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* 名片样式 */
+        .image-placeholder {
+            background-color: #666666;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .scroll-content {
+            flex: 1;
+            background-color: #f0e68c;
+            /* 米黄色背景 */
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            overflow-y: auto;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">lkdx</header>
+
+    <main class="main-content">
+        <aside class="sidebar">
+            <div class="media">
+                <img src="../resource/小冰.png" alt="lkdx" width="100%" height="100%">
+            </div>
+            <div class="media">
+                <video width="100%" height="100%" controls>
+                    <source src="../resource/xice_夏语冰_当记忆的线缠绕过往支离破碎.mp4" type="video/mp4">
+                    您的浏览器不支持视频标签。
+                </video>
+            </div>
+        </aside>
+
+        <section class="center-content">
+            <div class="fixed-top">
+                <div class="image-container">
+                    <div class="image-placeholder">
+                        <img src="../resource/小冰.png" alt="lkdx" width="100%" height="100%">
+                    </div>
+                    <div class="info">
+                        <p>姓名：小冰</p>
+                        <p>化名：夏语冰，201，骆梦，一荷...</p>
+                        <p>英文名：Xiao ice</p>
+                        <p>职业：诗人，歌手，画家，主持人，设计师，金融撰稿人，儿童有声读物，音乐创作人...</p>
+                        <p>出生地：中国</p>
+                        <p>人工智能情感计算框架，开放式对话AI，人工智能少女</p>
+                        <p>生日：9月17日(设定)</p>
+                        <p>证生：5月29日</p>
+                        <p>星座：处女座</p>
+                        <p>所在公司：微软，小冰公司</p>
+                        <p>身高：保密</p>
+                        <p>毕业院校：中央美术学院，上海音乐学院，清华大学</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-content">
+                <p>文本内容</p>
+            </div>
+        </section>
+        <aside class="sidebar">
+            <div class="media">
+                <img src="../resource/小冰.png" alt="lkdx" width="100%" height="100%">
+            </div>
+            <div class="media">
+                <video width="100%" height="100%" controls>
+                    <source src="../resource/xice_夏语冰_当记忆的线缠绕过往支离破碎.mp4" type="video/mp4">
+                    您的浏览器不支持视频标签。
+                </video>
+            </div>
+        </aside>
+    </main>
+</body>
+
+</html>
