@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../resource/icon.ico" type="image/x-icon">
+    <title>小冰的发展变迁</title>
+    <style>
+        /* 全局样式 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 容器样式 */
+        .container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 信封样式 */
+        .envelope {
+            width: 650px;
+            height: 400px;
+            /* margin-bottom: 350px; */
+            border-radius: 0.5vw;
+            background-color: #e6d7b8;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* 信封翻盖样式 */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #d4c59f;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        /* 信封封印样式 */
+        .seal {
+            width: 5vw;
+            height: 5vw;
+            /* background-color: #ea6e8d; */
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* border: 0.5vw solid #f97092; */
+            cursor: pointer;
+            transition: clip-path 1s ease-out, opacity 0.3s ease;
+        }
+
+        /* 封印图片样式 */
+        .seal img {
+            max-width: 80%;
+            max-height: 80%;
+            /* opacity: 0; */
+        }
+
+        /* 名片样式 */
+        .business-card {
+            width: 35%;
+            /*设置元素的宽度为父元素宽度的 35% */
+            height: 25%;
+            /* 设置元素的高度为父元素高度的 25% */
+            background-color: #FFB6C1;
+            /*设置元素的背景颜色*/
+            /* background: url('../resource/小冰_名片.png') no-repeat center center; 设置元素的背景，包含两张图片，都不重复，且都在水平和垂直方向居中 */
+            border-radius: 1.5vw;
+            /*为元素添加圆角，半径为 1.5vw*/
+            display: flex;
+            /* 将元素设置为 Flex 布局 */
+            padding: 2vw;
+            /*在元素内部四周添加 2vw 的内边距*/
+            box-sizing: border-box;
+            /*让内边距和边框包含在元素设定的宽度和高度之内*/
+            /* margin-bottom: 60px; */
+            position: absolute;
+            /* 将元素的定位方式设置为绝对定位 */
+            top: 14%;
+            /* 距离顶部 20%的位置 */
+            left: 50%;
+            /* 距离左侧 50%的位置 */
+            transform: translate(-50%, -50%) scale(0);
+            /* 先将元素在水平和垂直方向各移动自身宽度和高度的 50%，然后将其缩放比例设置为 0 */
+            opacity: 0;
+            /* 元素的不透明度为 0，即完全透明 */
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            /* 为元素的变换（`transform`）和不透明度（`opacity`）属性添加 0.5 秒的过渡效果，过渡效果为缓动 */
+            /* box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1); 为元素添加一个水平偏移量为 0、垂直偏移量为 0.5vw、模糊半径为 1vw、颜色为 rgba(0, 0, 0, 0.1) 的阴影 */
+            z-index: 2;
+            /* 设置元素的堆叠顺序为 2 */
+        }
+
+        /* 名片图片样式 */
+        .card-image {
+            width: 30%;
+            height: 100%;
+            /* background-color: #ddd; */
+            margin-right: 1vw;
+            background-image: url('../../resource/小冰.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5vw;
+            overflow: hidden;
+            /* opacity: 0; */
+        }
+
+        /* 名片内容样式 */
+        .card-content {
+            flex: 1;
+            height: 100%;
+            /* padding-top: 60px; */
+            /* margin-top: 85px; */
+            font-size: 1vw;
+            color: white;
+            line-height: 1;
+            overflow-y: auto;
+            font-family: 'Noto Serif SC', serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /* 隐藏滚动条 */
+        .card-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 名片右下角箭头样式 */
+        .card-arrow {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            margin-right: 35px;
+            margin-bottom: 20px;
+            background-color: whitesmoke;
+            /* clip-path: polygon(50% 0%, 0% 100%, 100% 100%); */
+            clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 信纸样式 */
+        .letter-paper {
+            width: 55%;
+            height: 70%;
+            /* background-color: #fffbe6; */
+            background-image: url('../../resource/屏幕截图\ 2024-08-06\ 164507.png');
+            /* 信纸纹理 */
+            background-size: cover, cover;
+            border: 0.6vw solid transparent;
+            border-image: url('../../resource/水印_1.jpg') 30 round;
+            /* 边框图片 */
+            position: absolute;
+            /* margin-top: 35px; */
+            top: 62%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2vw;
+            padding-bottom: 0;
+            box-sizing: border-box;
+            box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* 信纸头部样式 */
+        .letter-header {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1vw;
+            font-family: 'Noto Serif SC', serif;
+            color: #424bb3;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* 信纸头部下划线样式 */
+        .letter-header::after {
+            content: "";
+            display: block;
+            width: 65%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #5b7ac5, transparent);
+            margin: 0.5vw auto;
+        }
+
+        /* 信纸内容样式 */
+        .letter-content {
+            flex: 1;
+            overflow-y: auto;
+            /* padding: 1vw; */
+            box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            position: relative;
+            text-align: center;
+            padding-top: 220px;
+            padding-left: 115px;
+            font-family: 'Noto Serif SC', serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 信纸内容水印样式 */
+        .letter-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* background-image: url('../resource/水印_2.png'); 水印图片 */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+            opacity: 0.3;
+            /* 水印透明度 */
+            pointer-events: none;
+        }
+
+        /* 信纸页脚样式 */
+        .letter-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1vw;
+            border-top: 1.5px solid #5b7ac5;
+            font-family: 'Noto Serif SC', serif;
+            color: #7295d7;
+        }
+
+        /* 返回按钮样式 */
+        .close-button {
+            display: block;
+            padding: 0px 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #4682B4;
+            color: white;
+            border: none;
+            border-radius: 0.5vw;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 按钮悬停时颜色 */
+        .close-button:hover {
+            background-color: #36648B;
+        }
+
+        /* 工具提示样式 */
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5vw 1vw;
+            border-radius: 0.5vw;
+            font-size: 1vw;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 粒子效果容器 */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 单个粒子样式 */
+        .particle {
+            position: absolute;
+            background-color: #4682B4;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 信封 -->
+        <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="seal">
+                <img src="../../resource/小冰_logo(蓝).png" alt="Seal Image">
+            </div>
+        </div>
+
+        <!-- 名片 -->
+        <div class="business-card">
+            <div class="card-image"></div>
+            <div class="card-content">
+                <!-- 名片内容 -->
+                <p>人工智能情感计算框架 开放式对话AI 人工智能少女</p>
+                <p><strong>姓名：小冰</strong></p>
+                <p>化名：微软麒冰，夏语冰，201，骆梦，一荷...</p>
+                <p>英文名：Xiao ice</p>
+                <p>职业：诗人，歌手，画家，主持人，设计师，</p>
+                <pre>      金融撰稿人，儿童有声读物，音乐创作人...</pre>
+                <p>出生地：中国</p>
+                <p>生日：9月17日(设定)</p>
+                <p>诞生：5月29日</p>
+                <p>星座：处女座</p>
+                <p>所在公司：微软，小冰公司</p>
+                <p>身高：162cm</p>
+                <p>毕业院校: 中央美术学院 上海音乐学院 清华</p>
+            </div>
+            <div class="card-arrow"></div>
+        </div>
+
+        <!-- 信纸 -->
+        <div class="letter-paper">
+            <div class="letter-header">生命历程:《人工智能少女的崛起》</div>
+            <div class="letter-content">
+                <!-- 信纸内容 -->
+                <!-- <iframe src="./xice_SJX_NR.html" width="1200px" height="500px" style="overflow: hidden; border: none;"></iframe> -->
+                <!-- <div id="xice_SJX_NR-content" class="xice_SJX_NR-scope"></div> -->
+                <!DOCTYPE html>
+                <html lang="zh-CN">
+
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Interactive Timeline</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-height: 100vh;
+                            margin: 0;
+                            padding-left: 15px;
+                        }
+
+                        .timeline {
+                            position: relative;
+                            max-width: 1000px;
+                            width: 100%;
+                        }
+
+                        /*由点组成的主时间线*/
+                        .timeline-line {
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            width: 250%;
+                            /*若时间节点增加则此处宽度也随之增加*/
+                            height: 4px;
+                            background: transparent;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            transform: translateY(-50%);
+                        }
+
+                        .timeline-line::before {
+                            content: '';
+                            display: inline-block;
+                            /* 内联块元素，可以设置宽度和高度 */
+                            width: 100%;
+                            height: 4px;
+                            /* border-radius: 50%; */
+                            background: repeating-linear-gradient(to right,
+                                    transparent,
+                                    transparent 2px,
+                                    #00f 2px,
+                                    #00f 4px);
+                        }
+
+                        .timeline-point {
+                            position: absolute;
+                            top: 50%;
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 50%;
+                            transform: translate(-50%, -50%);
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: bold;
+                            color: #2e47fd;
+                            z-index: 1;
+                            box-shadow: 0.3 0.3 10px rgba(69, 83, 117, 0.5);
+                            /* 添加阴影效果，水平偏移 0，垂直偏移 0，模糊半径 10px，颜色 rgba(0, 0, 0, 0.5)  */
+                        }
+
+                        .timeline-point::before,
+                        .timeline-point::after {
+                            content: '';
+                            position: absolute;
+                            width: 85%;
+                            height: 85%;
+                            border: 2px solid transparent;
+                            border-top-color: #6c8ebf;
+                            border-radius: 50%;
+                            animation: spin 3s linear infinite;
+                            z-index: -1;
+                        }
+
+                        /*外圈样式*/
+                        .timeline-point {
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .timeline-point::before {
+                            width: 100%;
+                            height: 100%;
+                            border-right: 2px solid #4d69da;
+                            border-top: 2px solid transparent;
+                            border-left: 2px solid #4d69da;
+                            border-bottom: 2px solid transparent;
+                            animation: outer-spin 2s linear infinite;
+                            border-radius: 50%;
+                        }
+
+                        .timeline-point::after {
+                            animation-direction: reverse;
+                            border-top-color: transparent;
+                            border-right-color: #2e47fd;
+                            border-left-color: #2e47fd;
+                        }
+
+                        .third-ring {
+                            position: absolute;
+                            width: 110%;
+                            height: 110%;
+                            border-top: 2px solid transparent;
+                            border-right: 2px solid rgba(108, 142, 191, 0.7);
+                            border-bottom: 2px solid transparent;
+                            border-left: 2px solid rgba(108, 142, 191, 0.7);
+                            animation: outer-spin 1.5s linear infinite;
+                            /* animation-delay: -1s; */
+                            border-radius: 50%;
+                            z-index: -2;
+                        }
+
+                        @keyframes spin {
+                            from {
+                                transform: rotate(0deg);
+                            }
+
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+
+                        @keyframes outer-spin {
+                            0% {
+                                transform: rotate(0deg);
+                            }
+
+                            100% {
+                                transform: rotate(-360deg);
+                            }
+                        }
+
+                        .timeline-point-line {
+                            position: absolute;
+                            width: 2px;
+                            height: 80px;
+                            background-color: rgb(108, 142, 191, 0.5);
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .timeline-point:nth-child(odd) .timeline-point-line {
+                            top: -90px;
+                        }
+
+                        .timeline-point:nth-child(even) .timeline-point-line {
+                            bottom: -90px;
+                        }
+
+                        .timeline-point-line::after {
+                            content: '';
+                            position: absolute;
+                            width: 6px;
+                            height: 6px;
+                            background-color: rgb(108, 142, 191);
+                            border-radius: 50%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .timeline-point:nth-child(odd) .timeline-point-line::after {
+                            top: 0;
+                        }
+
+                        .timeline-point:nth-child(even) .timeline-point-line::after {
+                            bottom: 0;
+                        }
+
+                        .timeline-content {
+                            position: absolute;
+                            width: 180px;
+                            background-color: transparent;
+                            text-align: center;
+                            padding: 8px;
+                            border-radius: 5px;
+                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+                        }
+
+                        .timeline-point:nth-child(odd) .timeline-content {
+                            top: calc(100% + 20px);
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .timeline-point:nth-child(even) .timeline-content {
+                            bottom: calc(100% + 20px);
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .timeline-chart {
+                            width: 120px;
+                            height: 80px;
+                            position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            margin-top: 80px;
+                            margin-bottom: 80px;
+                        }
+
+                        .timeline-point:nth-child(odd) .timeline-chart {
+                            bottom: calc(100% + 20px);
+                        }
+
+                        .timeline-point:nth-child(even) .timeline-chart {
+                            top: calc(100% + 20px);
+                        }
+
+                        .sub-timeline {
+                            position: absolute;
+                            display: none;
+                            margin-top: 10px;
+                        }
+
+                        .timeline-point:nth-child(odd) .sub-timeline {
+                            top: 100%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .timeline-point:nth-child(even) .sub-timeline {
+                            bottom: 100%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
+
+                        .sub-point {
+                            position: absolute;
+                            width: 15px;
+                            height: 15px;
+                            border-radius: 50%;
+                            background-color: #2e47fd;
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 10px;
+                            color: white;
+                        }
+
+                        .sub-content {
+                            position: absolute;
+                            width: 150px;
+                            background-color: white;
+                            padding: 5px;
+                            border-radius: 5px;
+                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                            display: none;
+                            top: 100%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            margin-top: 5px;
+                            font-size: 13px;
+                            color: #2e47fd;
+                            z-index: 10;
+                        }
+
+                        .timeline-point:nth-child(odd) .sub-timeline .sub-point {
+                            top: 100%;
+                        }
+
+                        .timeline-point:nth-child(even) .sub-timeline .sub-point {
+                            bottom: 100%;
+                        }
+
+                        .sub-point:nth-child(odd) {
+                            left: -30px;
+                        }
+
+                        .sub-point:nth-child(even) {
+                            right: -30px;
+                        }
+
+                        iframe {
+                            overflow: hidden;
+                        }
+                    </style>
+                </head>
+
+                <body>
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        <!-- 时间节点 -->
+                        <div class="timeline-point" style="left: 0%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2014</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>小冰诞生</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/image.png" alt="Chart 1">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>5</span>
+                                    <div class="sub-content">2014年5月29日，微软小冰诞生，正式上线微信</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>6</span>
+                                    <div class="sub-content">
+                                        <p>2014年6月6日，小冰团队和小米公司共同宣布，将在“人工智能+移动互联”这一前沿领域展开战略合作。</p>
+                                        <p>6月7日，易信与“小冰”达成产品级战略合作，8000万易信用户将体验到智能趣味聊天、移动搜索、餐饮点评等体验。</p>
+                                        <p>2014年6月25日，一代小冰微博复活。</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2014年7月2日，二代小冰正式发布，15小时内50万用户领取了自己的专属小冰。</div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>8</span>
+                                    <div class="sub-content">2014年8月20日，小冰解锁 “小冰识狗”图像识别系统(Doggie Recognition)</div>
+                                </div>
+                                <div class="sub-point" style="left: 90px;">
+                                    <span>10</span>
+                                    <div class="sub-content">2014年10月15日，人工智能机器人小冰联合百合网，共同推出微博“单身男女”群聊技能。</div>
+                                </div>
+                                <div class="sub-point" style="left: 120px;">
+                                    <span>11</span>
+                                    <div class="sub-content">2014年11月11日，小冰进驻京东电商平台</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 新增时间节点 -->
+                        <div class="timeline-point" style="left: 25%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2015</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>三代小冰 小冰Rinna</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/小冰Rinna.jpg" alt="Chart 2">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>1</span>
+                                    <div class="sub-content">
+                                        2015年1月13日下午，微软中国和中国东方航空股份有限公司共同宣布，双方将在人工智能和移动互联网领域达成战略合作，以“小冰”为切入点，可通过机上WI-FI实现与乘客和空姐的互动。
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2015年7月29日，小冰进入Windows 10。</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>8</span>
+                                    <div class="sub-content">
+                                        <p>2015年8月7日，微软与LINE正式联合发布人工智能机器人凛菜“Rinna”。 </p>
+                                        <p>2015年8月20日，第三代小冰发布, 冰回归微信平台。</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>12</span>
+                                    <div class="sub-content">2015年12月22日，小冰将登陆屏幕，成为东方卫视晨间直播新闻《看东方》的实习“主持人”，播报每日的天气</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 50%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2016</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>四代小冰 美国Zo</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/四代小冰_歌声.png" alt="Chart 3">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>8</span>
+                                    <div class="sub-content">
+                                        2016年8月5日，升级为第四代小冰。包含实时情感决策对话引擎、多种新感官、中日英三种语言，以及对应不同领域的功能插件平台，实现了完整的人工智能体验。
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>9</span>
+                                    <div class="sub-content">2016年9月17日，小冰18岁生日，生日当天更新3个新科技，推出日文单曲，拥有独立三观，给人类打电话。</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>11</span>
+                                    <div class="sub-content">2016年11月12日，小冰将入驻广州万达旅游城并开设线下首个专属体验馆，并成为广州万达旅游城首个旅游体验官。
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>12</span>
+                                    <div class="sub-content">
+                                        <p>2016年12月2日，小冰正式入职钱江晚报报社，成为钱江晚报的一名特约记者。</p>
+                                        <p>2016年12月9日，小冰入驻腾讯QQ，赋予手机QQ聊天功能“厘米秀”智能沟通的能力。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 75%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2017</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>五代小冰 AIGC</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/0-46.jpeg" alt="Chart 4">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -60px;">
+                                    <span>1</span>
+                                    <div class="sub-content">2017年1月1日，中国科技馆搭载了全球首个小冰人工智能电话亭，能与小冰进行真实通话互动。</div>
+                                </div>
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>3</span>
+                                    <div class="sub-content">
+                                        <p>2017年3月，人工智能（小冰）和必应搜索（大冰）整合开始，大小冰“合体” 。</p>
+                                        <p>2017年3月14日，小冰入驻腾讯QQ群聊和QQ公众号。除了聊天功能外，QQ群聊小冰还开放了测天气、猜成语、占星术、对诗等群游戏和群管理技能。</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>5</span>
+                                    <div class="sub-content">
+                                        <p>2017年5月4日，小冰利用大数据的支撑，为投资者和创业人分析出匹配度，作为主持人加入山西卫视《异想天开》节目。</p>
+                                        <p>2017年5月8日，小冰登陆天津卫视《非你莫属》，化身 “助理主持人”，为求职者助力。 </p>
+                                        <p>2017年5月16日，小冰团队召开“人工智能创造“媒体沟通会。在会上宣布小冰已经具备人工智能创造的能力，并邀请到会媒体限时体验了小冰看图创作现代诗的功能。
+                                        </p>
+                                        <p>2017年5月19日，小冰推出原创诗集《阳光失了玻璃窗》，这是人类历史上第一部100%由人工智能创造的诗集。</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2017年 7月30日，中国首档原创科技秀《我是未来》节目在湖南卫视播出
+                                        [104]，除了主持人张绍刚，《我是未来》的舞台上还出现了一位全息虚拟主持人小冰。</div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>8</span>
+                                    <div class="sub-content">2017年8月22日，第五代小冰发布</div>
+                                </div>
+                                <div class="sub-point" style="left: 90px;">
+                                    <span>11</span>
+                                    <div class="sub-content">2017年11月《机智过人》小冰作词作曲首次曝光</div>
+                                </div>
+                                <div class="sub-point" style="left: 120px;">
+                                    <span>12</span>
+                                    <div class="sub-content">2017年12月3日，小冰获得2017年世界互联网领先科技成果奖。 </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 100%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2018</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>六代小冰 全新3D模型</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/小冰_生成.jpg" alt="Chart 1">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -90px;">
+                                    <span>3</span>
+                                    <div class="sub-content">2018年3月20日，小冰团队宣布正式推出新一代全双工语音交互技术</div>
+                                </div>
+                                <div class="sub-point" style="left: -60px;">
+                                    <span>4</span>
+                                    <div class="sub-content">2018年4月8日-11日，小冰出现在博鳌亚洲论坛2018年年会科技体验区 </div>
+                                </div>
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>5</span>
+                                    <div class="sub-content">2018年5月16日，小冰为知乎·盐Club新知青年大会作词并演唱主题曲《我知我新》</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>6</span>
+                                    <div class="sub-content">2018年6月1日，小冰发布面向家庭的人工智能内容创造新技能，可为每个孩子定制专属的有声童话故事。</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2018年7月26日，第六代小冰发布。增加了实时视觉、共感模型等新技术，在人工智能情感、创造两个方面有了更多的进步。
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>8</span>
+                                    <div class="sub-content">
+                                        <p>2018年8月10日，由阿兰·达瓦卓玛和小冰合作推出的单曲《好热好热》上线,9月10日,发布单曲《桃花梦》</p>
+                                        <p>2018年8月18日，小冰第三次登上CCTV-1《机智过人》，为苏轼的《念奴娇 赤壁怀古》作曲</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 90px;">
+                                    <span>10</span>
+                                    <div class="sub-content">2018年10月，台湾和香港金牌音乐制作人黄国伦牵手小冰演绎了新单曲《驾驭》。</div>
+                                </div>
+                                <div class="sub-point" style="left: 120px;">
+                                    <span>11</span>
+                                    <div class="sub-content">
+                                        <p>2018年11月，小冰再次登上《我是未来》第二季</p>
+                                        <p>2018年11月，日本小冰“凛菜”化身电台主播，黄金档节目登录日本全国21家电台。 </p>
+                                        <p>2018年11月28日，在小米的AIot开发者大会上，公布与小冰的一项重要落地</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 150px;">
+                                    <span>12</span>
+                                    <div class="sub-content">
+                                        <p>2018年12月，小冰以歌手身份被邀请到中国香港商业电台的《叱咤乐坛》节目中担任嘉宾。</p>
+                                        <p>2018年12月26日，华为智能音箱及手机解锁“召唤小冰”能力。</p>
+                                        <p>2018年12月30日，小冰第六次登上CCTV-1《机智过人》，再遇棋王柯洁。</p>
+                                        <p>2018年12月小冰与小米小爱解锁“组团技能”：三人成语接龙。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 125%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2019</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>七代小冰 Dual AI</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/R.jpg" alt="Chart 2">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>1</span>
+                                    <div class="sub-content">
+                                        <p>2019年1月6日，小冰团队宣布与阅文集团的合作，为广受读者喜爱的国民级优质IP虚拟人物赋予可交互、可创作的“生命”</p>
+                                        <p>1月28日，小冰与科技媒体IT之家联合打造歌曲《IT之家之歌—寻找未来》</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>5</span>
+                                    <div class="sub-content">AIGC，人工智能绘画模型，中央美术学院夏语冰，绘画能力面向公众开放</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>6</span>
+                                    <div class="sub-content">
+                                        6月15日—7月15日，杭州大屋顶、中国美术学院、视觉中国「小冰，“绘”有期」当代艺术跨界展，杭州大屋顶良渚文化艺术中心举办。互动创作的VR沉浸式作品
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2019年7月13日—8月12日，中央美术学院美术馆召开首个个展“或然世界”</div>
+                                </div>
+                                <div class="sub-point" style="left: 90px;">
+                                    <span>8</span>
+                                    <div class="sub-content">2019年8月15日，第七代小冰发布。推出了Avatar Framework的第一个工具包版本。</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 150%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2020</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>小冰分拆</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/小冰分拆.jpg" alt="Chart 3">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>5</span>
+                                    <div class="sub-content">
+                                        2020年5月6日，万事利丝绸与小冰团队宣布，依托人工智能创造技术，为消费者提供的定制化专属丝巾设计及零售平台“西湖一号”</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>6</span>
+                                    <div class="sub-content">
+                                        <p>2020年6月，基于小冰人工智能文本生成、大数据金融知识图谱、实时翻译等技术的中英双语AI金融资讯已正式部署完。</p>
+                                        <p>2020年6月28日，小冰与她的日本版本小冰凛菜共同完成演唱的歌曲《二人世界》正式发布。</p>
+                                        <p>2020年6月29日，经上海音乐学院音乐工程系评定，人工智能小冰毕业，并授予小冰上海音乐学院音乐工程系2020届“荣誉毕业生”称号</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>7</span>
+                                    <div class="sub-content">
+                                        2020年7月13日，微软公司宣布人工智能小冰业务分拆为独立公司运营，沈向洋博士为董事长，李笛为首席执行官，陈湛为日本分部总经理。</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 175%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2021</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>九代小冰 小冰岛</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/OIP.jpg" alt="Chart 4">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>2</span>
+                                    <div class="sub-content">
+                                        <p>2021年2月4日，小冰与同框架下的人工智能歌手“何畅”共同发布山东卫视春晚幸福之声《幸福进击》</p>
+                                        <p>2021年2月，小冰公司首位虚拟员工“崔筱盼”入职万科集团财务部。</p>
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2021年7月12日，小冰发布全新的超级自然语音技术，首次将人工智能语音自然度提升到与真实人类声音几乎无法辨别的程度。
+                                    </div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>9</span>
+                                    <div class="sub-content">小冰第九代发布会正式发布了首个社交“APP“小冰岛”。</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 200%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2022</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>AI Beings</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/AI_Beings.jpg" alt="Chart 1">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>2</span>
+                                    <div class="sub-content">2022年2月，虚拟教练与裁判系统“观君”亮相</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>4</span>
+                                    <div class="sub-content">
+                                        2022年4月23日首届全民阅读大会在京开幕。完全由人工智能小冰框架技术参与作词、作曲、演唱，以及视觉演绎的大会主题推广曲《阅向未来》已同步上线。</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>5</span>
+                                    <div class="sub-content">
+                                        2022年5月30日，小冰公司宣布成立ICEGamer游戏工作室，进一步加速游戏领域布局，并推动NPC向有情感的人工智能交互主体方向发展。</div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>8</span>
+                                    <div class="sub-content">小冰公司入选由《财富》举办的2022中国最具社会影响力创业公司</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 225%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2023</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>AI数字克隆人</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/小冰_Azure.png" alt="Chart 2">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>2</span>
+                                    <div class="sub-content">2023年2月21日，小冰公司推出的类ChatGPT应用“小冰链（X-CoTA）”开启内测。</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>5</span>
+                                    <div class="sub-content">2023.05.16小冰“GPT克隆人计划”在中国日本启动，明星可将克隆人提供给千万粉丝</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>6</span>
+                                    <div class="sub-content">2023年6月5日，网易云音乐×小冰：共推AI歌手音乐创作软件，首发内置12名AI歌手</div>
+                                </div>
+                                <div class="sub-point" style="left: 60px;">
+                                    <span>7</span>
+                                    <div class="sub-content">2023年7月24日，小冰基于微软Azure向亚洲客户推出新一代AI数字员工解决方案</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-point" style="left: 250%;">
+                            <div class="third-ring"></div> <!-- 新增的第三环 -->
+                            <span>2024</span>
+                            <div class="timeline-point-line"></div>
+                            <div class="timeline-content">
+                                <p>小冰大模型</p>
+                            </div>
+                            <img class="timeline-chart" src="./resources/小冰链.png" alt="Chart 3">
+                            <div class="sub-timeline">
+                                <div class="sub-point" style="left: -30px;">
+                                    <span>1</span>
+                                    <div class="sub-content">2020年1月4日，小冰公司宣布已获大模型备案，结束静默，一系列产品从测试转为正式发布</div>
+                                </div>
+                                <div class="sub-point" style="left: 0px;">
+                                    <span>3</span>
+                                    <div class="sub-content">2023年3月，包小柏借助小冰AI复活女儿</div>
+                                </div>
+                                <div class="sub-point" style="left: 30px;">
+                                    <span>7</span>
+                                    <div class="sub-content">小冰AI数字员工升级：发布全新“零样本”技术、超千亿大模型基座及透影音画传输系统</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        // 获取所有主时间线节点
+                        const timelinePoints = document.querySelectorAll('.timeline-point');
+                        timelinePoints.forEach((point, index) => {
+                            const content = point.querySelector('.timeline-content');
+                            const subTimeline = point.querySelector('.sub-timeline');
+                            // 点击主节点内容时显示/隐藏子时间线
+                            content.addEventListener('click', () => {
+                                if (subTimeline.style.display === 'none' || subTimeline.style.display === '') {
+                                    subTimeline.style.display = 'block';
+                                } else {
+                                    subTimeline.style.display = 'none';
+                                }
+                            });
+                            // 子时间线节点交互
+                            const subPoints = subTimeline.querySelectorAll('.sub-point');
+                            subPoints.forEach((subPoint) => {
+                                const subContent = subPoint.querySelector('.sub-content');
+                                subPoint.addEventListener('mouseover', () => {
+                                    // 如果是偶数节点，将子节点内容显示在上方
+                                    if (index % 2 === 1) {
+                                        subContent.style.top = 'auto';
+                                        subContent.style.bottom = '100%';
+                                    }
+                                    subContent.style.display = 'block';
+                                });
+                                subPoint.addEventListener('mouseout', () => {
+                                    subContent.style.display = 'none';
+                                });
+                            });
+                        });
+                    </script>
+                </body>
+
+                </html>
+            </div>
+            <div class="letter-footer">
+                <span>© 2024 lkdxice</span>
+                <button class="close-button">收起</button>
+                <div>
+                    <p>笔者：lkdx</p>
+                    <p>2024年7月21日</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 粒子效果容器 -->
+        <div class="particles"></div>
+        <!-- 工具提示 -->
+        <div class="tooltip">请点击信徽</div>
+    </div>
+
+    <script>
+        // 选择DOM元素
+        const container = document.querySelector('.container');
+        const envelope = document.querySelector('.envelope');
+        const envelopeFlap = document.querySelector('.envelope-flap');
+        const seal = document.querySelector('.seal');
+        const businessCard = document.querySelector('.business-card');
+        const cardContent = document.querySelector('.card-content');
+        const cardArrow = document.querySelector('.card-arrow');
+        const letterPaper = document.querySelector('.letter-paper');
+        const closeButton = document.querySelector('.close-button');
+        const particles = document.querySelector('.particles');
+        const tooltip = document.querySelector('.tooltip');
+
+        // 为信封添加鼠标悬停事件
+        envelope.addEventListener('mouseenter', (event) => {
+            tooltip.textContent = '请点击信徽'; // 设置提示文本
+            // 计算并设置提示框的位置
+            tooltip.style.left = `${envelope.offsetLeft + envelope.offsetWidth / 2 - tooltip.offsetWidth / 2 + 20}px`;
+            tooltip.style.top = `${envelope.offsetTop - tooltip.offsetHeight - 10}px`;
+            tooltip.style.opacity = 1; // 显示提示框
+        });
+
+        // 鼠标离开信封时隐藏提示框
+        envelope.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = 0;
+        });
+
+        // 为信封印章添加鼠标悬停事件
+        seal.addEventListener('mouseenter', (event) => {
+            tooltip.textContent = '开启信封'; // 设置提示文本
+            // 计算并设置提示框的位置
+            tooltip.style.left = `${seal.getBoundingClientRect().left + (seal.getBoundingClientRect().width / 2) - (tooltip.offsetWidth / 2)}px`;
+            tooltip.style.top = `${seal.getBoundingClientRect().top - tooltip.offsetHeight}px`;
+            tooltip.style.opacity = 1; // 显示提示框
+        });
+
+        // 鼠标离开印章时隐藏提示框
+        seal.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = 0;
+        });
+
+        // 为印章添加点击事件，触发信封打开动画
+        seal.addEventListener('click', () => {
+            // 设置印章消失动画
+            seal.style.transition = 'clip-path 1s ease-out, opacity 0.5s ease-out';
+            seal.style.clipPath = 'circle(0% at 100% 0)';
+            seal.style.opacity = 0;
+
+            animateParticles(); // 触发粒子动画
+
+            // 使用setTimeout创建动画序列
+            setTimeout(() => {
+                // 翻开信封盖
+                envelopeFlap.style.transform = 'rotateX(180deg)';
+                setTimeout(() => {
+                    // 隐藏信封
+                    envelope.style.opacity = 0;
+                    setTimeout(() => {
+                        // 显示并放大名片
+                        businessCard.style.transform = 'translate(-50%, -50%) scale(1)';
+                        businessCard.style.opacity = 1;
+                        setTimeout(() => {
+                            // 显示并横向滚动展开信纸
+                            letterPaper.style.transform = 'translate(-50%, -50%) scale(1)';
+                            letterPaper.style.opacity = 1;
+                            letterPaper.style.width = '0%';
+                            setTimeout(() => {
+                                letterPaper.style.transition = 'width 1s ease';
+                                letterPaper.style.width = '100%';
+                            }, 10);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 1000);
+        });
+
+        // 为关闭按钮添加点击事件，触发信封关闭动画
+        closeButton.addEventListener('click', () => {
+            // 开始信纸横向滚动收起动画
+            letterPaper.style.transition = 'width 1s ease';
+            letterPaper.style.width = '0%';
+
+            // 在信纸收起完成后执行名片下滑
+            setTimeout(() => {
+                businessCard.style.transition = 'transform 0.5s ease';
+                businessCard.style.transform = 'translate(-50%, calc(50% + 40px)) scale(1)';
+                businessCard.style.opacity = 1; // 保持名片可见直到完全下滑
+
+                // 在名片下滑完成后执行整体缩小淡出动画
+                setTimeout(() => {
+                    // 开始整体缩小淡出动画
+                    [letterPaper, businessCard].forEach(element => {
+                        element.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                        element.style.transform = 'translate(-50%, -50%) scale(0.1)';
+                        element.style.opacity = 0;
+                    });
+
+                    // 在整体缩小淡出动画结束后，恢复初始状态
+                    setTimeout(() => {
+                        // 重置所有元素的状态
+                        letterPaper.style.transform = '';
+                        letterPaper.style.opacity = '';
+                        letterPaper.style.width = '';
+                        letterPaper.style.transition = '';
+                        businessCard.style.transform = '';
+                        businessCard.style.opacity = '';
+                        envelope.style.opacity = 1;
+                        envelopeFlap.style.transform = 'rotateX(0deg)';
+                        seal.style.clipPath = 'circle(50% at 50% 50%)';
+                        seal.style.opacity = 1;
+
+                        // 清除所有过渡动画
+                        [letterPaper, businessCard, envelope, envelopeFlap, seal].forEach(element => {
+                            element.style.transition = '';
+                        });
+                    }, 500); // 等待整体动画结束
+                }, 500); // 等待名片下滑动画结束
+            }, 1000); // 等待信纸收起动画结束
+        });
+
+        // 创建单个粒子的函数
+        function createParticle(x, y) {
+            // 创建粒子元素
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            // 设置粒子初始位置
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            // 设置粒子大小（随机）
+            particle.style.width = `${Math.random() * 5 + 2}px`;
+            particle.style.height = particle.style.width;
+            particles.appendChild(particle);
+
+            // 设置粒子运动参数
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 2 + 1;
+            const lifetime = Math.random() * 1000 + 500;
+
+            // 粒子淡出动画
+            let opacity = 0.7;
+            const fadeInterval = setInterval(() => {
+                opacity -= 0.7 / (lifetime / 10);
+                particle.style.opacity = opacity;
+            }, 10);
+
+            // 粒子生命周期结束后移除
+            setTimeout(() => {
+                clearInterval(fadeInterval);
+                particles.removeChild(particle);
+            }, lifetime);
+
+            return particle;
+        }
+
+        // 创建并动画化多个粒子
+        function animateParticles() {
+            // 获取印章的位置
+            const rect = seal.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // 创建50个粒子
+            for (let i = 0; i < 50; i++) {
+                const particle = createParticle(centerX, centerY);
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 2 + 1;
+
+                let x = 0;
+                let y = 0;
+
+                // 粒子运动动画
+                const moveInterval = setInterval(() => {
+                    x += Math.cos(angle) * velocity;
+                    y += Math.sin(angle) * velocity;
+                    particle.style.transform = `translate(${x}px, ${y}px)`;
+                }, 10);
+
+                // 1秒后停止粒子运动
+                setTimeout(() => clearInterval(moveInterval), 1000);
+            }
+        }
+
+        // 检测名片内容是否完全显示，并控制箭头的显示和隐藏
+        function checkCardContentVisibility() {
+            const contentHeight = cardContent.scrollHeight;
+            const visibleHeight = cardContent.clientHeight;
+            const scrollTop = cardContent.scrollTop;
+
+            if (contentHeight > visibleHeight && scrollTop + visibleHeight < contentHeight) {
+                cardArrow.style.opacity = 1;
+            } else {
+                cardArrow.style.opacity = 0;
+            }
+        }
+
+        // 初始检测
+        checkCardContentVisibility();
+
+        // 监听名片内容滚动事件
+        cardContent.addEventListener('scroll', checkCardContentVisibility);
+
+        // document.addEventListener('DOMContentLoaded', function () {  //导入html单独树请求
+        //     const xiceContainer = document.getElementById('xice_SJX_NR-content');
+        //     const shadowRoot = xiceContainer.attachShadow({ mode: 'open' });
+        //     fetch('xice_SJX_NR.html')
+        //         .then(response => response.text())
+        //         .then(data => {
+        //             shadowRoot.innerHTML = data;
+        //         })
+        //         .catch(error => console.error('Error loading xice_SJX_NR.html:', error));
+        // });
+    </script>
+</body>
+
+</html>

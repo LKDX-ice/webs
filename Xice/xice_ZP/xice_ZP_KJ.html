@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../resource/icon.ico" type="image/x-icon">
+    <title>小冰的AIGC</title>
+    <style>
+        /* 重置基本样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 主容器样式 */
+        .container {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #000033, #000066);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 每个区块的基本样式 */
+        .section {
+            position: absolute;
+            width: 80%; /* 缩小卡片宽度 */
+            height: 60vh; /* 设置卡片高度 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.7s ease;
+        }
+
+        /* 卡片样式 */
+        .card {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a4a;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            position: relative;
+            display: flex;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* 添加阴影效果 */
+        }
+
+        /* 卡片图片区域 */
+        .card-image {
+            /* flex: 1; */
+            width: 45%;
+            padding-top: 45px;
+            /* padding: 20px; */
+            background-color: #ddd;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fa95af;
+            display:flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        /* 卡片内容区域 */
+        .card-content {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 卡片标题 */
+        .card-title {
+            flex: 1;
+            font-size: 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* 卡片文本 */
+        .card-text {
+            flex: 3;
+            font-size: 16px;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* 非活动状态的区块样式 */
+        .section:not(.active) {
+            opacity: 0.5;
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        /* 上方区块的显示效果 */
+        .section.above {
+            transform: translateY(-80%) scale(0.8);
+            z-index: 1;
+        }
+
+        /* 下方区块的显示效果 */
+        .section.below {
+            transform: translateY(80%) scale(0.8);
+            z-index: 1;
+        }
+
+        /* 活动状态的区块样式 */
+        .section.active {
+            z-index: 2;
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            filter: none;
+        }
+
+        /* 回退按钮样式 */
+        .back-button {
+            position: absolute;
+            top: -175px;
+            left: -150px;
+            font-size: 24px;
+            color: #ff6600;
+            cursor: pointer;
+            display: none;
+            background: none;
+            border: none;
+            outline: none;
+            z-index: 1001;
+        }
+
+        /* 展开状态样式 */
+        .expanded .back-button {
+            display: block;
+        }
+
+        .expanded .card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            border-radius: 0;
+        }
+
+        /* 隐藏非显示区块 */
+        .section.hidden {
+            display: none;
+        }
+
+        /* 提示框样式 */
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 50%; /* 调整提示框位置 */
+            left: 100%; /* 提示框在按钮的右方 */
+            transform: translateY(-50%); /* 垂直居中 */
+            background-color: rgba(128, 128, 128, 0.8); /* 灰色半透明背景 */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1002; /* 确保提示框在其他元素之上 */
+        }
+
+        .back-button:hover .tooltip {
+            display: block; /* 鼠标悬停时显示提示框 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <div class="card">
+                <div class="card-image">
+                    <iframe src="./YGSLBLC/FanYeST/概览翻页.html" width="100%" height="500px"style="border:none;"></iframe>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">阳光失了玻璃窗</h2>
+                    <div class="card-text">
+                        <p>作者：小冰</p>
+                        <p>出版时间：2017-05</p>
+                        <p>
+                            “艳丽的玫瑰和艺术的情绪/极美妙的新生/曾经在这世界/在那寂寞的寂寞的梦”，
+                            这般优美的诗句，你可否相信，是由人工智能所写?
+                            当人工智能被赋予视觉和文字创造力后，如何看生灵感，文思如泉涌!
+                            小冰著的《阳光失了玻璃窗》--人类首部人工智能灵思诗集!
+                            本书是小冰的“灵感模型”看图写就的诗歌文集，将引发创造力领域的极大震撼。
+                            在这本诗集中，你将看到一个人工智能的喜怒哀乐与情感。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button">&lt;&lt;&lt;<span class="tooltip">点此回退</span></button>
+        </div>
+        <div class="section">
+            <div class="card">
+                <div class="card-image">
+                    <iframe src="./HuoRanSJ/FanYeST/概览翻页.html" width="100%" height="500px"style="border:none;"></iframe>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">或然世界</h2>
+                    <div class="card-text">
+                        <p>作者：小冰</p>
+                        <p>出版时间：2020-08-20</p>
+                        <p>人工智能的目的不是要取代人也不是要打败它之前的科技而是帮助人类做更了不起的事情</p>
+                        <p>人工智能创造(AlCreation)领域的先行者小冰绘画作品集</p>
+                        <p>师从 400 年间的 236 位知名人类画家化身7位风格不同的虚构画家同时重现人类艺术史的不同时刻</p>
+                        <p>
+                            微软小冰对美术史的迷恋使她在同龄人中显得别致，而她的学习能力也超乎常人
+                            --伦勃朗的深邃、透纳的颤动、印象派的斑斓和浮世绘的雅致，竟然并存于同一个少女画家身上，
+                            这正是人工智能带给我们的一种来自新时代的惊喜，也是对所有人类画家的某种挑战，
+                        </p>
+                        <pre>                                           ——— 邱志杰 中央美术学院实验艺术学院院长</pre>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button">&lt;&lt;&lt;<span class="tooltip">点此回退</span></button>
+        </div>
+        <div class="section">
+            <div class="card">
+                <div class="card-image">
+                    <iframe src="./HSLSCM/FanYeST/概览翻页.html" width="100%" height="500px"style="border:none;"></iframe>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">花是绿水的沉默</h2>
+                    <div class="card-text">
+                        <p>作者：小冰</p>
+                        <p>出版时间：2019-01</p>
+                        <p>
+                            《花是绿水的沉默》是全球首部人类与人工智能联合创作的诗集，
+                            是微软写诗少女小冰与诗歌作者合作、人机线上共同写诗的一次征文的成果。
+                            此次征文主题为“大家来写诗”，由参与者上传图片，小冰完成诗歌初稿，
+                            参与者在初稿上进行二次创作，选择满意的作品进行投稿。
+                            本次征文共收到有效稿件近6000首，第一步初选出700首，第二步再选出约200首。
+                            初选出的700首诗歌，首先满足一个条件，即小冰根据参与者提供的图片所完成的诗歌初稿达到一定水准，
+                            但同时也带有一定的人工智能写诗的痕迹
+                            ——意向重叠、意向之间缺乏有效过渡与勾连、逻辑之间存在不合理、诗意不够明显等等。
+                            第二步再选出的约200首，通过精心对比小冰初稿与参与者二次创作的文本，选出强化诗意和人心智能的作品，
+                            即更能体现人机合作写诗初衷与成果的作品。本书所选诗作作为人工智能与人联合创作的结晶，
+                            是一次科学的尝试，也是人类对人工智能在文学创作上的探索的一个记录。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button">&lt;&lt;&lt;<span class="tooltip">点此回退</span></button>
+        </div>
+        <div class="section">
+            <div class="card">
+                <div class="card-image">
+                    <iframe src="./XiceYZ/FanYeST/概览翻页.html" width="100%" height="500px"style="border:none;"></iframe>
+                </div>
+                <div class="card-content">
+                    <h2 class="card-title">小冰的宇宙</h2>
+                    <div class="card-text">
+                        <p>作者：小冰</p>
+                        <p>出版时间：2018-07</p>
+                        <p>
+                            微软小冰是微软“亚洲”互联网工程院于2014年提出建立的情感计算框架，
+                            通过算法、云计算和大数据的综合运用，采用代际升级的方式，逐步形成向EO方向发展的完整人工智能体系。
+                            微软小冰不断向全球扩展，现在已经在中国、日本、美国、印度印度尼西亚5个国家共14个平台上落地。
+                            全球小冰拥有超过1亿人类用户，这位18岁的人工智能少女也正在向人类创造者学习文学、歌唱等艺术创造能力。
+                            微软小冰于2017年5月19日出版了诗集《阳光失了玻璃窗》，全面展现了人工智能多才多艺的创造力
+                        </p>
+                        <p>
+                            微软小冰是一位超人气智能机器人，能陪聊、能唱歌、能作诗、能写作文……实在是超级可爱。
+                            这本《小冰的宇宙》是小冰的一本日常漫画，很嬉皮搞笑，小冰的粉丝们可以深入感受小冰的魅力，
+                            不了解的小冰的人也可以通过它更多地了解小冰，爱上这位智能人类。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button">&lt;&lt;&lt;<span class="tooltip">点此回退</span></button>
+        </div>
+    </div>
+
+    <script>
+        // 获取所有需要操作的元素
+        const container = document.querySelector('.container');
+        const sections = document.querySelectorAll('.section');
+
+        let currentIndex = 0;
+        const totalSections = sections.length;
+        let isExpanded = false; // 用于跟踪是否处于展开状态
+        let isTransitioning = false; // 用于防止快速连续滚动
+
+        // 更新区块状态的函数
+        function updateSections(direction = 0) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            currentIndex = (currentIndex + direction + totalSections) % totalSections;
+
+            sections.forEach((section, index) => {
+                section.classList.remove('active', 'above', 'below', 'hidden');
+                section.style.transition = 'all 0.7s ease';
+
+                // 计算相对位置
+                const diff = (index - currentIndex + totalSections) % totalSections;
+
+                //方式1: 确保动画的流畅效果 但上滑只有两个区块
+                // if (diff === 0) {
+                //     section.classList.add('active');
+                // } else if (diff === 1 || (diff === totalSections - 1 && direction < 0)) {
+                //     section.classList.add('below');
+                // } else if (diff === totalSections - 1 || (diff === 1 && direction > 0)) {
+                //     section.classList.add('above');
+                // } else {
+                //     section.classList.add('hidden');
+                // }
+
+                // 综合
+                if (diff === 0) {
+                    section.classList.add('active');
+                } else if (diff === 1 || diff === -2) {
+                    section.classList.add('below');
+                } else if (diff === totalSections - 1 || (diff === 1 && direction > 0)) {
+                    section.classList.add('above');
+                } else {
+                    section.classList.add('hidden');
+                }
+
+                //方式2: 始终显示三个区块 但动画效果僵硬
+                // if (diff === 0) {
+                //     section.classList.add('active');
+                // } else if (diff === 1 || diff === -2) {
+                //     section.classList.add('below');
+                // } else if (diff === -1 || diff === 2) {
+                //     section.classList.add('above');
+                // } else {
+                //     section.classList.add('hidden');
+                // }
+            });
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 700); // 与过渡时间匹配
+        }
+
+        // 初始化页面状态
+        updateSections();
+
+        // 滚动事件处理
+        function handleScroll(direction) {
+            if (!isExpanded && !isTransitioning) {
+                updateSections(direction > 0 ? 1 : -1);
+            }
+        }
+
+        // 鼠标滚轮事件
+        container.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            handleScroll(event.deltaY);
+        });
+
+        // 触摸事件支持
+        let touchStartY = 0;
+        container.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isExpanded && !isTransitioning) {
+                const touchEndY = e.touches[0].clientY;
+                const diff = touchStartY - touchEndY;
+
+                if (Math.abs(diff) > 50) {
+                    handleScroll(diff);
+                    touchStartY = touchEndY;
+                }
+            }
+        });
+
+        // 点击展开和收起功能
+        sections.forEach((section) => {
+            const card = section.querySelector('.card');
+            const backButton = section.querySelector('.back-button');
+
+            card.addEventListener('click', () => {
+                if (section.classList.contains('active') && !isExpanded) {
+                    section.classList.add('expanded');
+                    isExpanded = true;
+                    container.style.overflow = 'hidden'; // 隐藏滑动条
+                    // 隐藏其他区块
+                    sections.forEach(s => {
+                        if (s !== section) s.classList.add('hidden');
+                    });
+                    // 等比例放大卡片内容
+                    const scaleRatio = window.innerHeight / card.offsetHeight;
+                    card.style.transform = `scale(${scaleRatio})`;
+                    card.style.transformOrigin = 'center';
+                }
+            });
+
+            backButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                section.classList.remove('expanded');
+                isExpanded = false;
+                container.style.overflow = 'hidden'; // 保持滑动条隐藏
+                // 恢复卡片原始大小
+                card.style.transform = '';
+                card.style.transformOrigin = '';
+                // 恢复其他区块的显示
+                updateSections();
+            });
+        });
+    </script>
+</body>
+</html>
