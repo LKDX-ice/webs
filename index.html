@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,15 +13,13 @@
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #2c2c2c;
-            /* 深色背景 */
             color: #fff;
-            /* 白色文字 */
             transition: background-color 0.3s, color 0.3s;
-            /* 平滑过渡效果 */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            /* 确保页面至少占满整个视口高度 */
+            overflow: hidden;
+            /* 隐藏滚动条 */
         }
 
         /* 头部样式 */
@@ -30,16 +29,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: fixed;
+            /* 固定位置 */
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            /* 确保在其他内容之上 */
         }
 
         .header h1 {
             margin: 0;
             font-size: 36px;
             background: linear-gradient(45deg, #8a2be2, #4169e1);
-            /* 渐变背景 */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* 使文字呈现渐变效果 */
         }
 
         /* 导航栏样式 */
@@ -50,6 +53,13 @@
             text-align: center;
             justify-content: center;
             height: 4vh;
+            position: fixed;
+            /* 固定位置 */
+            top: 10vh;
+            /* 在头部下方 */
+            width: 100%;
+            z-index: 1000;
+            /* 确保在其他内容之上 */
         }
 
         .nav a {
@@ -62,32 +72,44 @@
 
         .nav a:hover {
             background-color: #a0a0a0;
-            /* 鼠标悬停效果 */
         }
 
         /* 内容区域样式 */
         .content {
             display: flex;
             flex-grow: 1;
-            padding: 10px;
-            padding-top: 0px;
-            padding-left: 25px;
+            padding-top: 162px;
+            /* 为头部和导航栏留出空间 */
+            position: relative;
+            overflow-y: auto;
+            /* 允许内容区域滑动 */
+            overflow-x: hidden;
+            /* 隐藏水平滚动条 */
+            -ms-overflow-style: none;
+            /* IE 和 Edge 隐藏滚动条 */
+            scrollbar-width: none;
+            /* Firefox 隐藏滚动条 */
+        }
+
+        .content::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari 和 Opera 隐藏滚动条 */
         }
 
         /* 侧边栏容器样式 */
         .sidebar-container {
             display: flex;
             flex-direction: column;
-            /* 定义主轴方向为纵向 */
             gap: 20px;
             align-items: flex-start;
-            /* 子元素左对齐 */
             width: 200px;
-            /* 设置宽度 */
             height: auto;
             margin-top: 25px;
             margin-left: 100px;
-            margin-right: 60px;
+            position: fixed;
+            /* 固定位置 */
+            left: 0;
+            z-index: 1;
         }
 
         .sidebar {
@@ -98,7 +120,6 @@
         .logo {
             width: 100%;
             height: 150px;
-            /* background-color: #3c3c3c; */
             margin-bottom: 20px;
             display: flex;
             justify-content: center;
@@ -108,11 +129,11 @@
 
         /* 侧边栏链接样式 */
         .links {
-            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: calc(100% - 170px);
+            width: 150px;
+            height: 490px;
         }
 
         .links a,
@@ -129,10 +150,10 @@
             height: 40px;
         }
 
-        .links a:hover,.theme-switch:hover {
-            color: #5360FF; /* 鼠标悬停效果 */
+        .links a:hover,
+        .theme-switch:hover {
+            color: #5360FF;
         }
-
 
         .theme-switch {
             cursor: pointer;
@@ -143,6 +164,8 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            /* margin-left: 158px; */
+            /* 为侧边栏留出空间 */
             margin-right: 20%;
         }
 
@@ -152,14 +175,10 @@
         }
 
         .placeholder {
-            /* width: 100%; */
-            /* height: 40vh; */
-            /* background-color: #3c3c3c; */
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
-            /* background-color: white; */
             text-align: center;
         }
 
@@ -170,6 +189,12 @@
             text-align: center;
             font-size: 12px;
             height: 8vh;
+            /* position: fixed; */
+            /* 固定位置 */
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+            /* 确保在其他内容之上 */
         }
 
         /* 浅色主题样式 */
@@ -187,11 +212,6 @@
             background-color: #d0d0d0;
         }
 
-        /* body.light-theme .logo,
-        body.light-theme .placeholder {
-            background-color: #c0c0c0;
-        } */
-
         body.light-theme .links a,
         body.light-theme .theme-switch {
             color: #000;
@@ -208,7 +228,7 @@
     <!-- 导航栏 -->
     <div class="nav">
         <a href="https://xiaoice.com" target="_blank">小冰</a>
-        <a href="Xice/css.html" target="_blank">测试</a>
+        <a href="Xice/css.html" target="_blank">演示</a>
         <a href="Xice/xices.html" target="_blank">介绍</a>
         <a href="History/history.html" target="_blank">历史</a>
         <a href="Chinese medicine/YiYao.html" target="_blank">中医药</a>
@@ -228,21 +248,162 @@
                     <a href="https://codepen.io/chrisgannon/pen/ZaPmKp" target="_blank"><b>创意示例</b></a>
                     <a href="lkdx20231@outlook.com" target="_blank"><b>意见反馈</b></a>
                     <a href="https://developer.mozilla.org/zh-CN/docs/Learn" target="_blank"><b>MDN</b></a>
-                    <a href="lkdxFB.html"><b>原始页面</b></a>
-                    <div class="theme-switch" onclick="toggleTheme()">🌞 白昼模式</div>
+                    <a href="indexFB.html"><b>原始页面</b></a>
+                    <div class="theme-switch" onclick="toggleTheme()">🔆 白昼模式</div>
                 </div>
             </div>
         </div>
 
         <!-- 主内容 -->
         <div class="main-content">
-            <div class="intro" style="font-size: 20px;">
+            <div class="intro" style="font-size: 20px;margin-left: 40px;">
                 <p>这里是lkdx，欢迎来到这个网站</p>
-                <p>这是一个较为杂糅的静态网页，于兴趣与练习中产生，尚且粗糙</p>
+                <p>这是一个较为杂糅的静态网页，于练习与兴趣中产生，尚且粗糙</p>
                 <p>将不定期更新与完善，谢谢您的理解与包容</p>
             </div>
-                <p style="color: #8daac5; text-align: center;margin-top: 0px;margin-bottom: 0px;">数据可视化_图表示例</p>
-            <div class="placeholder">
+            <p style="color: #8daac5; text-align: center;margin-top: 0px;margin-bottom: 0px;">粒子时钟</p>
+            <div class="placeholder" style="margin-left: 158px;">
+                <!-- 粒子时钟代码保持不变 -->
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8"> <!-- 设置文档字符编码为UTF-8 -->
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 设置IE浏览器兼容模式 -->
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口，使页面在移动设备上正确显示 -->
+                    <title>粒子时钟</title> <!-- 设置页面标题 -->
+                    <style>
+                        body {
+                            /* background: transparent; */
+                            /* 设置背景为透明 */
+                            width: 100%;
+                            /* 设置宽度为100% */
+                            height: 100vh;
+                            /* 设置高度为视口高度 */
+                        }
+                    </style>
+                </head>
+                <body>
+                    <canvas class="clock"></canvas> <!-- 创建6个canvas元素，用于显示时钟 -->
+                    <canvas class="clock"></canvas>
+                    <canvas class="clock"></canvas>
+                    <canvas class="clock"></canvas>
+                    <canvas class="clock"></canvas>
+                    <canvas class="clock"></canvas>
+                    <script>
+                        // 获取所有class为clock的canvas元素
+                        var clocks = document.getElementsByClassName("clock")
+                        var ctx = [] // 存储每个canvas的绘图上下文
+                        var timestr = "" // 存储上一次的时间字符串
+                        var particleArray = [] // 存储所有粒子数组
+                        var colors = ["#1e90ff", "#1e90ff", "#2ed573", "#2ed573", "#ffa502", "#ffa502"] // 定义颜色数组
+                        var fonts = [] // 存储数字0-9的粒子数据
+                        // 初始化函数，设置canvas的尺寸和上下文，并生成字体粒子数据
+                        function init() {
+                            for (var i = 0; i < clocks.length; i++) {
+                                clocks[i].width = 250 // 设置canvas宽度
+                                clocks[i].height = 400 // 设置canvas高度
+                                ctx[i] = clocks[i].getContext("2d") // 获取2D绘图上下文
+                                ctx[i].fillStyle = colors[i] // 设置填充颜色
+                                particleArray.push([]) // 为每个canvas创建一个粒子数组
+                            }
+                            for (var i = 0; i < 10; i++) {
+                                ctx[0].font = "40px Arial" // 设置字体
+                                var width = ctx[0].measureText(i).width | 0 // 测量数字宽度并取整
+                                ctx[0].fillText(i, 0, 40) // 绘制数字
+                                var data = ctx[0].getImageData(0, 0, width, 40).data // 获取像素数据
+                                var len = data.length
+                                var tdata = []
+                                for (var j = 0; j < len / 4; j++) {
+                                    if (data[j * 4 + 3] != 0) { // 如果像素不透明
+                                        var x = j % width | 0 // 计算x坐标并取整
+                                        var y = j / width | 0 // 计算y坐标并取整
+                                        tdata.push([x, y]) // 将坐标添加到tdata数组
+                                    }
+                                }
+                                fonts.push(tdata) // 将数字的粒子数据添加到fonts数组
+                                ctx[0].clearRect(0, 0, 40, 40) // 清除canvas
+                            }
+                        }
+                        // 获取当前时间的字符串表示
+                        function timestring() {
+                            var d = new Date()
+                            return ("0" + d.getHours()).slice(-2) + ("0" + d.getMinutes()).slice(-2) + ("0" + d.getSeconds()).slice(-2)
+                        }
+                        init() // 调用初始化函数
+                        console.log(fonts) // 在控制台输出fonts数组
+                        // 粒子类，用于创建和更新粒子
+                        class particle {
+                            constructor(x, y) {
+                                this.x = Math.random() * 25 - 2.5 // 设置初始x坐标
+                                this.y = Math.random() * 40 + 5 // 设置初始y坐标
+                                this.ex = x // 目标x坐标
+                                this.ey = y // 目标y坐标
+                            }
+                            update() {
+                                this.x -= (this.x - this.ex) / 10 // 更新x坐标
+                                this.y -= (this.y - this.ey) / 10 // 更新y坐标
+                            }
+                            draw(i) {
+                                ctx[i].fillStyle = colors[i] // 设置填充颜色
+                                ctx[i].beginPath() // 开始绘制路径
+                                ctx[i].arc(this.x * 10 + 25, this.y * 10 - 50, 2, 0, Math.PI * 180, 0) // 绘制圆形
+                                ctx[i].fill() // 填充圆形
+                            }
+                        }
+                        // 根据时间变化调整粒子数组
+                        function change(ind, pi) {
+                            var newcount = fonts[ind].length - particleArray[pi].length // 计算需要添加或删除的粒子数量
+                            if (newcount >= 0) {
+                                for (var i = 0; i < newcount; i++) {
+                                    particleArray[pi].push(new particle(10, 20)) // 添加新粒子
+                                }
+                            }
+                            if (newcount < 0) {
+                                particleArray[pi].splice(0, -newcount) // 删除多余粒子
+                            }
+                            for (var i = 0; i < fonts[ind].length; i++) {
+                                particleArray[pi][i].ex = fonts[ind][i][0] // 设置目标x坐标
+                                particleArray[pi][i].ey = fonts[ind][i][1] // 设置目标y坐标
+                            }
+                            particleArray[pi].sort(function (a, b) { return Math.random() - 0.5 }) // 随机排序粒子数组
+                        }
+                        // 绘制函数，根据当前时间更新并绘制粒子
+                        function draw() {
+                            var timer = timestring() // 获取当前时间字符串
+                            for (var i = 0; i < timer.length; i++) {
+                                if (timer.charAt(i) != timestr.charAt(i)) { // 如果时间发生变化
+                                    change(timer.charAt(i), i) // 更新相应的粒子数组
+                                }
+                            }
+                            timestr = timer // 更新时间字符串
+                            for (var i = 0; i < clocks.length; i++) {
+                                // 创建一个临时canvas来应用透明度
+                                var tempCanvas = document.createElement('canvas');
+                                tempCanvas.width = clocks[i].width;
+                                tempCanvas.height = clocks[i].height;
+                                var tempCtx = tempCanvas.getContext('2d');
+                                // 将当前canvas的内容复制到临时canvas
+                                tempCtx.drawImage(clocks[i], 0, 0);
+                                // 清除当前canvas
+                                ctx[i].clearRect(0, 0, clocks[i].width, clocks[i].height);
+                                // 将临时canvas的内容以略微降低的不透明度绘制回当前canvas
+                                ctx[i].globalAlpha = 0.9; // 设置全局透明度
+                                ctx[i].drawImage(tempCanvas, 0, 0);
+                                ctx[i].globalAlpha = 1.0; // 重置全局透明度
+                                for (var j = 0; j < particleArray[i].length; j++) {
+                                    p = particleArray[i][j]
+                                    p.update() // 更新粒子位置
+                                    p.draw(i) // 绘制粒子
+                                }
+                            }
+                        }
+                        setInterval(draw, 20) // 每20毫秒调用一次draw函数
+                    </script>
+                </body>
+                </html>
+            </div>
+            <p style="color: #8daac5; text-align: center;margin-top: 0px;margin-bottom: 0px;">数据可视化_图表示例</p>
+            <div class="placeholder"style="margin-left: 40px;">
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -581,7 +742,7 @@
                         // - 重新加载页面：如果接收到的消息是 `'reload'`，则调用 `window.location.reload()` 重新加载页面。
                         // - 更新 CSS：如果接收到的消息以 `'update-css '` 开头，则更新页面中的 CSS 链接。
                     </script>
-        </div>
+            </div>
         </div>
     </div>
 
@@ -599,9 +760,10 @@
             if (document.body.classList.contains('light-theme')) {
                 themeSwitch.textContent = '🌙 暗夜模式';
             } else {
-                themeSwitch.textContent = '🌞 白昼模式';
+                themeSwitch.textContent = '🔆 白昼模式';
             }
         }
     </script>
 </body>
+
 </html>
