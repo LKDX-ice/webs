@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息反馈界面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: #0604E4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            text-align: center;
+            padding: 20px;
+        }
+        header h1 {
+            margin: 0;
+            background: linear-gradient(45deg, #8a2be2, #4169e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+        }
+        main {
+            flex-grow: 1;
+            padding: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        #feedback-form {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        #feedback-input {
+            flex-grow: 1;
+            /* padding: 10px; */
+            border: 1px solid #0604E4;
+            background-color: black;
+            color: #0604E4;
+            width: calc(66.67% - 20px);
+        }
+        #add-feedback {
+            padding: 10px 20px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        #feedback-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .feedback-item {
+            border: 1px solid #0604E4;
+            padding: 10px;
+            position: relative;
+            width: 355px;
+            height: 72px;
+            overflow: hidden;
+            transition: height 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .feedback-content {
+            flex-grow: 1;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .feedback-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .feedback-time {
+            font-size: 0.8em;
+        }
+        .feedback-actions button {
+            background: none;
+            border: none;
+            color: #0604E4;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .expanded {
+            height: auto;
+        }
+        #control-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+        #control-buttons button {
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #search-container, #sort-options {
+            display: none;
+            margin-top: 5px;
+        }
+        #search-container {
+            display: none; /* 初始状态下隐藏搜索容器 */
+            align-items: center;
+        }
+        #search-input {
+            padding: 5px;
+            border: 1px solid #0604E4;
+            background-color: black;
+            color: #0604E4;
+        }
+        #search-confirm, #search-return {
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        #sort-options {
+            position: absolute;
+            background-color: black;
+            border: 1px solid #0604E4;
+            padding: 5px;
+            z-index: 1000;
+        }
+        #sort-options button {
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LKDX</h1>
+    </header>
+    <main>
+        <form id="feedback-form">
+            <!-- <input type="text" id="feedback-input" placeholder="请在此处写入你想反馈的内容吧"> -->
+            <!-- <label for="feedback-form">请写入您想反馈的内容:</label>
+            <textarea id="feedback-input" name="feedback" rows="2" cols="50"></textarea><br><br> -->
+            <textarea id="feedback-input" placeholder="请在此处写入你想反馈的内容吧:"></textarea>
+            <button type="submit" id="add-feedback">添加</button>
+            <div id="control-buttons">
+                <button type="button" id="search-button">搜索</button>
+                <button type="button" id="sort-button">排序</button>
+            </div>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="请在此输入搜索内容吧">
+                <button type="button" id="search-confirm">确认</button>
+                <button type="button" id="search-return">返回</button>
+            </div>
+            <div id="sort-options">
+                <button type="button" id="sort-asc">时间顺序</button>
+                <button type="button" id="sort-desc">时间逆序</button>
+                <button type="button" id="sort-return">返回</button>
+            </div>
+        </form>
+        <div id="feedback-list"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 LKDX. 版权所有。</p>
+    </footer>
+
+    <script>
+        // 设置删除密码
+        const DELETE_PASSWORD = "1234";
+
+        // 页面加载时从localStorage加载反馈
+        window.addEventListener('load', loadFeedbacks);
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('feedback-input');
+            if (input.value.trim() !== '') {
+                addFeedback(input.value);
+                input.value = '';
+            }
+        });
+
+        // 添加反馈
+        function addFeedback(content, time = new Date(), id = Date.now()) {
+            const list = document.getElementById('feedback-list');
+            const item = document.createElement('div');
+            item.className = 'feedback-item';
+            item.innerHTML = `
+                <div class="feedback-content">${content}</div>
+                <div class="feedback-footer">
+                    <div class="feedback-time">${time.toLocaleString()}</div>
+                    <div class="feedback-actions">
+                        <button class="delete-btn">删除</button>
+                        <button class="expand-btn">展开</button>
+                    </div>
+                </div>
+            `;
+            item.dataset.id = id;
+            list.prepend(item);
+
+            // 保存到localStorage
+            saveFeedback(id, content, time);
+
+            // 删除按钮事件
+            item.querySelector('.delete-btn').addEventListener('click', function() {
+                const password = prompt("请输入删除密码：");
+                if (password === DELETE_PASSWORD) {
+                    list.removeChild(item);
+                    // 从localStorage中删除
+                    deleteFeedback(id);
+                } else {
+                    alert("密码错误！");
+                }
+            });
+
+            // 展开按钮事件
+            item.querySelector('.expand-btn').addEventListener('click', function() {
+                item.classList.toggle('expanded');
+                if (item.classList.contains('expanded')) {
+                    item.style.height = item.scrollHeight + 'px';
+                    this.textContent = '收起';
+                } else {
+                    item.style.height = '72px';
+                    this.textContent = '展开';
+                }
+            });
+        }
+
+        // 保存反馈到localStorage
+        function saveFeedback(id, content, time) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            feedbacks[id] = { content, time: time.toISOString() };
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        }
+
+        // 从localStorage加载反馈
+        function loadFeedbacks() {
+            const list = document.getElementById('feedback-list');
+            list.innerHTML = ''; // 清空现有的反馈列表
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            Object.entries(feedbacks).forEach(([id, feedback]) => {
+                addFeedback(feedback.content, new Date(feedback.time), id);
+            });
+        }
+
+        // 从localStorage删除反馈
+        function deleteFeedback(id) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            delete feedbacks[id];
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        }
+
+        // 搜索按钮事件
+        document.getElementById('search-button').addEventListener('click', function() {
+            document.getElementById('search-container').style.display = 'flex';
+            document.getElementById('sort-options').style.display = 'none';
+        });
+
+        // 搜索确认按钮事件
+        document.getElementById('search-confirm').addEventListener('click', function() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            feedbackItems.forEach(item => {
+                const content = item.querySelector('.feedback-content').textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // 搜索返回按钮事件
+        document.getElementById('search-return').addEventListener('click', function() {
+            document.getElementById('search-container').style.display = 'none';
+            document.getElementById('search-input').value = '';
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            feedbackItems.forEach(item => {
+                item.style.display = 'block';
+            });
+        });
+
+        // 排序按钮事件
+        document.getElementById('sort-button').addEventListener('click', function() {
+            const sortOptions = document.getElementById('sort-options');
+            sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('search-container').style.display = 'none';
+            
+            // 设置排序选项的位置
+            const rect = this.getBoundingClientRect();
+            sortOptions.style.top = `${rect.bottom + window.scrollY}px`;
+            sortOptions.style.left = `${rect.left + window.scrollX}px`;
+        });
+
+        // 时间顺序排序
+        document.getElementById('sort-asc').addEventListener('click', function() {
+            sortFeedbacks(true);
+        });
+
+        // 时间逆序排序
+        document.getElementById('sort-desc').addEventListener('click', function() {
+            sortFeedbacks(false);
+        });
+
+        // 排序返回按钮事件
+        document.getElementById('sort-return').addEventListener('click', function() {
+            document.getElementById('sort-options').style.display = 'none';
+            loadFeedbacks(); // 重新加载反馈，恢复到初始状态
+        });
+
+        // 排序函数
+        function sortFeedbacks(ascending) {
+            const list = document.getElementById('feedback-list');
+            const items = Array.from(list.children);
+            items.sort((a, b) => {
+                const timeA = new Date(a.querySelector('.feedback-time').textContent);
+                const timeB = new Date(b.querySelector('.feedback-time').textContent);
+                return ascending ? timeA - timeB : timeB - timeA;
+            });
+            items.forEach(item => list.appendChild(item));
+        }
+    </script>
+</body>
+</html>
