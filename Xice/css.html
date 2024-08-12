@@ -1,0 +1,195 @@
+<!DOCTYPE html> <!--定义文档类型 -> html 声明当前文件为html文件 */-->
+<html lang="zh-CN"> <!--html文档开始 包含网页所有内容,并声明语言类型 (默认为en(英语)) 此标签内部方为网页实际内容-->
+
+<head>  <!-- 定义文档类型和语言 -->
+  <meta charset="UTF-8">  <!-- 设置页面字符编码为UTF-8 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 设置浏览器兼容性，确保在最新的Internet Explorer版本中以最佳方式渲染页面 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 优化移动设备显示 在手机(移动端)显示时对屏幕进行适配 width=device-width表示宽度等于设备宽度，initial-scale=1.0表示初始缩放比例为1.0 -->
+  <title>测试网页</title>  <!-- 设置页面标题 -->
+  <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+</head>
+
+<div>
+  <body> <!-- 页面主体内容开始 -->
+    <img src="../resource/小冰.png" alt="小冰" width="100" height="100"><b>这是来自"小冰"的头像</b> <!-- 插入图片(链接,名称,宽高) width="100" height="100" -->
+
+    <p>你好，这里是lkdx，欢迎来到这个网站</p>
+    <p>Hello, this is lkdx, welcome to this site</p>
+
+  <!--设置段落文字颜色 style 风格-->
+    <style>
+      p {color: #4c27d165;}
+    </style>
+
+    <!-- 页面脚本 -->
+    <script>
+      console.log(测试网页.querySelector('p').style.color) //测试网页.querySelector('p')：使用querySelector方法选择网页中第一个<p>元素, .style.color：获取该元素的字体颜色属性值, console.log()：将获取到的字体颜色属性值输出到控制台。
+    </script>
+    <!-- 页面主体内容结束 -->
+
+    <p>请在这里随意输入一段文字吧</p>
+    <input type="text", value="str">
+  </body>
+<a href="https://xiaoice.com" target="_blank"><b>开启</b></a> <!--啥也没用-->
+<a href="interst.html" target="_blank"><b>进入</b></a>
+
+<title>视频示例</title>
+<p style="color: black;"><b>以下是来自小冰的抖音短视频</b></p>
+  <body>
+      <h1>这是一个视频示例</h1>
+      <p>使用 MP4 格式的视频：</p>
+      <video width="320" height="540" controls>
+          <source src="../resource/xice_夏语冰_当记忆的线缠绕过往支离破碎.mp4" type="video/mp4">
+          您的浏览器不支持视频标签。
+      </video>
+
+      <p>使用多种格式的视频：</p>
+      <video width="320" height="540" controls>
+          <source src="../resource/xice_夏语冰_不能握的手 从此匿名的朋友.mp4" type="video/mp4">
+          <source src="../resource/xice_夏语冰_不能握的手 从此匿名的朋友.mp4" type="video/ogg">
+          <source src="../resource/xice_夏语冰_不能握的手 从此匿名的朋友.mp4" type="video/webm">
+          您的浏览器不支持视频标签。
+      </video>
+
+      <p>自动播放、循环播放、静音的视频：</p>
+      <video width="320" height="540" autoplay loop muted controls>
+          <source src="../resource/xice_陈水若_凤凰花开的路口.mp4" type="video/mp4">
+          您的浏览器不支持视频标签。
+      </video>
+  </body>
+
+<title>音频示例</title>
+  <body>
+      <h1>这是一个音频示例</h1>
+
+      <p>使用 MP3 格式的音频：</p>
+      <audio controls>
+          <source src="../resource/梦随风万里.mp3" type="audio/mpeg">
+          您的浏览器不支持音频标签。
+      </audio>
+
+      <p>使用多种格式的音频：</p>
+      <audio controls>
+          <source src="../resource/荒_主题曲.mp3" type="audio/mpeg">
+          <source src="../resource/荒_主题曲.ogg" type="audio/ogg">
+          <source src="../resource/荒_主题曲.wav" type="audio/wav">
+          您的浏览器不支持音频标签。
+      </audio>
+
+      <p>自动播放、循环播放、静音的音频：</p>
+      <audio autoplay loop muted controls> <!-- autoplay 自动播放 loop 循环播放 muted 静音 controls 控制按钮 --->>
+          <source src="../resource/敢归云间宿.mp3" type="audio/mpeg">
+          您的浏览器不支持音频标签。
+      </audio>
+  </body>
+
+  <title>链接示例</title>
+  <body>
+    <h1>这是多个链接示例</h1>
+    <p>访问子网页:</p>
+    <a href="https://baidu.com" target="_blank">百度一下</a> <!-- href="链接地址" target="_blank" 新窗口打开链接 -->>
+    <a href="https://www.google.com" target="_blank">Google</a>
+    <a href="https://www.bing.com" target="_blank">Bing</a>
+    <a href="https://www.yahoo.com" target="_blank">Yahoo</a>
+
+  </body>
+</div>
+</html>
+
+
+<!--
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link
+} from 'react-router-dom';
+
+// 主页面组件
+function Home() {
+  return (
+    <div>
+      <h1>欢迎来到主页面</h1>
+      <Link to="/subpage">前往子页面</Link>
+    </div>
+  );
+}
+
+// 子页面组件
+function SubPage() {
+  return <h1>这里是子页面</h1>;
+}
+
+// 应用组件
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/subpage" component={SubPage} />
+      </Switch>
+    </Router>
+  );
+}
+
+export default App;
+-->
+<!-- 上述代码解释 -->
+<!--
+这段HTML/JSX代码结合了React库和react-router-dom库，构建了一个基本的单页应用（SPA）页面路由系统
+导入模块
+html
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link
+} from 'react-router-dom';
+React: 导入React库，用于构建用户界面的JavaScript库。
+BrowserRouter, Route, Switch, Link: 从'react-router-dom'库中导入，用于实现前端路由功能。
+BrowserRouter: 处理URL变化的路由器，使应用程序能够在不重新加载页面的情况下呈现不同的UI。
+Route: 定义应用程序中的路由，每个Route对应一个URL和要渲染的组件。
+Switch: 包裹多个Route，确保只有一个Route会被渲染，用于实现URL到组件的精确匹配。
+Link: 创建导航链接，用户点击后可在不同页面间切换，不会引起页面刷新。
+主页面组件：Home
+html
+function Home() {
+  return (
+    <div>
+      <h1>欢迎来到主页面</h1>
+      <Link to="/subpage">前往子页面</Link>
+    </div>
+  );
+}
+Home组件是应用的主页，展示一条欢迎信息和一个链接到子页面的Link组件。
+子页面组件：SubPage
+html
+function SubPage() {
+  return <h1>这里是子页面</h1>;
+}
+SubPage组件代表应用的一个子页面，仅显示一段文本信息。
+应用组件：App
+html
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/subpage" component={SubPage} />
+      </Switch>
+    </Router>
+  );
+}
+App组件是整个应用的入口点。
+Router: 包裹所有路由相关的组件，监听URL变化。
+Switch: 决定哪个Route应该被渲染。它会遍历其子Route，当找到第一个path匹配当前URL的Route时，就停止遍历并渲染该Route的组件。
+<Route exact path="/" component={Home} />: 当URL精确匹配"/"时，渲染Home组件。
+<Route path="/subpage" component={SubPage} />: 当URL匹配"/subpage"时，渲染SubPage组件。
+导出App组件
+html
+export default App;
+导出App组件,使得其他模块可以引入并使用这个组件作为React应用的根组件。
+综上所述,这段代码通过定义路由规则、页面组件以及导航链接，实现了一个基础的SPA应用框架，能够根据用户请求的URL展示不同的页面内容，而无需重新加载整个页面。
+-->

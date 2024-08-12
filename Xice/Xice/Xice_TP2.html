@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            height:100vh;
+            width:100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a1a;
+            perspective:1000px ;
+        }
+
+        #s_img{
+            width: 400px;
+            height: 600px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        img{
+            width: 400px;
+            height: 600px;
+            position: absolute;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0);
+            backface-visibility: hidden;
+            transition: 2s;
+        }
+
+        #a2{
+            transform: rotateY(180deg);
+        }
+
+        body:hover #a2{
+            transform: rotateY(0deg);
+        }
+
+        body:hover #a1{
+            transform: rotateY(-180deg);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="s_img">
+        <img src="../../resource/小冰_证书.png" id="a1">
+        <img src="../../resource/小冰_证书_2.jpg" id="a2">
+    </div>
+</body>
+</html>
