@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息反馈界面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: #0604E4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header,
+        footer {
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            background: linear-gradient(45deg, #8a2be2, #4169e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        #feedback-form {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        #feedback-input {
+            flex-grow: 1;
+            /* padding: 10px; */
+            border: 1px solid #0604E4;
+            background-color: black;
+            color: #0604E4;
+            width: calc(66.67% - 20px);
+        }
+
+        #add-feedback {
+            padding: 10px 20px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #feedback-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feedback-item {
+            border: 1px solid #0604E4;
+            padding: 10px;
+            position: relative;
+            width: 355px;
+            height: 72px;
+            overflow: hidden;
+            transition: height 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-content {
+            flex-grow: 1;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .feedback-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-time {
+            font-size: 0.8em;
+        }
+
+        .feedback-actions button {
+            background: none;
+            border: none;
+            color: #0604E4;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .expanded {
+            height: auto;
+        }
+
+        #control-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        #control-buttons button {
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #search-container,
+        #sort-options {
+            display: none;
+            margin-top: 5px;
+        }
+
+        #search-container {
+            display: none;
+            /* 初始状态下隐藏搜索容器 */
+            align-items: center;
+        }
+
+        #search-input {
+            padding: 5px;
+            border: 1px solid #0604E4;
+            background-color: black;
+            color: #0604E4;
+        }
+
+        #search-confirm,
+        #search-return {
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        #sort-options {
+            position: absolute;
+            background-color: black;
+            border: 1px solid #0604E4;
+            padding: 5px;
+            z-index: 1000;
+        }
+
+        #sort-options button {
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #0604E4;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>LKDX</h1>
+    </header>
+    <main>
+        <form id="feedback-form">
+            <textarea id="feedback-input" placeholder="请在此处写入你想反馈的内容吧:"></textarea>
+            <button type="submit" id="add-feedback">添加</button>
+            <div id="control-buttons">
+                <button type="button" id="search-button">搜索</button>
+                <button type="button" id="sort-button">排序</button>
+            </div>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="请在此输入搜索内容吧">
+                <button type="button" id="search-confirm">确认</button>
+                <button type="button" id="search-return">返回</button>
+            </div>
+            <div id="sort-options">
+                <button type="button" id="sort-asc">时间顺序</button>
+                <button type="button" id="sort-desc">时间逆序</button>
+                <button type="button" id="sort-return">返回</button>
+            </div>
+        </form>
+        <div id="feedback-list"></div>
+    </main>
+    <footer>
+        <p>&copy; 2023 LKDX. 版权所有。</p>
+    </footer>
+</body>
+<script type="module">
+    // 从您需要的 SDK 中导入您需要的功能
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+    import { initializeApp } from "firebase/app";
+    import { getDatabase } from "firebase/database";
+
+    // TODO:为您要使用的 Firebase 产品添加 SDK
+    //https://firebase.google.com/docs/web/setup#available-libraries
+
+    // 您的 Web 应用的 Firebase 配置
+    //对于 Firebase JS SDK v7.20.0 及更高版本,meturementId 是可选的
+
+    // TODO: 将以下内容替换为您应用的Firebase项目配置
+    //参见:https://firebase.google.com/docs/web/learn-more#config-object
+    const firebaseConfig = {
+        apiKey: "AIzaSyDhgcyM1rPvz5fMdTrRZReaVTJmUBfacek",
+        authDomain: "lkdx-89a6d.firebaseapp.com",
+        projectId: "lkdx-89a6d",
+        storageBucket: "lkdx-89a6d.appspot.com",
+        messagingSenderId: "650174569879",
+        appId: "1:650174569879:web:2a1bc3d53066f98e2978d2",
+        measurementId: "G-FHDKTYHQMX",
+        // 'Database aseURL'的值取决于数据库的位置
+        databaseURL: "https://DATABASE_NAME.asia-southeast1.firebasedatabase.app",
+    };
+
+    // 初始化Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);  // 新增：初始化 database
+
+
+    // 4. 添加反馈并同步到 Firebase
+    function addFeedbackToFirebase(content, id) {
+        set(ref(database, 'feedbacks/' + id), {
+            content: content,
+            time: new Date().toISOString()
+        });
+    }
+
+    // 5. 从 Firebase 加载反馈
+    function loadFeedbacksFromFirebase() {
+        get(ref(database, 'feedbacks/')).then((snapshot) => {
+            if (snapshot.exists()) {
+                const feedbacks = snapshot.val();
+                Object.keys(feedbacks).forEach(id => {
+                    const feedback = feedbacks[id];
+                    addFeedback(feedback.content, new Date(feedback.time), id);
+                });
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    // 设置删除密码
+    const DELETE_PASSWORD = "1234";
+
+    // 页面加载时从Firebase加载反馈
+    window.addEventListener('load', loadFeedbacksFromFirebase);
+
+    document.getElementById('feedback-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const input = document.getElementById('feedback-input');
+        if (input.value.trim() !== '') {
+            addFeedback(input.value);
+            input.value = '';
+        }
+    });
+
+    // 添加反馈
+    function addFeedback(content, time = new Date(), id = Date.now()) {
+        const list = document.getElementById('feedback-list');
+        const item = document.createElement('div');
+        item.className = 'feedback-item';
+        item.innerHTML = `
+                <div class="feedback-content">${content}</div>
+                <div class="feedback-footer">
+                    <div class="feedback-time">${time.toLocaleString()}</div>
+                    <div class="feedback-actions">
+                        <button class="delete-btn">删除</button>
+                        <button class="expand-btn">展开</button>
+                    </div>
+                </div>
+            `;
+        item.dataset.id = id;
+        list.prepend(item);
+
+        // 保存到Firebase
+        addFeedbackToFirebase(content, id);
+
+        // 删除按钮事件
+        item.querySelector('.delete-btn').addEventListener('click', function () {
+            const password = prompt("请输入删除密码：");
+            if (password === DELETE_PASSWORD) {
+                list.removeChild(item);
+                // 从Firebase中删除
+                deleteFeedback(id);
+            } else {
+                alert("密码错误！");
+            }
+        });
+
+        // 展开按钮事件
+        item.querySelector('.expand-btn').addEventListener('click', function () {
+            item.classList.toggle('expanded');
+            if (item.classList.contains('expanded')) {
+                item.style.height = item.scrollHeight + 'px';
+                this.textContent = '收起';
+            } else {
+                item.style.height = '72px';
+                this.textContent = '展开';
+            }
+        });
+    }
+
+    // 删除反馈
+    function deleteFeedback(id) {
+        remove(ref(database, 'feedbacks/' + id));
+    }
+
+    // 搜索按钮事件
+    document.getElementById('search-button').addEventListener('click', function () {
+        document.getElementById('search-container').style.display = 'flex';
+        document.getElementById('sort-options').style.display = 'none';
+    });
+
+    // 搜索确认按钮事件
+    document.getElementById('search-confirm').addEventListener('click', function () {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const feedbackItems = document.querySelectorAll('.feedback-item');
+        feedbackItems.forEach(item => {
+            const content = item.querySelector('.feedback-content').textContent.toLowerCase();
+            if (content.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // 搜索返回按钮事件
+    document.getElementById('search-return').addEventListener('click', function () {
+        document.getElementById('search-container').style.display = 'none';
+        document.getElementById('search-input').value = '';
+        const feedbackItems = document.querySelectorAll('.feedback-item');
+        feedbackItems.forEach(item => {
+            item.style.display = 'block';
+        });
+    });
+
+    // 排序按钮事件
+    document.getElementById('sort-button').addEventListener('click', function () {
+        const sortOptions = document.getElementById('sort-options');
+        sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
+        document.getElementById('search-container').style.display = 'none';
+
+        // 设置排序选项的位置
+        const rect = this.getBoundingClientRect();
+        sortOptions.style.top = `${rect.bottom + window.scrollY}px`;
+        sortOptions.style.left = `${rect.left + window.scrollX}px`;
+    });
+
+    // 时间顺序排序
+    document.getElementById('sort-asc').addEventListener('click', function () {
+        sortFeedbacks(true);
+    });
+
+    // 时间逆序排序
+    document.getElementById('sort-desc').addEventListener('click', function () {
+        sortFeedbacks(false);
+    });
+
+    // 排序返回按钮事件
+    document.getElementById('sort-return').addEventListener('click', function () {
+        document.getElementById('sort-options').style.display = 'none';
+        loadFeedbacksFromFirebase(); // 重新加载反馈，恢复到初始状态
+    });
+
+    // 排序函数
+    function sortFeedbacks(ascending) {
+        const list = document.getElementById('feedback-list');
+        const items = Array.from(list.children);
+        items.sort((a, b) => {
+            const timeA = new Date(a.querySelector('.feedback-time').textContent);
+            const timeB = new Date(b.querySelector('.feedback-time').textContent);
+            return ascending ? timeA - timeB : timeB - timeA;
+        });
+        items.forEach(item => list.appendChild(item));
+    }
+</script>
+
+</html>

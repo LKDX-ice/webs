@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+    <title>笔记区</title>
+    <style>
+        /* 页面整体样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #17181A;
+            color: #4169e1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* 页头和页脚样式 */
+        header, footer {
+            text-align: center;
+            padding: 20px;
+        }
+        /* 页头标题样式 */
+        header h1 {
+            margin: 0;
+            background: linear-gradient(0deg, #8a2be2, #4169e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+        }
+        /* 主要内容区域样式 */
+        main {
+            flex-grow: 1;
+            padding: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        /* 反馈表单样式 */
+        #feedback-form {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        /* 反馈输入框样式 */
+        #feedback-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 2px solid #0604E4;
+            background-color: #17181A;
+            /* border-radius: 10px; */
+            color: #3A81E6;
+            width: calc(66.67% - 20px);
+        }
+        /* 添加反馈按钮样式 */
+        #add-feedback {
+            padding: 10px 20px;
+            background-color: #2449E2;
+            color: #17181A;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        /* 反馈列表样式 */
+        #feedback-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        /* 反馈项样式 */
+        .feedback-item {
+            border: 1px solid #0604E4;
+            padding: 10px;
+            position: relative;
+            width: 355px;
+            height: 72px;
+            overflow: hidden;
+            transition: height 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 反馈内容样式 */
+        .feedback-content {
+            flex-grow: 1;
+            margin-bottom: 10px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        /* 反馈底部样式 */
+        .feedback-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* 反馈时间样式 */
+        .feedback-time {
+            color: #3A81E6;
+            font-size: 0.8em;
+        }
+        /* 反馈操作按钮样式 */
+        .feedback-actions button {
+            background: none;
+            border: none;
+            color: #3A81E6;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        /* 展开反馈项样式 */
+        .expanded {
+            height: auto;
+        }
+        /* 控制按钮样式 */
+        #control-buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+        /* 控制按钮样式 */
+        #control-buttons button {
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background-color: #2449E2;
+            color: #17181A;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* 搜索和排序选项样式 */
+        #search-container, #sort-options {
+            display: none;
+            margin-top: 5px;
+        }
+        /* 搜索容器样式 */
+        #search-container {
+            display: none; /* 初始状态下隐藏搜索容器 */
+            align-items: center;
+            margin-left: 5px;
+            border-radius: 5px;
+        }
+        /* 搜索输入框样式 */
+        #search-input {
+            padding: 5px;
+            border: 1px solid #0604E4;
+            background-color: #17181A;
+            color: #4169e1;
+            border-radius: 5px;
+        }
+        /* 搜索确认和返回按钮样式 */
+        #search-confirm, #search-return {
+            padding: 5px 10px;
+            background-color: #2449E2;
+            color: #17181A;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        /* 排序选项样式 */
+        #sort-options {
+            position: absolute;
+            background-color: #17181A;
+            border: 1px solid #0604E4;
+            padding: 5px;
+            z-index: 1000;
+        }
+        /* 排序选项按钮样式 */
+        #sort-options button {
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #2449E2;
+            color: #17181A;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* 默认隐藏超出三行的内容 */
+        pre {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 0;
+        }
+
+        /* 更多/收起按钮样式 */
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #3A81E6;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            margin-left: 850px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body >
+    <header>
+        <h1>LKDX</h1>
+    </header>
+    <main>
+        <form id="feedback-form">
+            <!-- <input type="text" id="feedback-input" placeholder="请在此处写入你想反馈的内容吧"> -->
+            <!-- <textarea id="feedback-input" rows="4" cols="50"></textarea><br></br> -->
+            <textarea id="feedback-input" placeholder="请在此处写入您想反馈的内容吧"></textarea>
+            <button type="submit" id="add-feedback">添加</button>
+            <div id="control-buttons">
+                <button type="button" id="search-button">搜索</button>
+                <button type="button" id="sort-button">排序</button>
+            </div>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="请在此输入搜索内容吧">
+                <button type="button" id="search-confirm">确认</button>
+                <button type="button" id="search-return">返回</button>
+            </div>
+            <div id="sort-options">
+                <button type="button" id="sort-asc">时间顺序</button>
+                <button type="button" id="sort-desc">时间逆序</button>
+                <button type="button" id="sort-return">返回</button>
+            </div>
+        </form>
+        <div id="note-area">
+                <pre id="note-content">
+                概览：
+                        欢迎来到这里『笔记区』你可以在这里记录你的想法、心得、感悟、收藏，甚至吐槽等等，它们不会被除你以外的任何人查看。
+                    这不会泄露你的隐私，它使用localStorage(浏览器内存/本地存储)来实现，用以处理你的信息(包括写入、存储、删除等)
+                    但由于这种方式只将内容存储在浏览器的内存中，故是临时且不持久的，所以它无法做到跨设备、跨软件、跨账号的同步。
+                    这将导致你在不同设备;乃至不同设备上登陆的完全相同的软件的同一账号，看到的信息也不会相同，但它们的记录不会被删除。
+                    我曾考虑indexedDB、MongoDB、MySQL进行部署，但这通常需要后端代码与服务器端交互，过程复杂，故未选择
+                    我曾尝试使用Firebase云数据库进行部署，但由于技术原因，多次尝试也未能实现，后转以云数据库进行尝试，也未能正确写入数据
+                    后欲以Node.js与html,js代码，将新增的内容直接以预设的格式添入html的代码结构中，并将添加内容后的html直接保存为下次用于请求的文件，但多次尝试，仍未果
+                    此处原本是用以实现“意见反馈”的实时评论输入及展示效果的区域，因上述缘由故作弃案，但其效果与创意思来尚可，故作此笔记区，以于余热
+                    因原本反馈设计考虑，此处删除需填写密码，此密码于代码内部写入不可更改，原始密码为：014529
+                    后续或许会有间接性的更新，将完善一部分功能与Bug，或许会有新的想法，也将实现新的页面样式与结构，此祝阅览愉快。
+            </pre>
+            <button class="toggle-btn" onclick="toggleContent()">更多</button>
+        </div>
+        <div id="feedback-list"></div>
+    </main>
+    <footer>
+        <p>&copy; 2024 lkdxice.com</p>
+    </footer>
+
+    <script>
+        // 设置删除密码
+        const DELETE_PASSWORD = "014529";
+
+        // 页面加载时从localStorage加载反馈
+        window.addEventListener('load', loadFeedbacks);
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('feedback-input');
+            if (input.value.trim() !== '') {
+                addFeedback(input.value);
+                input.value = '';
+            }
+        });
+
+        // 添加反馈
+        function addFeedback(content, time = new Date(), id = Date.now()) {
+            const list = document.getElementById('feedback-list');
+            const item = document.createElement('div');
+            item.className = 'feedback-item';
+            item.innerHTML = `
+                <div class="feedback-content">${content}</div>
+                <div class="feedback-footer">
+                    <div class="feedback-time">${time.toLocaleString()}</div>
+                    <div class="feedback-actions">
+                        <button class="delete-btn">删除</button>
+                        <button class="expand-btn">展开</button>
+                    </div>
+                </div>
+            `;
+            item.dataset.id = id;
+            list.prepend(item);
+
+            // 保存到localStorage
+            saveFeedback(id, content, time);
+
+            // 删除按钮事件
+            item.querySelector('.delete-btn').addEventListener('click', function() {
+                const password = prompt("请输入删除密码：");
+                if (password === DELETE_PASSWORD) {
+                    list.removeChild(item);
+                    // 从localStorage中删除
+                    deleteFeedback(id);
+                } else {
+                    alert("密码错误！");
+                }
+            });
+
+            // 展开按钮事件
+            item.querySelector('.expand-btn').addEventListener('click', function() {
+                item.classList.toggle('expanded');
+                if (item.classList.contains('expanded')) {
+                    item.style.height = item.scrollHeight + 'px';
+                    this.textContent = '收起';
+                } else {
+                    item.style.height = '72px';
+                    this.textContent = '展开';
+                }
+            });
+        }
+
+        // 保存反馈到localStorage
+        function saveFeedback(id, content, time) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            feedbacks[id] = { content, time: time.toISOString() };
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        }
+
+        // 从localStorage加载反馈
+        function loadFeedbacks() {
+            const list = document.getElementById('feedback-list');
+            list.innerHTML = ''; // 清空现有的反馈列表
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            Object.entries(feedbacks).forEach(([id, feedback]) => {
+                addFeedback(feedback.content, new Date(feedback.time), id);
+            });
+        }
+
+        // 从localStorage删除反馈
+        function deleteFeedback(id) {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
+            delete feedbacks[id];
+            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        }
+
+        // 搜索按钮事件
+        document.getElementById('search-button').addEventListener('click', function() {
+            document.getElementById('search-container').style.display = 'flex';
+            document.getElementById('sort-options').style.display = 'none';
+        });
+
+        // 搜索确认按钮事件
+        document.getElementById('search-confirm').addEventListener('click', function() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            feedbackItems.forEach(item => {
+                const content = item.querySelector('.feedback-content').textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // 搜索返回按钮事件
+        document.getElementById('search-return').addEventListener('click', function() {
+            document.getElementById('search-container').style.display = 'none';
+            document.getElementById('search-input').value = '';
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            feedbackItems.forEach(item => {
+                item.style.display = 'block';
+            });
+        });
+
+        // 排序按钮事件
+        document.getElementById('sort-button').addEventListener('click', function() {
+            const sortOptions = document.getElementById('sort-options');
+            sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('search-container').style.display = 'none';
+            
+            // 设置排序选项的位置
+            const rect = this.getBoundingClientRect();
+            sortOptions.style.top = `${rect.bottom + window.scrollY}px`;
+            sortOptions.style.left = `${rect.left + window.scrollX}px`;
+        });
+
+        // 时间顺序排序
+        document.getElementById('sort-asc').addEventListener('click', function() {
+            sortFeedbacks(true);
+        });
+
+        // 时间逆序排序
+        document.getElementById('sort-desc').addEventListener('click', function() {
+            sortFeedbacks(false);
+        });
+
+        // 排序返回按钮事件
+        document.getElementById('sort-return').addEventListener('click', function() {
+            document.getElementById('sort-options').style.display = 'none';
+            loadFeedbacks(); // 重新加载反馈，恢复到初始状态
+        });
+
+        // 排序函数
+        function sortFeedbacks(ascending) {
+            const list = document.getElementById('feedback-list');
+            const items = Array.from(list.children);
+            items.sort((a, b) => {
+                const timeA = new Date(a.querySelector('.feedback-time').textContent);
+                const timeB = new Date(b.querySelector('.feedback-time').textContent);
+                return ascending ? timeA - timeB : timeB - timeA;
+            });
+            items.forEach(item => list.appendChild(item));
+        }
+
+        // 获取pre标签和更多/收起按钮
+        const noteContent = document.getElementById('note-content');
+        const toggleBtn = document.querySelector('.toggle-btn');
+
+        // 初次打开页面或刷新时,默认隐藏超出三行的内容
+        noteContent.style.display = '-webkit-box';
+
+        // 点击更多/收起按钮时切换内容显示状态
+        function toggleContent() {
+            if (noteContent.style.display === '-webkit-box') {
+                // 显示全部内容,并将按钮替换为"收起"
+                noteContent.style.display = 'block';
+                toggleBtn.textContent = '收起';
+            } else {
+                // 隐藏超出三行的内容,并将按钮替换为"更多"
+                noteContent.style.display = '-webkit-box';
+                toggleBtn.textContent = '更多';
+            }
+        }
+    </script>
+</body>
+</html>
