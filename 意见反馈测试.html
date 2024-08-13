@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户信息反馈界面</title>
     <style>
+        /* 保持原有的 CSS 样式不变 */
         body {
             font-family: Arial, sans-serif;
             background-color: black;
@@ -15,10 +17,13 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        header, footer {
+
+        header,
+        footer {
             text-align: center;
             padding: 20px;
         }
+
         header h1 {
             margin: 0;
             background: linear-gradient(45deg, #8a2be2, #4169e1);
@@ -26,6 +31,7 @@
             -webkit-text-fill-color: transparent;
             font-size: 2em;
         }
+
         main {
             flex-grow: 1;
             padding: 10px;
@@ -33,11 +39,13 @@
             margin: 0 auto;
             width: 100%;
         }
+
         #feedback-form {
             display: flex;
             margin-bottom: 20px;
             align-items: flex-start;
         }
+
         #feedback-input {
             flex-grow: 1;
             /* padding: 10px; */
@@ -46,6 +54,7 @@
             color: #0604E4;
             width: calc(66.67% - 20px);
         }
+
         #add-feedback {
             padding: 10px 20px;
             background-color: #0604E4;
@@ -55,11 +64,13 @@
             border-radius: 5px;
             margin-left: 10px;
         }
+
         #feedback-list {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
+
         .feedback-item {
             border: 1px solid #0604E4;
             padding: 10px;
@@ -71,20 +82,24 @@
             display: flex;
             flex-direction: column;
         }
+
         .feedback-content {
             flex-grow: 1;
             margin-bottom: 10px;
             overflow-y: auto;
             padding-right: 10px;
         }
+
         .feedback-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .feedback-time {
             font-size: 0.8em;
         }
+
         .feedback-actions button {
             background: none;
             border: none;
@@ -92,14 +107,17 @@
             cursor: pointer;
             margin-left: 10px;
         }
+
         .expanded {
             height: auto;
         }
+
         #control-buttons {
             display: flex;
             flex-direction: column;
             margin-left: 10px;
         }
+
         #control-buttons button {
             margin-bottom: 5px;
             padding: 5px 10px;
@@ -109,21 +127,28 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #search-container, #sort-options {
+
+        #search-container,
+        #sort-options {
             display: none;
             margin-top: 5px;
         }
+
         #search-container {
-            display: none; /* 初始状态下隐藏搜索容器 */
+            display: none;
+            /* 初始状态下隐藏搜索容器 */
             align-items: center;
         }
+
         #search-input {
             padding: 5px;
             border: 1px solid #0604E4;
             background-color: black;
             color: #0604E4;
         }
-        #search-confirm, #search-return {
+
+        #search-confirm,
+        #search-return {
             padding: 5px 10px;
             background-color: #0604E4;
             color: black;
@@ -132,6 +157,7 @@
             border-radius: 5px;
             margin-left: 5px;
         }
+
         #sort-options {
             position: absolute;
             background-color: black;
@@ -139,6 +165,7 @@
             padding: 5px;
             z-index: 1000;
         }
+
         #sort-options button {
             display: block;
             width: 100%;
@@ -152,193 +179,111 @@
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>LKDX</h1>
-    </header>
-    <main>
-        <form id="feedback-form">
-            <!-- <input type="text" id="feedback-input" placeholder="请在此处写入你想反馈的内容吧"> -->
-            <!-- <label for="feedback-form">请写入您想反馈的内容:</label>
-            <textarea id="feedback-input" name="feedback" rows="2" cols="50"></textarea><br><br> -->
-            <textarea id="feedback-input" placeholder="请在此处写入你想反馈的内容吧:"></textarea>
-            <button type="submit" id="add-feedback">添加</button>
-            <div id="control-buttons">
-                <button type="button" id="search-button">搜索</button>
-                <button type="button" id="sort-button">排序</button>
-            </div>
-            <div id="search-container">
-                <input type="text" id="search-input" placeholder="请在此输入搜索内容吧">
-                <button type="button" id="search-confirm">确认</button>
-                <button type="button" id="search-return">返回</button>
-            </div>
-            <div id="sort-options">
-                <button type="button" id="sort-asc">时间顺序</button>
-                <button type="button" id="sort-desc">时间逆序</button>
-                <button type="button" id="sort-return">返回</button>
-            </div>
-        </form>
-        <div id="feedback-list"></div>
-    </main>
-    <footer>
-        <p>&copy; 2023 LKDX. 版权所有。</p>
-    </footer>
+    <div class="container">
+        <h1>用户信息反馈界面</h1>
+        <div class="input-area">
+            <textarea placeholder="请写入您想反馈的内容:"></textarea>
+        </div>
+        <div class="button-group">
+            <button class="add-btn">添加</button>
+            <button class="search-btn">搜索</button>
+            <button class="sort-btn">排序</button>
+        </div>
+        <div class="feedback-list">
+            <!-- 反馈项将在这里动态添加 -->
+        </div>
+    </div>
+    <div class="overlay"></div>
 
     <script>
-        // 设置删除密码
-        const DELETE_PASSWORD = "1234";
+        // 获取DOM元素
+        const textarea = document.querySelector('textarea');
+        const addBtn = document.querySelector('.add-btn');
+        const searchBtn = document.querySelector('.search-btn');
+        const sortBtn = document.querySelector('.sort-btn');
+        const feedbackList = document.querySelector('.feedback-list');
+        const overlay = document.querySelector('.overlay');
 
-        // 页面加载时从localStorage加载反馈
-        window.addEventListener('load', loadFeedbacks);
-
-        document.getElementById('feedback-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const input = document.getElementById('feedback-input');
-            if (input.value.trim() !== '') {
-                addFeedback(input.value);
-                input.value = '';
-            }
-        });
-
-        // 添加反馈
-        function addFeedback(content, time = new Date(), id = Date.now()) {
-            const list = document.getElementById('feedback-list');
-            const item = document.createElement('div');
-            item.className = 'feedback-item';
-            item.innerHTML = `
-                <div class="feedback-content">${content}</div>
-                <div class="feedback-footer">
-                    <div class="feedback-time">${time.toLocaleString()}</div>
-                    <div class="feedback-actions">
-                        <button class="delete-btn">删除</button>
-                        <button class="expand-btn">展开</button>
-                    </div>
-                </div>
-            `;
-            item.dataset.id = id;
-            list.prepend(item);
-
-            // 保存到localStorage
-            saveFeedback(id, content, time);
-
-            // 删除按钮事件
-            item.querySelector('.delete-btn').addEventListener('click', function() {
-                const password = prompt("请输入删除密码：");
-                if (password === DELETE_PASSWORD) {
-                    list.removeChild(item);
-                    // 从localStorage中删除
-                    deleteFeedback(id);
-                } else {
-                    alert("密码错误！");
-                }
-            });
-
-            // 展开按钮事件
-            item.querySelector('.expand-btn').addEventListener('click', function() {
-                item.classList.toggle('expanded');
-                if (item.classList.contains('expanded')) {
-                    item.style.height = item.scrollHeight + 'px';
-                    this.textContent = '收起';
-                } else {
-                    item.style.height = '72px';
-                    this.textContent = '展开';
-                }
+        // 从localStorage加载反馈
+        function loadFeedbacks() {
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+            feedbacks.forEach(content => {
+                const feedbackItem = createFeedbackItem(content);
+                feedbackList.appendChild(feedbackItem);
             });
         }
 
         // 保存反馈到localStorage
-        function saveFeedback(id, content, time) {
-            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
-            feedbacks[id] = { content, time: time.toISOString() };
+        function saveFeedbacks() {
+            const feedbacks = Array.from(feedbackList.children).map(item => item.querySelector('p').textContent);
             localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
         }
 
-        // 从localStorage加载反馈
-        function loadFeedbacks() {
-            const list = document.getElementById('feedback-list');
-            list.innerHTML = ''; // 清空现有的反馈列表
-            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
-            Object.entries(feedbacks).forEach(([id, feedback]) => {
-                addFeedback(feedback.content, new Date(feedback.time), id);
-            });
+        // 添加反馈
+        addBtn.addEventListener('click', () => {
+            const content = textarea.value.trim();
+            if (content) {
+                const feedbackItem = createFeedbackItem(content);
+                feedbackList.appendChild(feedbackItem);
+                textarea.value = '';
+                saveFeedbacks();
+            }
+        });
+
+        // 创建反馈项
+        function createFeedbackItem(content) {
+            const item = document.createElement('div');
+            item.className = 'feedback-item';
+            item.innerHTML = `
+                <p>${content}</p>
+                <button class="expand-btn">展开</button>
+            `;
+
+            const expandBtn = item.querySelector('.expand-btn');
+            expandBtn.addEventListener('click', () => expandFeedback(item, content));
+
+            return item;
         }
 
-        // 从localStorage删除反馈
-        function deleteFeedback(id) {
-            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '{}');
-            delete feedbacks[id];
-            localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        // 展开反馈详情
+        function expandFeedback(item, content) {
+            const detail = document.createElement('div');
+            detail.className = 'feedback-detail';
+            detail.innerHTML = `
+                <p>${content}</p>
+                <button class="collapse-btn">收起</button>
+            `;
+
+            const collapseBtn = detail.querySelector('.collapse-btn');
+            collapseBtn.addEventListener('click', () => collapseFeedback(item, detail));
+
+            document.body.appendChild(detail);
+            item.style.display = 'none';
+            overlay.style.display = 'block';
         }
 
-        // 搜索按钮事件
-        document.getElementById('search-button').addEventListener('click', function() {
-            document.getElementById('search-container').style.display = 'flex';
-            document.getElementById('sort-options').style.display = 'none';
-        });
-
-        // 搜索确认按钮事件
-        document.getElementById('search-confirm').addEventListener('click', function() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const feedbackItems = document.querySelectorAll('.feedback-item');
-            feedbackItems.forEach(item => {
-                const content = item.querySelector('.feedback-content').textContent.toLowerCase();
-                if (content.includes(searchTerm)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-
-        // 搜索返回按钮事件
-        document.getElementById('search-return').addEventListener('click', function() {
-            document.getElementById('search-container').style.display = 'none';
-            document.getElementById('search-input').value = '';
-            const feedbackItems = document.querySelectorAll('.feedback-item');
-            feedbackItems.forEach(item => {
-                item.style.display = 'block';
-            });
-        });
-
-        // 排序按钮事件
-        document.getElementById('sort-button').addEventListener('click', function() {
-            const sortOptions = document.getElementById('sort-options');
-            sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
-            document.getElementById('search-container').style.display = 'none';
-            
-            // 设置排序选项的位置
-            const rect = this.getBoundingClientRect();
-            sortOptions.style.top = `${rect.bottom + window.scrollY}px`;
-            sortOptions.style.left = `${rect.left + window.scrollX}px`;
-        });
-
-        // 时间顺序排序
-        document.getElementById('sort-asc').addEventListener('click', function() {
-            sortFeedbacks(true);
-        });
-
-        // 时间逆序排序
-        document.getElementById('sort-desc').addEventListener('click', function() {
-            sortFeedbacks(false);
-        });
-
-        // 排序返回按钮事件
-        document.getElementById('sort-return').addEventListener('click', function() {
-            document.getElementById('sort-options').style.display = 'none';
-            loadFeedbacks(); // 重新加载反馈，恢复到初始状态
-        });
-
-        // 排序函数
-        function sortFeedbacks(ascending) {
-            const list = document.getElementById('feedback-list');
-            const items = Array.from(list.children);
-            items.sort((a, b) => {
-                const timeA = new Date(a.querySelector('.feedback-time').textContent);
-                const timeB = new Date(b.querySelector('.feedback-time').textContent);
-                return ascending ? timeA - timeB : timeB - timeA;
-            });
-            items.forEach(item => list.appendChild(item));
+        // 收起反馈详情
+        function collapseFeedback(item, detail) {
+            item.style.display = 'block';
+            detail.remove();
+            overlay.style.display = 'none';
         }
+
+        // 搜索功能（待实现）
+        searchBtn.addEventListener('click', () => {
+            alert('搜索功能待实现');
+        });
+
+        // 排序功能（待实现）
+        sortBtn.addEventListener('click', () => {
+            alert('排序功能待实现');
+        });
+
+        // 页面加载时加载已保存的反馈
+        loadFeedbacks();
     </script>
 </body>
+
 </html>
