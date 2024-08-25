@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python基础</title>
+    <style>
+        /* 全局样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 头部样式 */
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* 主体区域样式 */
+        .main-container {
+            display: flex;
+            height: calc(100% - 50px); /* 减去头部高度 */
+            margin-top: 50px; /* 头部高度 */
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 250px;
+            background-color: #f1f1f1;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .sidebar li:hover {
+            color: #9C89E9;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: #e9e9e9;
+            padding: 10px;
+            position: sticky;
+            top: 50px; /* 头部高度 */
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav li {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        nav li:hover {
+            background-color: #d3d3d3;
+        }
+
+        nav li.active {
+            color: #9C89E9;
+        }
+
+        /* 主内容区域样式 */
+        .main-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* 版权信息样式 */
+        .copyright {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python基础</h1>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>目录</h3>
+            <ul id="sidebarItems">
+                <!-- 侧边栏项目将通过JavaScript动态生成 -->
+            </ul>
+        </aside>
+
+        <main class="content">
+            <nav>
+                <ul>
+                    <li data-section="basic" class="active">基础语法</li>
+                    <li data-section="crawler">爬虫基础示例</li>
+                    <li data-section="mysql">Mysql数据库基础</li>
+                    <li data-section="office">办公自动化</li>
+                    <li data-section="bigdata">大数据分析基础</li>
+                </ul>
+            </nav>
+
+            <div class="main-content" id="mainContent">
+                <!-- 主内容将通过JavaScript动态加载 -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 定义内容数据
+        const contentData = {
+            basic: {
+                title: "Python基础语法",
+                items: [
+                    "字面量, 变量, 字符串和数字,输入与输出, 注释",
+                    "转义字符,布尔类型和None类型,逻辑判断,编码格式",
+                    "条件判断,运算与优先级,and与or",
+                    "for循环基础,变量交换,异常捕获",
+                    "数据结构:列表",
+                    "数据结构:元组,集合,可变与不可变类型数据",
+                    "for循环,while循环,python常用函数1",
+                    "迭代器与python常用函数2",
+                    "字典,深拷贝与浅拷贝,列表推导式",
+                    "函数",
+                    "递归,闭包,匿名函数",
+                    "面向对象编程",
+                    "类的继承, 重写和多继承",
+                    "多继承的钻石继承,多态和鸭子类型,类的组合,类的私有属性和私有方法",
+                    "魔法方法",
+                    "单例模式，类的书写规范，包(模块)的制作和导入",
+                    "文件操作",
+                    "正则表达式",
+                    "装饰器与生成器"
+                ]
+            },
+            crawler: {
+                title: "爬虫基础示例",
+                items: ["示例1", "示例2", "示例3"]
+            },
+            mysql: {
+                title: "Mysql数据库基础",
+                items: ["连接数据库", "查询操作", "插入操作"]
+            },
+            office: {
+                title: "办公自动化",
+                items: ["Excel操作", "Word操作", "PPT操作"]
+            },
+            bigdata: {
+                title: "大数据分析基础",
+                items: ["数据清洗", "数据可视化", "机器学习基础"]
+            }
+        };
+
+        // 获取DOM元素
+        const navItems = document.querySelectorAll('nav li');
+        const sidebarItems = document.getElementById('sidebarItems');
+        const mainContent = document.getElementById('mainContent');
+
+        // 初始化页面内容
+        function initPage() {
+            loadContent('basic');
+        }
+
+        // 加载内容
+        function loadContent(section) {
+            // 更新导航栏选中状态
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === section) {
+                    item.classList.add('active');
+                }
+            });
+
+            // 更新侧边栏和主内容
+            const sectionData = contentData[section];
+            sidebarItems.innerHTML = sectionData.items.map(item => `<li>${item}</li>`).join('');
+            mainContent.innerHTML = `<h2>${sectionData.title}</h2><p>这里是${sectionData.title}的详细内容。</p>`;
+
+            // 为侧边栏项目添加点击事件
+            // sidebarItems.querySelectorAll('li').forEach((item, index) => {
+            //     item.addEventListener('click', () => {
+            //         mainContent.innerHTML += `<h3>${item.textContent}</h3><p>这里是关于 "${item.textContent}" 的详细内容。</p>`;
+            //         item.scrollIntoView({ behavior: 'smooth' });
+            //     });
+            // });
+        }
+
+        // 为导航栏项目添加点击事件
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                loadContent(item.dataset.section);
+            });
+        });
+
+        // 初始化页面
+        initPage();
+    </script>
+</body>
+</html>

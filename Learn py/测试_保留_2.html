@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+    <title>python</title>
+    <style>
+        /* 设置全局样式和页面背景颜色 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1B1B1B;
+            transition: background-color 0.3s, color 0.3s;
+            color: #ccc;
+            /* color: #4169e1; */
+            overflow: hidden;
+            /* 隐藏整体页面的滚动条 */
+        }
+
+        /* 头部样式，包含标题 */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 25px;
+            background: linear-gradient(0deg, #8a2be2, #4169e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            position: fixed;
+            top: 50px;
+            width: 100%;
+            background-color: #555;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* 导航按钮样式 */
+        nav a {
+            color: #ccc;
+            /* color: #5360FF; */
+            text-decoration: none;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        /* 当前导航按钮的高亮效果 */
+        nav a.active {
+            /* color: #6744f0; */
+            color: #9C89E9;
+        }
+
+        /* 鼠标悬停在导航按钮上时的效果 */
+        nav a:hover::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 5px;
+            height: 80%;
+            background-color: #888;
+            z-index: -1;
+            border-radius: 5px;
+        }
+
+        /* 主体部分样式 */
+        .container {
+            display: flex;
+            margin-top: 100px;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 20%;
+            overflow-y: auto;
+            /* 侧边栏可单独滑动 */
+            height: calc(100vh - 100px);
+            position: fixed;
+            text-align: center;
+            /* 让侧边栏的子标题在区块内居中显示 */
+        }
+
+        /* 侧边栏子标题样式 */
+        .sidebar h3 {
+            padding: 10px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
+        /* 鼠标悬停在侧边栏子标题上的效果 */
+        .sidebar h3:hover {
+            color: #9C89E9;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            width: 55%;
+            margin-left: 20%;
+            padding: 20px;
+            overflow-y: auto;
+            /* 内容区域可单独滑动 */
+            height: calc(100vh - 100px);
+            scroll-behavior: smooth;
+            /* 平滑滚动 */
+        }
+
+        /* 内容区块样式 */
+        .content-block {
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        /* 内容区块标题样式 */
+        .content-block h4 {
+            margin-top: 0;
+            color: #6845f1;
+            font-size: 24px;
+        }
+
+        /* 其他功能区域样式 */
+        .extra {
+            width: 20%;
+            position: fixed;
+            top: 100px;
+            right: 0;
+            left: 1300px;
+            overflow-y: auto;
+            height: calc(100vh - 100px);
+            padding: 20px;
+        }
+
+        /* 功能按钮样式 */
+        .extra button {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 70%;
+            background-color: #444;
+            border: none;
+            /* color: #ccc; */
+            color: #3A81E6;
+            cursor: pointer;
+        }
+
+        /* 鼠标悬停在功能按钮上的效果 */
+        .extra button:hover {
+            background-color: #555;
+        }
+
+        /* 浅色主题样式 */
+        body.light-theme {
+            background-color: #e0e0e0;
+            color: #000;
+        }
+
+        body.light-theme header {
+            background-color: #e0e0e0;
+        }
+
+        body.light-theme nav,
+        body.light-theme .extra button {
+            background-color: #d0d0d0;
+        }
+
+        body.light-theme .sidebar h3,
+        body.light-theme nav a,
+        body.light-theme .theme-switch {
+            color: #000;
+        }
+
+        /* 修改滚动条的白色背景部分为透明 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            /* background: #88a3f4; */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* 搜索框样式 */
+        .search-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .search-container input {
+            width: 63%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #0604E4;
+            background-color: #17181A;
+            color: #4169e1;
+            border-radius: 5px;
+        }
+
+        .search-container button {
+            padding: 10px;
+            width: 34%;
+            margin-right: 10px;
+            color: #3A81E6;
+            border-radius: 5px;
+        }
+
+        /* 搜索结果高亮样式 */
+        .highlight {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 搜索提示框样式 */
+        .search-info {
+            position: sticky;
+            top: 0;
+            width: 64%;
+            background-color: #4169e1;
+            padding: 10px;
+            border: 1px solid #5360FF;
+            display: none;
+            /* 默认隐藏 */
+            z-index: 10000;
+        }
+
+        /* 提示框中的文本样式 */
+        .search-info span {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* 隐藏其他内容块 */
+        .content.hidden,
+        .sidebar.hidden {
+            display: none;
+        }
+
+        /* 高亮侧边栏当前显示的子标题 */
+        .sidebar h3.active {
+            background-color: #2d2b2b;
+            border: 2px solid #5360FF;
+            border-left: none;
+            border-right: 25px solid #4169e1;
+            padding-left: 6px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <header>
+        <h1>python基础</h1>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="#" class="active" onclick="switchTab('basics')">基础语法</a>
+        <a href="#" onclick="switchTab('webScraping')">爬虫简单示例</a>
+        <a href="#" onclick="switchTab('mysql')">MySQL数据库基础</a>
+        <a href="#" onclick="switchTab('automation')">办公自动化</a>
+        <a href="#" onclick="switchTab('bigData')">大数据分析基础</a>
+    </nav>
+
+    <!-- 主体 -->
+    <div class="container">
+        <!-- 侧边栏: 基础语法 -->
+        <aside id="basics-sidebar" class="sidebar">
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+            <h3 onclick="scrollToContent('basics-title1')">基础语法子标题1</h3>
+            <h3 onclick="scrollToContent('basics-title2')">基础语法子标题2</h3>
+            <h3 onclick="scrollToContent('basics-title3')">基础语法子标题3</h3>
+            <h3 onclick="scrollToContent('basics-title4')">基础语法子标题4</h3>
+            <h3 onclick="scrollToContent('basics-title5')">基础语法子标题5</h3>
+            <h3>...更多</h3>
+        </aside>
+
+        <!-- 内容区域: 基础语法 -->
+        <main id="basics-content" class="content" onscroll="highlightSidebar('basics')">
+            <div class="content-block" id="basics-title1">
+                <h4>基础语法子标题1</h4>
+                <p>基础语法子标题1所属内容</p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+            </div>
+            <div class="content-block" id="basics-title2">
+                <h4>基础语法子标题2</h4>
+                <p>基础语法子标题2所属内容</p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+            </div>
+            <div class="content-block" id="basics-title3">
+                <h4>基础语法子标题3</h4>
+                <p>基础语法子标题3所属内容</p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+            </div>
+            <div class="content-block" id="basics-title4">
+                <h4>基础语法子标题4</h4>
+                <p>基础语法子标题4所属内容</p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+            </div>
+            <div class="content-block" id="basics-title5">
+                <h4>基础语法子标题5</h4>
+                <p>基础语法子标题5所属内容</p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+                <p>学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。</p>
+                <p>
+                    学习 Web 开发
+                    欢迎来到 MDN 学习区。本系列文章旨在为零基础 Web 开发初学者提供指导和开始编写网站代码所需的所有内容。
+
+                    该教程并不是“从入门到精通”类型的教程，只能让你做到“从入门到适应”。在此之后，你应该能够以你自己的方式学习 MDN 的其他内容，并接触到其他中、高级资源。
+
+                    从零开始学习 Web 开发极具挑战性，该教程将为你提供详细的资料，手把手帮助你轻松愉快地学习。无论你是正在学习 Web 开发的学生（自学或参与课程）、寻找材料的老师、编程爱好者，亦或是仅仅想了解一点点
+                    Web 技术，我们都希望你能感到宾至如归。
+
+                    学习起点
+                    零基础的初学者
+                    如果你完全没有 Web 开发经验，那么我们推荐从 Web 入门部分开始，该部分教程通过实践的方式向你介绍 Web 开发。
+
+                    有一定基础
+                    如果你已经具备了一定的开发知识，下一步就是深入学习 HTML 和 CSS。先学习 HTML 入门，再学习 CSS 初步。
+
+                    学习脚本编写
+                    如果你已经完成了 HTML 和 CSS 入门课程，或是主要对编写代码感兴趣，可以继续学习 JavaScript 或服务端开发。可通过 JavaScript 初步和服务端编程的第一步开始学习。
+
+                    框架与工具
+                    在掌握了原生 HTML、CSS、JavaScript 的要领后，就可以继续学习前端开发工具课程，并考虑开始研究 JavaScript 前端框架，以及网站服务端编程了。
+                </p>
+            </div>
+        </main>
+
+        <!-- 侧边栏: 爬虫简单示例 -->
+        <aside id="webScraping-sidebar" class="sidebar hidden">
+            <h3 onclick="scrollToContent('webScraping-title1')">爬虫子标题1</h3>
+            <h3 onclick="scrollToContent('webScraping-title2')">爬虫子标题2</h3>
+            <h3 onclick="scrollToContent('webScraping-title3')">爬虫子标题3</h3>
+            <h3 onclick="scrollToContent('webScraping-title4')">爬虫子标题4</h3>
+            <h3 onclick="scrollToContent('webScraping-title5')">爬虫子标题5</h3>
+            <h3>...更多</h3>
+        </aside>
+
+        <!-- 内容区域: 爬虫简单示例 -->
+        <main id="webScraping-content" class="content hidden" onscroll="highlightSidebar('webScraping')">
+            <div class="content-block" id="webScraping-title1">
+                <h4>爬虫子标题1</h4>
+                <p>爬虫子标题1所属内容</p>
+            </div>
+            <div class="content-block" id="webScraping-title2">
+                <h4>爬虫子标题2</h4>
+                <p>爬虫子标题2所属内容</p>
+            </div>
+            <div class="content-block" id="webScraping-title3">
+                <h4>爬虫子标题3</h4>
+                <p>爬虫子标题3所属内容</p>
+            </div>
+            <div class="content-block" id="webScraping-title4">
+                <h4>爬虫子标题4</h4>
+                <p>爬虫子标题4所属内容</p>
+            </div>
+            <div class="content-block" id="webScraping-title5">
+                <h4>爬虫子标题5</h4>
+                <p>爬虫子标题5所属内容</p>
+            </div>
+        </main>
+
+        <!-- 侧边栏: MySQL数据库基础 -->
+        <aside id="mysql-sidebar" class="sidebar hidden">
+            <h3 onclick="scrollToContent('mysql-title1')">MySQL子标题1</h3>
+            <h3 onclick="scrollToContent('mysql-title2')">MySQL子标题2</h3>
+            <h3>...更多</h3>
+        </aside>
+
+        <!-- 内容区域: MySQL数据库基础 -->
+        <main id="mysql-content" class="content hidden" onscroll="highlightSidebar('mysql')">
+            <div class="content-block" id="mysql-title1">
+                <h4>MySQL子标题1</h4>
+                <p>MySQL子标题1所属内容</p>
+            </div>
+            <div class="content-block" id="mysql-title2">
+                <h4>MySQL子标题2</h4>
+                <p>MySQL子标题2所属内容</p>
+            </div>
+        </main>
+
+        <!-- 侧边栏: 办公自动化 -->
+        <aside id="automation-sidebar" class="sidebar hidden">
+            <h3 onclick="scrollToContent('automation-title1')">办公自动化子标题1</h3>
+            <h3 onclick="scrollToContent('automation-title2')">办公自动化子标题2</h3>
+            <h3>...更多</h3>
+        </aside>
+
+        <!-- 内容区域: 办公自动化 -->
+        <main id="automation-content" class="content hidden" onscroll="highlightSidebar('automation')">
+            <div class="content-block" id="automation-title1">
+                <h4>办公自动化子标题1</h4>
+                <p>办公自动化子标题1所属内容</p>
+            </div>
+            <div class="content-block" id="automation-title2">
+                <h4>办公自动化子标题2</h4>
+                <p>办公自动化子标题2所属内容</p>
+            </div>
+        </main>
+
+        <!-- 侧边栏: 大数据分析基础 -->
+        <aside id="bigData-sidebar" class="sidebar hidden">
+            <h3 onclick="scrollToContent('bigData-title1')">大数据子标题1</h3>
+            <h3 onclick="scrollToContent('bigData-title2')">大数据子标题2</h3>
+            <h3>...更多</h3>
+        </aside>
+
+        <!-- 内容区域: 大数据分析基础 -->
+        <main id="bigData-content" class="content hidden" onscroll="highlightSidebar('bigData')">
+            <div class="content-block" id="bigData-title1">
+                <h4>大数据子标题1</h4>
+                <p>大数据子标题1所属内容</p>
+            </div>
+            <div class="content-block" id="bigData-title2">
+                <h4>大数据子标题2</h4>
+                <p>大数据子标题2所属内容</p>
+            </div>
+        </main>
+
+        <!-- 其他功能区域 -->
+        <aside class="extra">
+            <p style="color: #5360FF;">其他功能</p>
+            <button onclick="toggleBackground()">
+                <div class="theme-switch">🔆 白昼模式</div>
+            </button>
+            <button onclick="showSearchBox()">
+                <div class="theme-switch">内容搜索</div>
+            </button>
+            <!-- 搜索框容器 -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="请在此输入你想搜索的内容">
+                <div style="display: flex;"> <!-- 使用flex布局使按钮横向排列 -->
+                    <button onclick="searchContent()">确认</button>
+                    <button onclick="hideSearchBox()">返回</button>
+                </div>
+                <!-- 搜索提示框 -->
+                <div class="search-info">
+                    <span id="result-count"></span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // 切换主题的函数
+        function toggleBackground() {
+            document.body.classList.toggle('light-theme');
+            const themeSwitch = document.querySelector('.theme-switch');
+            if (document.body.classList.contains('light-theme')) {
+                themeSwitch.textContent = '🌙 暗夜模式';
+            } else {
+                themeSwitch.textContent = '🔆 白昼模式';
+            }
+        }
+
+        // 显示搜索框
+        function showSearchBox() {
+            document.querySelector('.search-container').style.display = 'block';
+        }
+
+        // 隐藏搜索框
+        function hideSearchBox() {
+            document.querySelector('.search-container').style.display = 'none';
+            resetSearch(); // 重置搜索结果
+        }
+
+        // 内容搜索功能
+        function searchContent() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const contentBlocks = document.querySelectorAll('.content-block');
+            resetSearch(); // 重置搜索结果
+            let highlightCount = 0; // 高亮总数计数器
+
+            contentBlocks.forEach(block => {
+                const regex = new RegExp(searchTerm, 'gi');
+                const highlightedHTML = block.innerHTML.replace(regex, match => {
+                    highlightCount++; // 每找到一个匹配项，计数器加一
+                    return `<span class="highlight">${match}</span>`;
+                });
+                block.innerHTML = highlightedHTML;
+                if (block.textContent.includes(searchTerm)) {
+                    block.style.border = '2px solid #9C89E9';
+                } else {
+                    block.style.border = '0px solid transparent';
+                }
+            });
+
+            // 显示提示框并更新结果数量
+            const searchInfo = document.querySelector('.search-info');
+            const resultCount = document.getElementById('result-count');
+            searchInfo.style.display = 'block';
+            resultCount.textContent = `结果:${highlightCount} (此为所有标签结果)`;
+        }
+
+        // 重置搜索结果
+        function resetSearch() {
+            const contentBlocks = document.querySelectorAll('.content-block');
+            contentBlocks.forEach(block => {
+                const originalHTML = block.innerHTML.replace(/<span class="highlight">/g, '').replace(/<\/span>/g, '');
+                block.innerHTML = originalHTML;
+                block.style.border = '0px solid transparent'; // 移除边框
+            });
+            const searchInfo = document.querySelector('.search-info');
+            searchInfo.style.display = 'none'; // 隐藏提示框
+        }
+
+        // 标签切换功能
+        function switchTab(tab) {
+            // 隐藏所有内容区域和侧边栏
+            document.querySelectorAll('.content').forEach(content => content.classList.add('hidden'));
+            document.querySelectorAll('.sidebar').forEach(sidebar => sidebar.classList.add('hidden'));
+
+            // 显示当前点击的内容区域和侧边栏
+            document.getElementById(`${tab}-content`).classList.remove('hidden');
+            document.getElementById(`${tab}-sidebar`).classList.remove('hidden');
+
+            // 移除所有导航按钮的高亮效果
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+
+            // 为当前点击的导航按钮添加高亮效果
+            document.querySelector(`nav a[onclick="switchTab('${tab}')"]`).classList.add('active');
+        }
+
+        // 默认显示"基础语法"的内容
+        switchTab('basics');
+
+        // 当点击侧边栏中的子标题时，内容区域滚动到对应的内容块
+        function scrollToContent(contentId) {
+            const contentBlock = document.getElementById(contentId);
+            const contentArea = contentBlock.parentElement; // 获取内容块所在的区域
+            contentArea.scrollTop = contentBlock.offsetTop - contentArea.offsetTop; // 滚动到内容块的位置
+        }
+
+        // 当内容区域滚动时，高亮侧边栏中的对应子标题
+        function highlightSidebar(tab) {
+            const contentBlocks = document.querySelectorAll(`#${tab}-content .content-block`);
+            const sidebarHeaders = document.querySelectorAll(`#${tab}-sidebar h3`);
+            const contentArea = document.getElementById(`${tab}-content`);
+            let activeIndex = -1;
+
+            // 找出当前显示的内容块索引
+            contentBlocks.forEach((block, index) => {
+                if (block.offsetTop <= contentArea.scrollTop + 100) {
+                    activeIndex = index;
+                }
+            });
+
+            // 更新侧边栏中子标题的样式
+            sidebarHeaders.forEach((header, index) => {
+                if (index === activeIndex) {
+                    header.classList.add('active');
+                } else {
+                    header.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>python基础语法</title>
+    <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+    <style>
+        .container {
+            display: flex;
+            /* 定义为弹性盒子 */
+            margin: 0;
+            gap: 60px;
+            /* 设置子元素之间的间隔 */
+            height: 87vh;
+        }
+
+        .address {
+            /* 导航栏 父元素设置 */
+            display: flex;
+            flex-direction: column;
+            /* 定义主轴方向为纵向 */
+            gap: 20px;
+            align-items: flex-start;
+            /* 子元素左对齐 */
+            width: 115px;
+            /* 设置宽度 */
+            height: 87vh;
+            /* 设为视口高度 */
+            overflow-y: auto;
+            /* 启用纵向滚动条 */
+            scroll-behavior: smooth;
+            /* 平滑滚动 */
+            background-color: #0a3bcc;
+        }
+
+        .text {
+            /* 导航栏 子元素设置 */
+            width: 100%;
+            /* 子元素宽度占满父元素 */
+            height: auto;
+            padding: 0px;
+            margin: 0;
+        }
+
+        .text a {
+            text-decoration: none;
+            color: whitesmoke;
+        }
+
+        .main-content {
+            display: flex;
+            /* 定义为弹性盒子 */
+            flex-direction: column;
+            /* 定义主轴方向为纵向 */
+            gap: 30px;
+            /* 设置子元素之间的间隔 */
+            margin: 0;
+            /* 设置外边距 */
+            padding: 20px;
+            /* 设置内边距 */
+            flex: 1;
+            /* 使内容框架部分占据剩余空间 */
+        }
+
+        .xic {
+            /* 标题栏 父元素设置 */
+            display: flex;
+            /* 定义为弹性盒子 */
+            justify-content: center;
+            /* 定义主轴对齐方式 居中 */
+            flex-direction: row;
+            /* 定义主轴方向为横向 */
+            flex-wrap: wrap;
+            /* 允许子元素在需要时换行 */
+            background-color: white;
+            margin: 0;
+        }
+
+        .cid {
+            /* 标题栏 子元素设置 */
+            border: 2px solid #ccc;
+            padding: 10px;
+            /* 设置内边距,使内容与边框之间有一定的间隔 */
+            margin: 5px;
+            /* 设置外边距,使子元素之间有一定的距离 */
+            text-align: center;
+            /* 文本内容居中对齐。 */
+            font-size: 16px;
+            /* 设置字体大小 */
+            background-color: #ccc;
+            /* 设置背景颜色 */
+            flex: 1 1 auto;
+            /* 使子元素等宽,可根据内容自动调整宽度 */
+            min-width: 50px;
+            /* 设置最小宽度 */
+        }
+
+        .cid a {
+            /* 标题栏 子元素 链接设置 */
+            text-decoration: none;
+            /* 去掉链接的下划线 */
+            color: black;
+            /* 设置链接文字颜色 */
+        }
+
+        .main{
+            /* 内容框架 父元素设置 */
+            overflow-y: auto;
+            /* 启用纵向滚动条 */
+            scroll-behavior: smooth;
+            /* 平滑滚动 */
+        }
+
+        .main::-webkit-scrollbar {
+            display: none;
+            /* 隐藏滚动条 */
+        }
+
+        .child {
+            /* 内容框架 子元素设置 */
+            background-color: rgb(170, 192, 73);
+            text-align: center;
+            flex: 1 1 auto;
+            /* 使子元素等高,可根据内容自动调整高度 */
+            min-height: 50px;
+            /* 设置最小高度 */
+            max-height: 300px;
+            /* 设置最大高度 */
+        }
+    </style>
+</head>
+
+<body style="font-size: small; margin: 0;">
+    <!-- 设置头部标识栏 -->
+    <div style="border: 0px solid #225686; background-color: #225686; margin: 0; padding: 1px; z-index: 100;">
+        <p style="color: white; font: 30px 微软雅黑; text-align: center;"><b>lkdx</b></p>
+    </div>
+
+    <!-- 设置剩余主体 -->
+    <div class="container">
+        <!-- 导航栏 -->
+        <div class="address" style="background-color:#668aff; padding: 10px;">
+            <!-- 内容1 logo -->
+            <div class="text">
+                <img src="../resource/python图标.png" alt="Logo" width="100px" , height="70px">
+            </div>
+            <div class="text">
+                <a href="#"><b>字面量, 变量、字符串和数字，输入与输出，注释</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>转义字符,布尔类型和None类型,逻辑判断,编码格</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>条件判断,运算与优先级,and与or</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>for循环基础,变量交换,异常捕获</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>数据结构:列表</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>数据结构:元组,集合，可变与不可变类型数据</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>for循环,while循环,python常用函数1</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>迭代器与python常用函数2</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>字典,深拷贝与浅拷贝,列表推导式</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>函数</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>递归,闭包,匿名函数</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>面向对象编程</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>类的继承，重写和多继承</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>多继承的钻石继承,多态和鸭子类型,类的组合,类的私有属性和私有方法</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>魔法方法</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>单例模式，类的书写规范，包(模块)的制作和导入</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>文件操作</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>正则表达式</b></a>
+            </div>
+            <div class="text">
+                <a href="#"><b>装饰器与生成器</b></a>
+            </div>
+        </div>
+
+        <!-- 子嵌套 确保标题栏与内容栏位置正常显示 -->
+        <div class="main-content">
+            <!-- 标题栏设置 -->
+            <div class="xic" style="border: 2px solid white; background-color: white; margin: 0;">
+                <div class="cid">
+                    <a href="#"><b>python基础语法</b></a>
+                </div>
+                <div class="cid">
+                    <a href="#"><b>爬虫简单示例</b></a>
+                </div>
+                <div class="cid">
+                    <a href="#"><b>MySql数据库基础</b></a>
+                </div>
+                <div class="cid">
+                    <a href="#"><b>办公自动化</b></a>
+                </div>
+                <div class="cid">
+                    <a href="#"><b>大数据分析基础</b></a>
+                </div>
+            </div>
+
+            <!-- 内容框架 -->
+            <div class="main">
+                <!-- 子元素 图片 内容1 -->
+                <div class="child" style="color: black; font-size: 30px; text-align: center;">
+                    <p>Content 1</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
