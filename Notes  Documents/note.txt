@@ -1,0 +1,49 @@
+提交更改 命令：git config pull.rebase false
+
+Flex布局(弹性布局)
+display: flex;
+flex-direction: row; // 主轴方向，row表示从左到右，column表示从上到下
+justify-content: flex-start; // 主轴对齐方式，flex-start表示向左对齐，flex-end表示向右对齐，center表示居中对齐，space-between表示两端对齐，space-around表示两侧均匀分布
+align-items: flex-start; // 交叉轴对齐方式，flex-start表示向上对齐，flex-end表示向下对齐，center表示居中对齐，baseline表示基线对齐
+flex-wrap: nowrap; // 换行方式，nowrap表示不换行，wrap表示换行，wrap-reverse表示反向换行
+flex: 0 1 auto; // 弹性比例，第一个值表示主轴方向的长度，第二个值表示交叉轴方向的长度，auto表示自动分配剩余空间
+align-self: auto; // 覆盖align-items属性，单独设置某一个子元素的对齐方式
+order: 0; // 子元素的排列顺序，数值越小越靠前
+flex-grow: 0; // 弹性放大比例，数值越大放大比例越大
+flex-shrink: 1; // 弹性缩小比例，数值越小缩小比例越大
+flex-basis: auto; // 弹性长度，auto表示自动分配剩余空间
+align-content: flex-start; // 多根轴线的对齐方式，flex-start表示向左对齐，flex-end表示向右对齐，center表示居中对齐，space-between表示两端对齐，space-around表示两侧均匀分布
+
+
+<!-- css创意动画:https://codepen.io/chrisgannon/pen/ZaPmKp -->
+
+
+<p><b>地址：</b>北京市海淀区中关村南大街10号</p>
+<p><b>电话：</b>13811111111</p>
+<p><b>邮箱：</b>13811111111@qq.com</p>
+<p><b>营业时间：</b>8:00-22:00</p>
+
+
+“SVG 图标”指的是使用可缩放矢量图形（Scalable Vector Graphics，简称 SVG）格式创建的图标。SVG 是一种基于 XML 语法的图像格式，用于描述二维矢量图形和矢量/混合图形。与基于像素的图像格式（如 JPEG、PNG）不同，SVG 图标是矢量图形，因此具有以下特点：
+1. **可缩放性**：SVG 图标可以无限放大或缩小而不损失清晰度，因为它们是基于数学描述的图形，而不是基于像素的。
+2. **可编辑性**：SVG 图标可以在任何支持 SVG 的文本编辑器或图形编辑软件中进行编辑和修改。
+3. **文件大小**：由于 SVG 是基于文本的，并且只存储图形的形状、颜色和位置等信息，因此文件大小通常比位图格式小。
+4. **交互性**：SVG 图标可以与 JavaScript 和 CSS 一起使用，创建具有动态和交互性的图标。
+5. **跨平台兼容性**：SVG 图标可以在任何支持 SVG 的浏览器或应用程序中查看和显示，无需进行额外的转换或处理。
+SVG 图标在网页设计中非常流行，因为它们可以轻松地调整大小以适应不同的屏幕尺寸和分辨率，同时保持清晰度和美观度。此外，SVG 图标还可以通过 CSS 进行样式化，以匹配网站的整体视觉风格。
+
+
+# 数学分式显示
+<!-- <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mn>9.11</mn><mo>=</mo><mn>9</mn><mo>+</mo><mfrac><mn>1</mn><mn>10</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>100</mn></mfrac></mrow><annotation encoding="application/x-tex">9.11 = 9 + \frac{1}{10} + \frac{1}{100}
+                </annotation></semantics></math> -->
+
+
+<a href="https://www.statuscake.com" title="Website Uptime Monitoring"><img src="https://app.statuscake.com/button/index.php?Track=7265957&Days=1&Design=2" /></a>
+// 这段代码是一个HTML超链接元素，用于创建一个指向特定网页的链接，并且在鼠标悬停时显示标题。具体来说：
+// <a> 标签定义了一个超链接，用于从当前页面跳转到另一个页面或页面的某个部分。
+// href="" 属性用于指定链接的目标URL。在这个例子中，href 属性的值为空，这意味着它没有指向任何地方。通常，你需要在这里填入一个有效的URL地址。
+// title="Website Uptime Monitoring" 属性提供了一个工具提示文本，当用户将鼠标悬停在链接上时，会显示这个文本
+在这个例子中文本是 "Website Uptime Monitoring"，表明链接与网站的正常运行时间监控相关
+// <img src="" /> 是一个空的图像标签，用于在网页上嵌入图像，src 属性用于指定图像的URL地址
+但在这个例子中，src 属性的值为空，因此没有显示任何图像通常，你需要在这里填入图像文件的路径或URL
+故此代码的意图是创建一个带有标题 "Website Uptime Monitoring" 的超链接，但没有提供实际的链接地址和图像源，要使其工作，你需要填充 href 和 src 属性的值
