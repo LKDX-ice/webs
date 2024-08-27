@@ -568,8 +568,23 @@
                                 /* 初始状态隐藏 */
                             }
 
+                            .segment:nth-child(2)::before,
+                            .segment:nth-child(5)::before{
+                                content: '';
+                                position: absolute;
+                                top: 0px;
+                                right: -10px;
+                                height: 100%;
+                                width: 20px;
+                                /* background-color: #d8dae6e4; */
+                                background-color: #1227e4e4;
+                                transform: rotatey(-60deg);
+                                transition: 0.5s;
+                                opacity: 0; /* 初始状态隐藏 */
+                            }
+
                             /* .segment::after 只作用于水平方向 */
-                            /* .segment:nth-child(1)::after, */
+                            .segment:nth-child(1)::after,
                             .segment:nth-child(4)::after,
                             .segment:nth-child(7)::after {
                                 content: '';
@@ -582,8 +597,7 @@
                                 background-color: #1227e4e4;
                                 transform: rotateX(-75deg) rotateY(0deg);
                                 transition: .5s;
-                                opacity: 0;
-                                /* 初始状态隐藏 */
+                                opacity: 0; /* 初始状态隐藏 */
                             }
 
                             /* 当段处于激活状态时，增加升起效果和更强的光照效果 */
