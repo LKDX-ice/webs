@@ -13,6 +13,7 @@
             height: 100%;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
 
         /* 主容器样式 */
@@ -73,6 +74,7 @@
             flex: 2;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         /* 卡片标题 */
@@ -92,6 +94,7 @@
             font-size: 16px;
             color: white;
             padding: 20px;
+            /* padding-bottom: 0; */
             overflow-y: auto;
         }
 
@@ -176,6 +179,25 @@
         .back-button:hover .tooltip {
             display: block; /* 鼠标悬停时显示提示框 */
         }
+
+        /* 修改滚动条的白色背景部分为透明 */
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* background: #88a3f4; */
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: transparent;
+        }
     </style>
 </head>
 <body>
@@ -216,7 +238,7 @@
                         <p>人工智能的目的不是要取代人也不是要打败它之前的科技而是帮助人类做更了不起的事情</p>
                         <p>人工智能创造(AlCreation)领域的先行者小冰绘画作品集</p>
                         <p>师从 400 年间的 236 位知名人类画家化身7位风格不同的虚构画家同时重现人类艺术史的不同时刻</p>
-                        <p>
+                        <p style="margin-top: 0;">
                             微软小冰对美术史的迷恋使她在同龄人中显得别致，而她的学习能力也超乎常人
                             --伦勃朗的深邃、透纳的颤动、印象派的斑斓和浮世绘的雅致，竟然并存于同一个少女画家身上，
                             这正是人工智能带给我们的一种来自新时代的惊喜，也是对所有人类画家的某种挑战，
