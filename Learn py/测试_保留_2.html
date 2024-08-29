@@ -166,16 +166,17 @@
             color: #000;
         }
 
-        body.light-theme header {
+        body.light-theme header{
             background-color: #e0e0e0;
         }
 
         body.light-theme nav,
+        body.light-theme .sidebar h3,
+        body.light-theme .search-container input,
         body.light-theme .extra button {
             background-color: #d0d0d0;
         }
 
-        body.light-theme .sidebar h3,
         body.light-theme nav a,
         body.light-theme .theme-switch {
             color: #000;
@@ -226,7 +227,9 @@
 
         /* 搜索结果高亮样式 */
         .highlight {
-            background-color: rgba(255, 255, 255, 0.5);
+            /* background-color: rgba(255, 255, 255, 0.5); */
+            background-color: rgba(243, 222, 105, 0.5);
+            border: 1px solid rgb(243, 222, 105);
         }
 
         /* 搜索提示框样式 */
@@ -267,7 +270,7 @@
          /* 玻璃拟态卡片样式 */
         .glass-card {
             position: absolute; /* 使用绝对定位确保卡片叠加在其他元素上面 */
-            top: 43%; /* 垂直居中 */
+            top: 48%; /* 垂直居中 */
             left: 37%; /* 左右位置调整，使其右对齐 */
             transform: translate(-50%, -50%); /* 用以真正居中调整 */
             width: 190px; /* 设置卡片宽度 */
