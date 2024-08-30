@@ -291,7 +291,7 @@
 
             // 删除按钮事件
             item.querySelector('.delete-btn').addEventListener('click', function() {
-                const password = prompt("请输入删除密码：");
+                const password = prompt("请输入删除密码(014529)：");
                 if (password === DELETE_PASSWORD) {
                     list.removeChild(item);
                     // 从localStorage中删除
