@@ -27,15 +27,16 @@
         /* 头部样式 */
         .header {
             background-color: #1a1a1a;
-            height: 10vh;
+            /* height: 10vh; */
             display: flex;
             justify-content: center;
             align-items: center;
-            position: fixed;
+            /* position: fixed; */
             /* 固定位置 */
             top: 0;
             width: 100%;
-            z-index: 1000;
+            padding: 26px;
+            /* z-index: 1000; */
             /* 确保在其他内容之上 */
         }
 
@@ -45,6 +46,8 @@
             background: linear-gradient(45deg, #8a2be2, #4169e1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-align: center;
+            /* 使文本内容居中 */
         }
 
         /* 导航栏样式 */
@@ -80,8 +83,9 @@
         .content {
             display: flex;
             flex-grow: 1;
-            padding-top: 162px;
+            /* padding-top: 162px; */
             /* 为头部和导航栏留出空间 */
+            padding-top: 68px;
             position: relative;
             overflow-y: auto;
             /* 允许内容区域滑动 */
@@ -352,7 +356,8 @@
         .glass-card {
             position: absolute; /* 使用绝对定位确保卡片叠加在其他元素上面 */
             top: 30%; /* 垂直居中 */
-            left: 80%; /* 左右位置调整，使其右对齐 */
+            /* left: 80%; */
+            left: 81%;
             transform: translate(-50%, -50%); /* 用以真正居中调整 */
             width: 190px; /* 设置卡片宽度 */
             height: 190px;
@@ -376,6 +381,7 @@
 </head>
 
 <body>
+    <!-- SVG 动画 -->
     <svg class="loading" viewBox="0 0 1000 1000">
         <defs>
             <polygon id="loading_hexagon" points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" fill="#171717" />
@@ -394,7 +400,7 @@
         <a href="Xice/xices.html" target="_blank">介绍</a>
         <a href="History/history.html" target="_blank">历史</a>
         <a href="Chinese medicine/YiYao.html" target="_blank">中医药</a>
-        <a href="Learn py/测试_保留_2.html" target="_blank">python</a>
+        <a href="Learn py/python.html" target="_blank">python</a>
     </div>
 
     <!-- 主要内容区域 -->
@@ -679,7 +685,21 @@
                             position: absolute;
                             inset: 5px 3px;
                             border-top: 1px solid #ccc;
-                            filter: blur(1px);
+                            filter: blur(2px);
+                            transition: .5s;
+                            opacity: 0;
+                        }
+
+                        /* 垂直方向 */
+                        .segmentFB.active:nth-child(2)::before,
+                        .segmentFB.active:nth-child(3)::before,
+                        .segmentFB.active:nth-child(5)::before,
+                        .segmentFB.active:nth-child(6)::before {
+                            content: "";
+                            position: absolute;
+                            inset: 5px 3px;
+                            border-top: 1px solid #ccc;
+                            filter: blur(2px);
                             transition: .5s;
                             opacity: 0;
                         }
@@ -735,7 +755,8 @@
                         .colonFB div::before {
                             content: "";
                             position: absolute;
-                            inset: 2px 3px;
+                            inset:
+                                2px 3px;
                             border-top: 2px solid #ccc;
                             border-right: 1px solid #ccc;
                             filter: blur(1px);
@@ -816,14 +837,15 @@
                 </div>
 
                 <!-- 炫彩七段 -->
-                <div id="qiduanxc" class="tab-content" style="height:314px; margin-left: 320px; margin-right: 20px; margin-top: 90px;">
+                <div id="qiduanxc" class="tab-content"
+                    style="height:314px; margin-left: 365px; margin-right: 20px; margin-top: 90px;">
                     <style>
                         /* 引入字体文件 */
                         @font-face {
                             font-family: timeFont;
                             src: url(./font/DS-DIGIT.TTF);
                         }
-                    
+
                         .xuancai {
                             font-family: timeFont;
                             font-size: 200px;
@@ -833,7 +855,7 @@
                             animation: timeColor 3s linear infinite;
                             text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
                         }
-                    
+
                         @keyframes timeColor {
                             to {
                                 filter: hue-rotate(360deg);
@@ -1674,12 +1696,17 @@
         <p>网站界面显示主要适配的浏览器为edge(PC端)&nbsp;|&nbsp;如果以上功能或链接出现问题请通过"意见反馈"进行告知</p>
     </div>
 
-    <div class="glass-card">
+    <div class="glass-card" style="margin-right: -85px;">
         <pre>若网站长时间挂载后台，
-    界面可能出现BUG，
-    导致显示异常，
+   界面可能出现BUG，
+     导致显示异常，
     此时请刷新网页，
   或退出标签页重新进入</pre>
+    </div>
+    <div class="glass-card" style="border-radius: 15px;width: 190px;height: auto;top: 48%; left: 88%;box-shadow: none;backdrop-filter: blur(5px);padding-left: 10px;z-index: -10;">
+        <p>
+            很抱歉让你看见这个，但不知为何，原本在代码测试中所有一切正常的页面，在最近检查时发现，在一些浏览器上有的样式与布局出现了一些问题，如消失的效果，突然多出的覆盖或滚动条，原本这些是没有的，已尽量修正，多谢谅解
+        </p>
     </div>
 
     <script>
@@ -1714,63 +1741,89 @@
 
         // 蜂窝矩阵退散动效
         const loading = {
-            row: 30,
-            line: 15,
-            container: null,
-            blocks: [],
+            row: 30, // 行数
+            line: 25, // 列数
+            container: null, // 容器元素
+            blocks: [], // 蜂窝块元素数组
             init() {
-                this.container = document.querySelector('.loading');
-                this.creat_blocks();
+                this.container = document.querySelector('.loading'); // 获取容器元素
+                this.creat_blocks(); // 创建蜂窝块
                 setTimeout(() => {
-                    this.hidden();
-                }, 1000)
+                    this.hidden(); // 开始隐藏动画
+                })
+                //, 1000); // 延迟1秒开始动画
             },
             creat_blocks() {
-                for (let l = 0; l < this.line; l++) {
-                    let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                    for (let r = 0; r < this.row; r++) {
-                        let use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-                        use.setAttribute("class", "loading_block");
-                        use.setAttribute("href", "#loading_hexagon");
-                        use.setAttribute("x", `${l % 2 ? 86.5 * r : 86.5 * r + 43.3}`);
-                        use.setAttribute("y", `${74.5 * l}`);
-                        use.setAttribute("transform-origin", "50 50")
-                        g.appendChild(use);
-                        this.blocks.push(use);
+                for (let l = 0; l < this.line; l++) { // 遍历列
+                    let g = document.createElementNS("http://www.w3.org/2000/svg", "g"); // 创建SVG组
+                    for (let r = 0; r < this.row; r++) { // 遍历行
+                        let use = document.createElementNS("http://www.w3.org/2000/svg", "use"); // 创建SVG使用元素
+                        use.setAttribute("class", "loading_block"); // 设置类名
+                        use.setAttribute("href", "#loading_hexagon"); // 设置引用
+                        use.setAttribute("x", `${l % 2 ? 86.5 * r : 86.5 * r + 43.3}`); // 设置x坐标
+                        use.setAttribute("y", `${74.5 * l}`); // 设置y坐标
+                        use.setAttribute("transform-origin", "50 50"); // 设置变换原点
+                        g.appendChild(use); // 将使用元素添加到组中
+                        this.blocks.push(use); // 将使用元素添加到蜂窝块数组中
                     }
-                    this.container.appendChild(g);
+                    this.container.appendChild(g); // 将组添加到容器中
                 }
             },
             hidden() {
+                // 获取需要显示的内容元素
+                const contentElements = document.querySelectorAll('.header,.nav, .content, .footer, .glass-card');
+
+                // 初始化内容元素的透明度为0
+                contentElements.forEach(el => el.style.opacity = '0');
+
                 gsap.timeline()
                     .set(this.blocks, {
-                        "stroke-dashoffset": () => { return Math.random() > 0.5 ? -100 : 100 },
+                        "stroke-dashoffset": () => { return Math.random() > 0.5 ? -100 : 100 }, // 随机设置初始的stroke-dashoffset
                     })
                     .to(this.blocks, {
-                        "stroke-dashoffset": 0,
-                        "stroke-opacity": 1,
-                        duration: 1.5, // 延长持续时间
-                        ease: "power4.out",
+                        "stroke-dashoffset": 0, // 将stroke-dashoffset设置为0
+                        "stroke-opacity": 1, // 将stroke-opacity设置为1
+                        duration: 1.5, // 动画持续时间
+                        ease: "power4.out", // 缓动函数
                         stagger: {
-                            from: "random",
-                            each: 0.002
+                            from: "random", // 随机开始
+                            each: 0.002 // 每个元素之间的延迟
+                        },
+                        onUpdate: function () {
+                            // 根据动画的进度更新内容元素的透明度
+                            const progress = this.progress();
+                            contentElements.forEach(el => el.style.opacity = progress);
                         }
                     })
                     .to(this.blocks, {
-                        scale: 0,
-                        opacity: 0,
-                        duration: 2, // 延长持续时间
-                        ease: "power2.out",
+                        scale: 0, // 缩放为0
+                        opacity: 0, // 透明度为0
+                        duration: 2, // 动画持续时间
+                        ease: "power2.out", // 缓动函数
                         stagger: {
-                            from: "center",
-                            each: 0.004
+                            from: "center", // 从中心开始
+                            each: 0.004 // 每个元素之间的延迟
+                        },
+                        onUpdate: function () {
+                            // 根据动画的进度更新内容元素的透明度
+                            const progress = this.progress();
+                            contentElements.forEach(el => el.style.opacity = progress);
                         }
-                    }, "<0.2")
+                    }, "<0.2") // 相对于上一个动画延迟0.2秒开始
+                    .call(() => {
+                        动画完成后显示其他内容
+                        document.querySelectorAll('.header,.nav, .content, .footer, .glass-card').forEach(el => el.style.display = 'block');
+                        // document.querySelectorAll('').forEach(el => el.style.display = 'block');
+                        this.container.style.display = 'none'; // 隐藏SVG动画
+                        contentElements.forEach(el => el.style.opacity = '1'); // 确保内容元素完全显示
+                    });
             }
         }
         window.addEventListener('load', () => {
-            loading.init();
+            loading.init(); // 页面加载完成后初始化动画
         })
+
+
     </script>
 </body>
 
