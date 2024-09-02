@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互动动画</title>
+    <style>
+        /* 设置主体样式 */
+        #main {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            background: black;
+            border-radius: 50% / 40%;
+            margin: 100px auto;
+        }
+
+        /* 设置眼睛样式 */
+        .eye {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            top: 50px;
+        }
+
+        .eye.left {
+            left: 60px;
+        }
+
+        .eye.right {
+            right: 60px;
+        }
+
+        /* 设置聊天框样式 */
+        .chat-box {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: rgb(44, 118, 209);
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* 设置云朵提示框样式 */
+        .cloud-box {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 100px;
+            height: 60px;
+            background: lightgray;
+            border-radius: 50%;
+            box-shadow:
+                -20px 15px 0 -5px lightgray,
+                20px 15px 0 -5px lightgray,
+                0 10px 0 10px lightgray,
+                20px 15px 0 -5px lightgray,
+                -20px 15px 0 5px lightgray,
+                10px 0 10px 0 lightgray;
+            display: none;
+            text-align: center; /* 水平居中 */
+            line-height: 60px; /* 垂直居中 */
+        }
+
+        /* 设置眨眼动画 */
+        @keyframes blink {
+
+            0%,
+            20%,
+            60%,
+            100% {
+                height: 80px;
+            }
+
+            40%,
+            80% {
+                height: 0;
+            }
+        }
+
+        /* 设置抖动动画 */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25%,
+            75% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* 设置波浪动画 */
+        @keyframes wave {
+
+            0%,
+            100% {
+                border-radius: 50% / 40%;
+            }
+
+            50% {
+                border-radius: 40% / 50%;
+            }
+        }
+
+        /* 设置荧光眼睛动画 */
+        @keyframes glow {
+
+            0%,
+            100% {
+                background: white;
+            }
+
+            50% {
+                background: blue;
+            }
+        }
+
+        /* 设置黑色小圆球动画 */
+        @keyframes black-orbs {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 设置月牙形眼睛 */
+        .crescent {
+            width: 45px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%/100%;
+            position: absolute;
+            top: 90px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="chat-box">HI，我是小黑</div>
+        <div class="cloud-box">☁️</div>
+    </div>
+
+    <script>
+        const main = document.getElementById('main'); // 获取页面中的主要元素
+        const eyes = document.querySelectorAll('.eye'); // 获取所有具有'eye'类的元素
+        const chatBox = document.querySelector('.chat-box'); // 获取第一个具有'chat-box'类的元素
+        const cloudBox = document.querySelector('.cloud-box'); // 获取第一个具有'cloud-box'类的元素
+        let blinkInterval, cloudInterval; // 定义两个变量用于存储定时器ID
+        let cloudActive = true; // 定义状态变量，初始为激活状态
+
+        // 页面初始加载时显示聊天框
+        window.onload = () => {
+            chatBox.style.display = 'block'; // 显示聊天框
+            setTimeout(() => {
+                chatBox.style.display = 'none'; // 3秒后隐藏聊天框
+            }, 3000);
+        };
+
+        // 设置眨眼动画
+        blinkInterval = setInterval(() => {
+            if (cloudActive) {
+                eyes.forEach(eye => {
+                    eye.style.animation = 'blink 0.5s'; // 为每个眼睛设置眨眼动画
+                    setTimeout(() => {
+                        eye.style.animation = ''; // 0.5秒后清除动画
+                    }, 500);
+                });
+            }
+        }, 3000); // 每3秒执行一次
+
+        // 设置云朵提示框动画
+        const shapes = ['○', '△', '□', '◇', '☆'];
+        cloudInterval = setInterval(() => {
+            if (cloudActive) {
+                const shape = shapes[Math.floor(Math.random() * shapes.length)]; // 随机选择一个形状
+                cloudBox.textContent = shape; // 设置云朵提示框的内容
+                cloudBox.style.display = 'block'; // 显示云朵提示框
+                setTimeout(() => {
+                    cloudBox.style.display = 'none'; // 3秒后隐藏云朵提示框
+                }, 3000);
+            }
+        }, Math.random() * 5000 + 5000); // 每5到10秒随机执行一次
+
+        // 鼠标在主体上边缘滑动时眼睛变为月牙形
+        main.addEventListener('mouseover', (e) => {
+            if (e.clientY < main.getBoundingClientRect().top + 20) { // 判断鼠标是否在主体上边缘
+                eyes.forEach(eye => {
+                    eye.classList.add('crescent'); // 添加月牙形样式
+                });
+                cloudActive = false; // 禁用云朵提示框
+            } else {
+                eyes.forEach(eye => {
+                    eye.classList.remove('crescent'); // 移除月牙形样式
+                });
+                cloudActive = true; // 启用云朵提示框
+            }
+        });
+
+        // 双击主体时的动画效果
+        let doubleClickCount = 0;
+        main.addEventListener('dblclick', () => {
+            cloudActive = false; // 禁用云朵提示框
+            doubleClickCount++;
+            if (doubleClickCount % 2 === 1) { // 奇数次双击
+                main.style.animation = 'shake 2s'; // 设置主体摇晃动画
+                // main.style.animation = 'wave 2s'; // 边缘波浪效果
+                setTimeout(() => {
+                    main.style.animation = ''; // 2秒后清除动画
+                    cloudActive = true; // 启用云朵提示框
+                }, 2000);
+            } else { // 偶数次双击
+                eyes.forEach(eye => {
+                    eye.style.animation = 'glow 2s'; // 设置眼睛发光动画
+                });
+                const orbs = document.createElement('div'); // 创建新的div元素
+                orbs.style.position = 'absolute';
+                orbs.style.width = '10px';
+                orbs.style.height = '10px';
+                orbs.style.background = 'black';
+                orbs.style.borderRadius = '50%';
+                orbs.style.animation = 'black-orbs 2s'; // 设置黑色球体动画
+                main.appendChild(orbs); // 将新元素添加到主体中
+                setTimeout(() => {
+                    eyes.forEach(eye => {
+                        eye.style.animation = ''; // 2秒后清除眼睛动画
+                    });
+                    main.removeChild(orbs); // 移除新元素
+                    cloudActive = true; // 启用云朵提示框
+                }, 2000);
+            }
+        });
+
+        // 单击主体时显示聊天框
+        let clickCount = 0;
+        const messages = ['你好', '今天天气不错', '你在做什么', '很高兴见到你', '再见'];
+        main.addEventListener('click', () => {
+            cloudActive = false; // 禁用云朵提示框
+            const message = messages[clickCount % messages.length]; // 选择一个消息
+            chatBox.textContent = message; // 设置聊天框内容
+            chatBox.style.display = 'block'; // 显示聊天框
+            setTimeout(() => {
+                chatBox.style.display = 'none'; // 3秒后隐藏聊天框
+                cloudActive = true; // 启用云朵提示框
+            }, 3000);
+            clickCount++;
+        });
+
+        // 眼睛跟随鼠标移动
+        document.addEventListener('mousemove', (e) => {
+            const mainRect = main.getBoundingClientRect(); // 获取主体的位置和大小
+            const mainCenterX = mainRect.left + mainRect.width / 2; // 计算主体中心X坐标
+            const mainCenterY = mainRect.top + mainRect.height / 2; // 计算主体中心Y坐标
+            const mouseX = e.clientX; // 获取鼠标X坐标
+            const mouseY = e.clientY; // 获取鼠标Y坐标
+
+            // 计算眼睛的相对位置
+            const eyeOffsetX = Math.min(Math.max((mouseX - mainCenterX) / 5, -50), 50);
+            const eyeOffsetY = Math.min(Math.max((mouseY - mainCenterY) / 5, -30), 30);
+
+            eyes.forEach(eye => {
+                eye.style.transform = `translate(${eyeOffsetX}px, ${eyeOffsetY}px)`; // 设置眼睛的偏移
+            });
+        });
+    </script>
+</body>
+</html>
