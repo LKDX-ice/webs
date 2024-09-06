@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>背景滑动色彩显示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    #container {
+      display: grid;
+      grid-template-columns: repeat(20, 100px);
+      grid-gap: 2px;
+    }
+
+    #container span {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      background-color: #111;
+      z-index: 10;
+    }
+
+    #container span::before {
+      content: '';
+      position: absolute;
+      width: 50%;
+      ;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    #cursor {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background-color: #0f0;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      border-radius: 50%;
+      animation: animate 4s linear infinite;
+    }
+
+    #cursor::before,
+    #cursor::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0f0;
+    }
+
+    @keyframes animate {
+      0% {
+        filter: hue-rotate(0deg) blur(50px);
+      }
+
+      100% {
+        filter: hue-rotate(360deg) blur(50px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <div id="cursor"></div>
+  <script>
+    for (var i = 0; i < 250; i++) {
+      const box = document.createElement('span')
+      document.getElementById('container').appendChild(box)
+    }
+
+    const cursor = document.getElementById('cursor')
+    window.onmousemove = (e) => {
+      cursor.style.left = e.clientX + 'px'
+      cursor.style.top = e.clientY + 'px'
+    }
+  </script>
+</body>
+
+</html>

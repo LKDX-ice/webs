@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS - 拟态键盘</title>
+    <style>
+        html, body, div {
+            margin: 0;
+            padding: 0;
+			font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+		/* 容器 */
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000033;
+        }
+
+		/* 键盘 */
+        .keyboard {
+            display: flex;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px 1px #666 inset, 0px 0px 5px 1px #fff;
+            background-color: #E4E6EA;
+            padding: 30px;
+        }
+
+		/* 按键 */
+        .key {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #E4E9EC;
+            box-shadow: 3px 3px 8px 2px #999, -3px -3px 8px 2px #fff;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
+			transition: .1s;
+        }
+        .key:hover {
+            box-shadow: 0 0 3px 1px #999;
+        }
+        .key-empty {
+            width: 40px;
+            height: 40px;
+        }
+
+		/* 区域一 */
+        .area-1 {
+            width: 740px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-content: baseline;
+        }
+
+		/* 区域二 */
+        .area-2 {
+            width: 140px;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .area-2-item {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+		/* 区域三 */
+        .area-3 {
+            width: 190px;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .area-3-light {
+            display: flex;
+            gap: 10px;
+        }
+        .area-3-light-item {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            color: #999;
+        }
+        .area-3-number {
+            display: flex;
+            gap: 10px;
+        }
+        .area-3-number-item {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="keyboard">
+			<!-- 区域一 -->
+            <div class="area-1">
+                <!-- line1 -->
+                <div class="key" style="background-color: orange; color: #f5f5f5;">Esc</div>
+                <div class="key" style="margin-left: 50px;">F1</div>
+                <div class="key">F2</div>
+                <div class="key">F3</div>
+                <div class="key" style="margin-left: 25px;">F4</div>
+                <div class="key">F5</div>
+                <div class="key">F6</div>
+                <div class="key">F7</div>
+                <div class="key" style="margin-left: 25px;">F8</div>
+                <div class="key">F9</div>
+                <div class="key">F10</div>
+                <div class="key">F11</div>
+                <div class="key">F12</div>
+                <!-- line2 -->
+                <div class="key"><span>~</span><span>`</span></div>
+                <div class="key"><span>!</span><span>1</span></div>
+                <div class="key"><span>@</span><span>2</span></div>
+                <div class="key"><span>#</span><span>3</span></div>
+                <div class="key"><span>$</span><span>4</span></div>
+                <div class="key"><span>%</span><span>5</span></div>
+                <div class="key"><span>^</span><span>6</span></div>
+                <div class="key"><span>&</span><span>7</span></div>
+                <div class="key"><span>*</span><span>8</span></div>
+                <div class="key"><span>(</span><span>9</span></div>
+                <div class="key"><span>)</span><span>0</span></div>
+                <div class="key"><span>-</span><span>-</span></div>
+                <div class="key"><span>=</span><span>+</span></div>
+                <div class="key" style="width: 90px;">←</div>
+                <!-- line3 -->
+                <div class="key" style="width: 70px;">Tab</div>
+                <div class="key">Q</div>
+                <div class="key">W</div>
+                <div class="key">E</div>
+                <div class="key">R</div>
+                <div class="key">T</div>
+                <div class="key">Y</div>
+                <div class="key">U</div>
+                <div class="key">I</div>
+                <div class="key">O</div>
+                <div class="key">P</div>
+                <div class="key"><span>[</span><span>{</span></div>
+                <div class="key"><span>]</span><span>}</span></div>
+                <div class="key" style="width: 60px;"><span>\</span><span>|</span></div>
+                <!-- line4 -->
+                <div class="key" style="width: 85px;">Caps Lock</div>
+                <div class="key">A</div>
+                <div class="key">S</div>
+                <div class="key">D</div>
+                <div class="key">F</div>
+                <div class="key">G</div>
+                <div class="key">H</div>
+                <div class="key">J</div>
+                <div class="key">K</div>
+                <div class="key">L</div>
+                <div class="key"><span>;</span><span>:</span></div>
+                <div class="key"><span>'</span><span>"</span></div>
+                <div class="key" style="width: 95px;">Enter</div>
+                <!-- line5 -->
+                <div class="key" style="width: 115px;">Shift</div>
+                <div class="key">Z</div>
+                <div class="key">X</div>
+                <div class="key">C</div>
+                <div class="key">V</div>
+                <div class="key">B</div>
+                <div class="key">N</div>
+                <div class="key">M</div>
+                <div class="key"><span>,</span><span><</span></div>
+                <div class="key"><span>.</span><span>></span></div>
+                <div class="key"><span>/</span><span>?</span></div>
+                <div class="key" style="width: 115px;">Shift</div>
+                <!-- line6 -->
+                <div class="key" style="width: 50px;">Ctrl</div>
+                <div class="key" style="width: 50px;">Win</div>
+                <div class="key" style="width: 50px;">Alt</div>
+                <div class="key" style="width: 320px;"></div>
+                <div class="key" style="width: 50px;">Alt</div>
+                <div class="key" style="width: 50px;">Win</div>
+                <div class="key" style="width: 50px;">▤</div>
+                <div class="key" style="width: 50px;">Ctrl</div>
+            </div>
+
+			<!-- 区域二 -->
+            <div class="area-2">
+				<!-- 上 -->
+                <div class="area-2-item">
+                    <div class="key">Print</div>
+                    <div class="key">Lock</div>
+                    <div class="key">Pause</div>
+                    <div class="key">Insert</div>
+                    <div class="key">Home</div>
+                    <div class="key">UP</div>
+                    <div class="key">Del</div>
+                    <div class="key">End</div>
+                    <div class="key">Down</div>
+                </div>
+				<!-- 下 -->
+                <div class="area-2-item">
+                    <div class="key-empty"></div>
+                    <div class="key">↑</div>
+                    <div class="key-empty"></div>
+                    <div class="key">←</div>
+                    <div class="key">↓</div>
+                    <div class="key">→</div>
+                </div>
+            </div>
+
+			<!-- 区域三 -->
+            <div class="area-3">
+				<!-- 指示灯 -->
+                <div class="area-3-light">
+                    <div class="area-3-light-item" style="color: orangered;">◘</div>
+                    <div class="area-3-light-item">◘</div>
+                    <div class="area-3-light-item">◘</div>
+                    <div class="area-3-light-item">◘</div>
+                </div>
+				<!-- 数字小键盘 -->
+                <div class="area-3-number">
+					<!-- 左 -->
+                    <div class="area-3-number-item">
+                        <div class="key">Num</div>
+                        <div class="key">/</div>
+                        <div class="key">*</div>
+                        <div class="key">7</div>
+                        <div class="key">8</div>
+                        <div class="key">9</div>
+                        <div class="key">4</div>
+                        <div class="key">5</div>
+                        <div class="key">6</div>
+                        <div class="key">1</div>
+                        <div class="key">2</div>
+                        <div class="key">3</div>
+                        <div class="key" style="width: 90px;">0</div>
+                        <div class="key">.</div>
+                    </div>
+					<!-- 右 -->
+                    <div class="area-3-number-item">
+                        <div class="key">-</div>
+                        <div class="key" style="height: 90px;">+</div>
+                        <div class="key" style="height: 90px;">Enter</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

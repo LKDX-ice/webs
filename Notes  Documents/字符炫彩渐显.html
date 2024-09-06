@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>使用CSS和Javascript的文本悬停效果</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #222;
+        }
+
+        h2 {
+            position: relative;
+            font-size: 3em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        h2 span {
+            color: #555;
+            transition: 0.25s;
+        }
+
+        h2:hover span {
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0, 0 0 15px #0f0, 0 0 30px #0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class='text'>Text Hover Effects</h2>
+    <script>
+        let text = document.querySelector('.text')
+        text.innerHTML = text.innerText.split('').map((letters, i) => {
+            return `<span style='transition-delay: ${i * 40}ms; filter: hue-rotate(${i * 30}deg)'>${letters}</span>`
+        }).join('')
+    </script>
+</body>
+
+</html>

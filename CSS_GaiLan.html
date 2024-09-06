@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #2c2c2c;
+            color: #fff;
+            /* overflow: hidden; */
+            /* 隐藏滚动条 */
+        }
+
+        /* 头部样式 */
+        .header {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            width: 100%;
+            padding: 26px;
+            position: fixed;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            background: linear-gradient(45deg, #8a2be2, #4169e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 15px;
+            height: 6vh;
+            width: 100%;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* 整体标签内容展示区 */
+        .address {
+            display: flex;
+            flex-direction: row; /* 定义主轴方向为纵向 */
+            /* align-items: flex-start; 子元素左对齐 */
+        }
+
+        /* 标签样式 */
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            margin-top: 130px;
+            margin-left: 20px;
+            margin-right: 20px;
+            /* gap: 10px; */
+            max-height: 80vh; /* 限制高度以启用滚动 */
+            overflow-y: auto; /* 标签栏可滚动 */
+        }
+
+        /* 单个标签样式 */
+        .tab {
+            padding: 10px 20px;
+            background-color: #2c2c2c;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #8daac5;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        /* 激活状态的标签样式 */
+        .tab.active {
+            color: #5360FF;
+            box-shadow: inset 0 5px 1px rgba(0, 0, 0, .35),
+                inset 0 5px 5px rgba(0, 0, 0, .5),
+                inset 0 15px 25px rgba(0, 0, 0, .35);
+            border-radius: 0 0 0 0;
+        }
+
+        /* 标签内容样式 */
+        .tab-content {
+            display: none;
+            margin-top: 115px;
+            position: relative;
+        }
+
+        /* 激活状态的标签内容样式 */
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content.p{
+            margin: 0;
+            z-index: 10;
+        }
+
+        /* 修改滚动条的白色背景部分为透明 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4169e1;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4169e1;
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
+            font-size: 12px;
+            border-right: 2px solid #55a3ec;
+            transition: transform 0.6s ease-in-out, background-color 0.6s ease;
+        }
+
+        button:hover {
+            background-color: #55a3ec;
+            color: #3A81E6;
+            border-radius: 5px;
+            border: none;
+            text-shadow: 0 0 1px #fff,
+                0 0 20px #2449E2,
+                0 0 30px #2449E2;
+            background: linear-gradient(#555353, #363535, #303030);
+            box-shadow: inset 0 5px 1px rgba(0, 0, 0, .35),
+                0 5px 5px rgba(0, 0, 0, .5),
+                0 15px 25px rgba(0, 0, 0, .35);
+            transform: translateZ(25px);
+        }
+
+    </style>
+</head>
+<div class="header">
+    <h1>LKDX</h1>
+</div>
+<body>
+    <div class="address">
+        <!-- 标签栏 -->
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'intro')">简介</button>
+            <!-- <button class="tab" onclick="openTab(event, 'works')"><a href="./xice_ZP/xice_ZP_KJ.html" target="_blank">作品</a></button> -->
+            <button class="tab" onclick="openTab(event, 'xiaohei')">小黑</button>
+            <button class="tab" onclick="openTab(event, 'works')">字符炫彩渐显</button>
+            <button class="tab" onclick="openTab(event, 'activities')">3D 空间</button>
+            <button class="tab" onclick="openTab(event, 'tpzhank')">图片3D展开</button>
+            <button class="tab" onclick="openTab(event, 'thtime')">3D方块样时间线</button>
+            <button class="tab" onclick="openTab(event, 'xiaoyang')">跟随鼠标的角色</button>
+            <button class="tab" onclick="openTab(event, 'anniuxt')">按钮悬停变换</button>
+            <button class="tab" onclick="openTab(event, 'beijing')">背景炫彩滑动</button>
+            <button class="tab" onclick="openTab(event, 'jisuanqi')">玻璃拟态计算器</button>
+            <button class="tab" onclick="openTab(event, 'jianbian')">玻璃式渐变卡片</button>
+            <button class="tab" onclick="openTab(event, 'fengwosx')">蜂窝矩阵消散动画</button>
+            <button class="tab" onclick="openTab(event, 'guzhang')">故障式文本风格</button>
+            <button class="tab" onclick="openTab(event, 'huadong')">打字机滑动显色</button>
+            <button class="tab" onclick="openTab(event, 'yuanhuan')">科技圆环旋转动效</button>
+            <button class="tab" onclick="openTab(event, 'daoying')">可编辑倒影文本</button>
+            <button class="tab" onclick="openTab(event, 'shixiangs')">视线跟随</button>
+            <button class="tab" onclick="openTab(event, 'qiuxingyp')">荧光的球形药瓶</button>
+            <button class="tab" onclick="openTab(event, 'wangyeyy')">养在网页底部的鱼</button>
+            <button class="tab" onclick="openTab(event, 'youqudh')">有趣的鬼魂动画</button>
+            <button class="tab" onclick="openTab(event, 'kapaideng')">立体卡牌登录界面</button>
+            <button class="tab" onclick="openTab(event, 'lizidongx')">粒子动效</button>
+            <button class="tab" onclick="openTab(event, 'shaloudh')">沙漏动画</button>
+            <button class="tab" onclick="openTab(event, 'bolangsshuo')">波浪状闪烁文本</button>
+            <button class="tab" onclick="openTab(event, 'liushuidl')">流水灯登录界面</button>
+            <button class="tab" onclick="openTab(event, 'tanzhaoxs')">探照灯显示文本</button>
+            <button class="tab" onclick="openTab(event, 'tiaodong')">跳动变色的文本</button>
+            <button class="tab" onclick="openTab(event, 'xunijianp')">虚拟键盘</button>
+            <button class="tab" onclick="openTab(event, 'gudianann')">古典的按钮样式</button>
+            <button class="tab" onclick="openTab(event, 'fenlierh')">圆球的分裂融合</button>
+        </div>
+
+        <!-- 简介标签内容 -->
+        <div id="intro" class="tab-content active" style="text-align: center;padding-top: 150px; padding-left: 20%;">
+            <p>这里是一些 CSS 样式与动画效果的展示区域</p>
+            <p>侧边栏可滑动并对你感兴趣的内容进行点击查看</p>
+            <p>若想获取源码可通过 “F12检查”进行</p>
+            <p>内容来自创意或网络，不定期更新<P>
+            <p>当打开页面时所有效果会同时触发，在点击选择的标签后请稍作等待或刷新</P>
+            <p>当页面中有效果出现卡顿、无显示、内容不完整等异常情况时，请刷新网页或需借助 VPN</p>
+            <div class="footer" style="margin-top: 365px;width: 272.5%;margin-left: -600px;">
+                <p style="top: 20px; margin-left: 10%;">© 2024 lkdxice.com</p>
+            </div>
+        </div>
+
+        <!-- 其他标签内容 -->
+        <div id="xiaohei" class="tab-content">
+            <p style="font-size: 20px;">这是一个可互动的可爱的小家伙，你可以尝试对它进行抚摸、双击、单击等操作</p>
+            <iframe src="./Notes  Documents/小黑.html" style="width:190%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="works" class="tab-content">
+            <p style="font-size: 20px;">将鼠标悬停至字符上方即可查看效果</p>
+            <iframe src="./Notes  Documents/字符炫彩渐显.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="activities" class="tab-content">
+            <p style="font-size: 20px;">这是一个3D空间的展示效果，在展示范围内移动，房间可跟随鼠标进行一定幅度的移动，其中电视与墙上的海报均有内容，若无显示请开启VPN</p>
+            <iframe src="./Notes  Documents/3D房间测试.html" style="width:105%;height: 70vh;margin-top: 30px;margin-left: 50px;"></iframe>
+        </div>
+        <div id="tpzhank" class="tab-content">
+            <p style="font-size: 20px;">请将鼠标移动至图片任意位置</p>
+            <iframe src="./Notes  Documents/图片3D展开/图片3D展开.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="thtime" class="tab-content">
+            <p style="font-size: 20px;">等待几秒，时间线将自行移动</p>
+            <iframe src="./Notes  Documents/3D时间线/3D时间线.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="xiaoyang" class="tab-content">
+            <p style="font-size: 20px;">在展示范围内移动鼠标可引起小羊跟随</p>
+            <iframe src="./Notes  Documents/小羊跟随/小羊跟随.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="anniuxt" class="tab-content">
+            <p style="font-size: 20px;">请将鼠标移动至按钮上</p>
+            <iframe src="./Notes  Documents/按钮悬停变换.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="beijing" class="tab-content">
+            <p style="font-size: 20px;">在展示区域任意滑动可触发效果</p>
+            <iframe src="./Notes  Documents/背景滑动显现.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="jisuanqi" class="tab-content">
+            <p style="font-size: 20px;">点击数字与运算符看看结果吧,每次运算完成后记得清除~</p>
+            <iframe src="./Notes  Documents/玻璃拟态计算器.html" style="width:270%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="jianbian" class="tab-content">
+            <p style="font-size: 20px;">将鼠标移动至卡片上</p>
+            <iframe src="./Notes  Documents/玻璃拟态渐变卡片.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="fengwosx" class="tab-content">
+            <p style="font-size: 20px;">请等待几秒，若长时间无显示请刷新页面后立即点击至此，开启或关闭VPN</p>
+            <iframe src="./Notes  Documents/蜂窝矩阵消散.html" style="width:205%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="guzhang" class="tab-content">
+            <p style="font-size: 20px;">无需任何操作</p>
+            <iframe src="./Notes  Documents/故障文本风格.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="huadong" class="tab-content">
+            <p style="font-size: 20px;">将鼠标移动至卡片上</p>
+            <iframe src="./Notes  Documents/滑动显色(打字机)效果.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="yuanhuan" class="tab-content">
+            <p style="font-size: 20px;">将鼠标移动至圆环上触发它的立体效果</p>
+            <iframe src="./Notes  Documents/科技圆环旋转动效.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="daoying" class="tab-content">
+            <p style="font-size: 20px;">闪烁着荧光的文本，点击文本末尾即可编辑</p>
+            <iframe src="./Notes  Documents/可编辑文本及倒影.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="shixiangs" class="tab-content">
+            <p style="font-size: 20px;">在展示区域内移动鼠标吧</p>
+            <iframe src="./Notes  Documents/视线跟随.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="qiuxingyp" class="tab-content">
+            <p style="font-size: 20px;">不妨猜猜瓶内摇晃的是什么药剂~</p>
+            <iframe src="./Notes  Documents/炫彩球形药瓶.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="wangyeyy" class="tab-content">
+            <p style="font-size: 20px;">在网页的底部养鱼~</p>
+            <iframe src="./Notes  Documents/养在网页底部的鱼.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="youqudh" class="tab-content">
+            <p style="font-size: 20px;">小鬼出没~试着点击它吧</p>
+            <iframe src="./Notes  Documents/有趣的鬼魂动画.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="kapaideng" class="tab-content">
+            <p style="font-size: 20px;">将鼠标悬停在卡片上出现缩放效果，内容可填写，登录仅作模拟</p>
+            <iframe src="./Notes  Documents/立体卡牌式登录界面.html" style="width:230%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="lizidongx" class="tab-content">
+            <p style="font-size: 20px;">科幻？或许是吧~</p>
+            <iframe src="./Notes  Documents/粒子测试.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="shaloudh" class="tab-content">
+            <p style="font-size: 20px;">何不可变为沙漏时钟呢</p>
+            <iframe src="./Notes  Documents/沙漏动画.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="bolangsshuo" class="tab-content">
+            <p style="font-size: 20px;">您的页面正在加载中...</p>
+            <iframe src="./Notes  Documents/闪烁波浪文本.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="liushuidl" class="tab-content">
+            <p style="font-size: 20px;">尝试输入用户名称与密码吧</p>
+            <iframe src="./Notes  Documents/首页登录.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="tanzhaoxs" class="tab-content">
+            <p style="font-size: 20px;">无需任何操作</p>
+            <iframe src="./Notes  Documents/探照灯显示_文本.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="tiaodong" class="tab-content">
+            <p style="font-size: 20px;">无需任何操作</p>
+            <iframe src="./Notes  Documents/跳动变色效果.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="xunijianp" class="tab-content">
+            <p style="font-size: 20px;">一个没什么用的小键盘，除了点击似乎没有其他功能，或许不定期更新</p>
+            <iframe src="./Notes  Documents/虚拟键盘.html" style="width:220%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="gudianann" class="tab-content">
+            <p style="font-size: 20px;">请将鼠标悬停在按钮上</p>
+            <iframe src="./Notes  Documents/选择框.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+        <div id="fenlierh" class="tab-content">
+            <p style="font-size: 20px;">请将鼠标悬停在按钮上</p>
+            <iframe src="./Notes  Documents/圆球融合分裂模拟.html" style="width:400%;height: 70vh;margin-top: 30px;margin-left: 35px;"></iframe>
+        </div>
+    </div>
+    <script>
+        // 标签切换功能
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            // 隐藏所有标签内容
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            // 移除所有标签的激活状态
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            // 显示当前标签内容并激活当前标签
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        //滑块高度调整
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const scrollbarThumb = document.querySelector('::-webkit-scrollbar-thumb');
+        //     if (scrollbarThumb) {
+        //         scrollbarThumb.style.height = '20px';
+        //     }
+        // });
+    </script>
+</body>
+</html>
