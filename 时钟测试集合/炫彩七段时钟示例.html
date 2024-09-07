@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link href="font/DS-DIGIT.TTF" rel="stylesheet"> -->
+    <title>七段码时间显示</title>
+    <style>
+        /* 页面初始化，清除所有元素的内外边距 */
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 引入字体文件 */
+        @font-face {
+            /* 这里随便取个名字就可以了 */
+            font-family: timeFont;
+            /* 这里写上字体的路径 */
+            src: url(../font/DS-DIGIT.TTF);
+        }
+
+        /* 让这个时钟居中 */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #414141;
+        }
+
+        /* 试一下有没有成功 */
+        h1 {
+            /* 给h1设置字体样式 */
+            font-family: timeFont;
+            /* 成功了！ */
+            /* 接下来写一下时间 */
+
+            /* 不太好看，加一点样式 */
+            /* 设置字体大小 */
+            font-size: 200px;
+            /* 设置字体颜色 */
+            /* 没注意，这里不能用bgc,bg就够了 */
+            background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+            /* 吓我一跳，没提示我还以为我写错了,继续! */
+            /* 这个报错不用管，可以用 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: timeColor 3s linear infinite;
+            /* 变色的具体教程在第一期视频！ */
+            /* 让字梦幻一点 */
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes timeColor {
+            to {
+                filter: hue-rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 实现八段码样式最简单的方法就是使用字体 -->
+    <!-- 在网页的根目录下新建一个font字体文件夹，将字体文件放进去，再通过css引入即可 -->
+    <h1>123</h1>
+    <!-- 可以看到好像没什么效果，因为还没引入，哈哈哈 -->
+    <script>
+        let displayTime = document.querySelector("h1");
+        //   简易版本
+        // setInterval(function(){
+        //     let times=new Date();
+        //     let hour=times.getHours();
+        //     let min=times.getMinutes();
+        //     let sec=times.getSeconds();
+        //     let str=''+(hour<10?'0':'')+hour;
+        //     str+=(min<10?':0':':')+min;
+        //     str+=(sec<10?':0':':')+sec;
+        //     displayTime.innerHTML=str;
+        // },1000)
+        // 主要工作全部做完了
+        // 定时器还是比较低级的
+        // 整个高级点的
+
+        requestAnimationFrame(function reTime() {
+            let times = new Date();
+            let hour = times.getHours();
+            let min = times.getMinutes();
+            let sec = times.getSeconds();
+            let str = "" + (hour < 10 ? "0" : "") + hour;
+            str += (min < 10 ? ":0" : ":") + min;
+            str += (sec < 10 ? ":0" : ":") + sec;
+            displayTime.innerHTML = str;
+            // 递归调用自己
+            requestAnimationFrame(reTime);
+            // 这个方法比定时器占用的资源低，还好用，顺滑，不会出现第一秒没有时间的情况
+        });
+    </script>
+</body>
+
+</html>

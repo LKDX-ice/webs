@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时钟</title>
+    <style>
+        /* 引入字体文件 */
+        @font-face {
+            font-family: timeFont;
+            src: url(../font/DS-DIGIT.TTF);
+        }
+    
+        .xuancai {
+            font-family: timeFont;
+            font-size: 200px;
+            background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: timeColor 3s linear infinite;
+            text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+        }
+    
+        @keyframes timeColor {
+            to {
+                filter: hue-rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="xuancai" id="clockDisplay"></div>
+    <script>
+        let displayTime = document.getElementById("clockDisplay");
+        function updateTime() {
+            let now = new Date();
+            let hour = now.getHours();
+            let min = now.getMinutes();
+            let sec = now.getSeconds();
+            let str = "" + (hour < 10 ? "0" : "") + hour;
+            str += (min < 10 ? ":0" : ":") + min;
+            str += (sec < 10 ? ":0" : ":") + sec;
+            displayTime.innerHTML = str;
+            requestAnimationFrame(updateTime); // 递归调用自己
+        }
+        requestAnimationFrame(updateTime); // 初始调用
+    </script>
+</body>
+</html>

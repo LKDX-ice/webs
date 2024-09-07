@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D七段式时钟</title>
+    <style>
+        body {
+            background-color: #21211c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 设置时钟容器的3D透视效果 */
+        .clock {
+            display: flex;
+            perspective: 1500px; /* 增加透视深度，使立体感更强 */
+            gap: 20px;
+        }
+
+        /* 引入字体文件 */
+        @font-face {
+            font-family: timeFont; /* 自定义字体名称 */
+            src: url('font/DS-DIGIT.TTF'); /* 字体文件路径 */
+        }
+
+        /* 数字容器的样式，启用3D保留，并添加倾斜角度 */
+        .digit {
+            width: 100px;
+            height: 180px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-15deg) rotateY(0deg); /* 添加倾斜角度 */
+            transition: transform 0.6s ease; /* 添加平滑的过渡效果 */
+        }
+
+        /* 数字段的样式 */
+        .segment {
+            position: absolute;
+            background-color: #ddd;
+            transition: transform 0.6s ease-in-out, background-color 0.6s ease; /* 增加升降过程的平滑过渡效果 */
+            transform-origin: center center; /* 修改为中心旋转 */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* 增加阴影来增强立体感 */
+            /* font-family: timeFont;  */
+            /* 应用自定义字体 */
+            font-size: 60px; /* 设置字体大小，使其适应数字段的大小 */
+            /* color: transparent;  */
+            /* 字体颜色设置为透明，只显示背景 */
+            /* -webkit-background-clip: text;  */
+            /* 使字体背景变为文本 */
+            height: 20px; /* 基础高度 */
+        }
+
+        /* 设置立体高度 */
+        .segment::before {
+            content: '';
+            position: absolute;
+            background-color: inherit;
+            transform-origin: bottom; /* 从底部进行旋转 */
+            transform: rotateX(90deg);
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 15px; /* 额外高度，增添立体感 */
+        }
+
+        /* 水平段的样式 */
+        .segment:nth-child(1), .segment:nth-child(4), .segment:nth-child(7) {
+            width: 80px;
+            height: 20px; /* 高度已经通过 ::before 增加 */
+            left: 10px;
+        }
+        .segment:nth-child(1) { top: 0; } /* 顶部 */
+        .segment:nth-child(4) { top: 80px; } /* 中间 */
+        .segment:nth-child(7) { bottom: 0; } /* 底部 */
+
+        /* 垂直段的样式 */
+        .segment:nth-child(2), .segment:nth-child(3), .segment:nth-child(5), .segment:nth-child(6) {
+            width: 20px;
+            height: 70px;
+            transform-origin: center center; /* 修改为中心旋转 */
+        }
+        .segment:nth-child(2) { top: 10px; left: 0; } /* 左上 */
+        .segment:nth-child(3) { top: 10px; right: 0; } /* 右上 */
+        .segment:nth-child(5) { bottom: 10px; left: 0; } /* 左下 */
+        .segment:nth-child(6) { bottom: 10px; right: 0; } /* 右下 */
+
+        /* 当段处于激活状态时，增加升起效果和更强的光照效果 */
+        .segment.active {
+            background-color: #ff6b6b;
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
+            transform: translateZ(25px); /* 增加Z轴的位移 */
+        }
+
+        /* 冒号的样式 */
+        .colon {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            height: 180px;
+            font-size: 50px;
+            color: #333;
+            transform: rotateX(-15deg) rotateY(0deg); /* 同样为冒号添加倾斜效果 */
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="digit" id="hour1"></div>
+        <div class="digit" id="hour2"></div>
+        <div class="colon">:</div>
+        <div class="digit" id="minute1"></div>
+        <div class="digit" id="minute2"></div>
+        <div class="colon">:</div>
+        <div class="digit" id="second1"></div>
+        <div class="digit" id="second2"></div>
+    </div>
+
+    <script>
+        // 数字段配置
+        const digitConfigs = {
+            0: [1,1,1,0,1,1,1],
+            1: [0,0,1,0,0,1,0],
+            2: [1,0,1,1,1,0,1],
+            3: [1,0,1,1,0,1,1],
+            4: [0,1,1,1,0,1,0],
+            5: [1,1,0,1,0,1,1],
+            6: [1,1,0,1,1,1,1],
+            7: [1,0,1,0,0,1,0],
+            8: [1,1,1,1,1,1,1],
+            9: [1,1,1,1,0,1,1]
+        };
+
+        // 创建数字段
+        function createDigit(container) {
+            for (let i = 0; i < 7; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'segment';
+                container.appendChild(segment);
+            }
+        }
+
+        // 更新数字段的显示
+        function updateDigit(container, number) {
+            const segments = container.getElementsByClassName('segment');
+            const config = digitConfigs[number];
+            for (let i = 0; i < 7; i++) {
+                segments[i].classList.toggle('active', config[i] === 1);
+            }
+        }
+
+        // 更新时钟显示
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            updateDigit(document.getElementById('hour1'), parseInt(hours[0]));
+            updateDigit(document.getElementById('hour2'), parseInt(hours[1]));
+            updateDigit(document.getElementById('minute1'), parseInt(minutes[0]));
+            updateDigit(document.getElementById('minute2'), parseInt(minutes[1]));
+            updateDigit(document.getElementById('second1'), parseInt(seconds[0]));
+            updateDigit(document.getElementById('second2'), parseInt(seconds[1]));
+        }
+
+        // 初始化数字段
+        document.querySelectorAll('.digit').forEach(createDigit);
+        setInterval(updateClock, 1000); // 每秒钟更新一次
+        updateClock(); // 立即更新一次以显示当前时间
+    </script>
+</body>
+</html>

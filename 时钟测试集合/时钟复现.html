@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>时钟复现</title>
+    <style>
+        .clock {
+            width: 300px;
+            height: 150px;
+            background-color: white;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            font-family: 'Arial', sans-serif;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px #aaa;
+        }
+        .colon {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        3<div class="colon">:</div>04
+    </div>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>立体时钟</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* 水平方向居中 */
+            align-items: center; /* 垂直方向居中 */
+            height: 100vh; /* 占满整个视口高度 */
+            background-color: #f0f0f0; /* 背景颜色 */
+            font-family: Arial, sans-serif; /* 字体 */
+        }
+        .clock {
+            display: flex;
+            background-color: white; /* 时钟背景色 */
+            border-radius: 10px; /* 圆角效果 */
+            padding: 20px; /* 内边距 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影 */
+        }
+        .digit {
+            width: 50px; /* 每个数字的宽度 */
+            height: 80px; /* 每个数字的高度 */
+            display: flex;
+            flex-direction: column; /* 垂直布局 */
+            align-items: center; /* 水平居中 */
+            justify-content: center; /* 垂直居中 */
+            margin: 0 5px; /* 数字之间的间距 */
+            transition: transform 0.3s; /* 动画效果 */
+        }
+        .segment {
+            width: 100%; /* 段的宽度 */
+            height: 16%; /* 段的高度，占总高度的16% */
+            background-color: #3498db; /* 段的颜色 */
+            margin: 1px 0; /* 段之间的间距 */
+            transform: translateY(0); /* 初始位置 */
+        }
+        .digit.active .segment {
+            transform: translateY(-20px); /* 升起效果 */
+        }
+        .digit.inactive .segment {
+            transform: translateY(20px); /* 降落效果 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock" id="clock">
+        <div class="digit" id="digit1">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+        </div>
+        <div class="digit" id="digit2">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+        </div>
+        <div class="digit" id="digit3">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+        </div>
+        <div class="digit" id="digit4">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+        </div>
+    </div>
+
+    <script>
+        // 定义数字与对应的段
+        const numbers = {
+            '0': [1, 1, 1, 0, 1, 1],
+            '1': [0, 0, 0, 0, 0, 0],
+            '2': [1, 1, 0, 1, 1, 0],
+            '3': [1, 1, 0, 1, 0, 1],
+            '4': [0, 1, 1, 1, 0, 1],
+            '5': [1, 0, 1, 1, 0, 1],
+            '6': [1, 1, 1, 1, 1, 1],
+            '7': [1, 0, 0, 0, 0, 0],
+            '8': [1, 1, 1, 1, 1, 1],
+            '9': [1, 1, 1, 1, 0, 1],
+            ':': [0, 0, 0, 0, 0, 0]
+        };
+
+        // 更新时钟的函数
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0'); // 获取小时并补零
+            const minutes = String(now.getMinutes()).padStart(2, '0'); // 获取分钟并补零
+            const timeString = hours + ':' + minutes; // 形成时间字符串
+
+            // 更新每个数字
+            for (let i = 0; i < timeString.length; i++) {
+                const digit = document.getElementById('digit' + (i + 1));
+                const segments = digit.getElementsByClassName('segment');
+                const number = timeString[i];
+
+                // 激活和非激活的段设置
+                for (let j = 0; j < segments.length; j++) {
+                    segments[j].classList.remove('active', 'inactive'); // 清除之前的状态
+                    if (numbers[number][j]) {
+                        segments[j].classList.add('active'); // 该段激活
+                    } else {
+                        segments[j].classList.add('inactive'); // 该段未激活
+                    }
+                }
+            }
+        }
+
+        // 每秒更新一次时钟
+        setInterval(updateClock, 1000);
+        updateClock(); // 初次调用以显示时间
+    </script>
+</body>
+</html>
