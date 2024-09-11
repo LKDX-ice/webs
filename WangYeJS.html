@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKDX 页面</title>
+    <style>
+        /* 设置全局样式 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* 头部样式 */
+        .header {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* 简介区域样式 */
+        .intro {
+            background-color: #1e90ff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 20px;
+        }
+
+        .content-block {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(193, 211, 234, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(192, 194, 224, 0.37);
+            /* color: white; */
+            width: 80%;
+            margin-left: 10%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .content-block img {
+            width: 20%;
+            object-fit: cover;
+        }
+
+        .content-block .text {
+            width: 80%;
+            padding: 20px;
+            margin-right: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            margin-left: 30px;
+            writing-mode: vertical-lr; /* 使文字纵向排列 */
+        }
+
+        /* 单数区块图片在左 */
+        .content-block:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        /* 双数区块图片在右 */
+        .content-block:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 头部 -->
+    <div class="header">
+        LKDX
+    </div>
+
+    <!-- 简介区域 -->
+    <div class="intro">
+        简介概述
+        <p>具体内容</p>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <div class="content-block">
+            <img src="https://via.placeholder.com/150" alt="示例图片">
+            <h2 style="margin-top: 70px;">生命宇宙</h2>
+            <div class="text">
+                <p style="margin: 0;">简介概述</p>
+                <a href="https://www.blueyard.com/blueyard" target="_blank"><b>点击进入</b></a>
+            </div>
+        </div>
+        <div class="content-block">
+            <img src="https://via.placeholder.com/150" alt="示例图片">
+            <div class="text">
+                <p>简介概述</p>
+                <a href="http://garryui.cn" target="_blank"><b>点击进入</b></a>
+            </div>
+            <h2 style="margin-top: 20px;">动漫风格个人简介网站</h2>
+        </div>
+        <div class="content-block">
+            <img src="https://via.placeholder.com/150" alt="示例图片">
+            <h2 style="margin-top: 40px;">后世末日电台网站</h2>
+            <div class="text">
+                <p>简介概述</p>
+                <a href="https://frequency2156.com/" target="_blank"><b>点击进入</b></a>
+            </div>
+        </div>
+        
+    </div>
+    </div>
+
+</body>
+</html>
