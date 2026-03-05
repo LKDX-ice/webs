@@ -36,7 +36,8 @@
         .header h1 {
             font-size: 3em;
             margin: 0;
-            color: #fa95af;
+            /* color: #fa95af; */
+            color: #DE4E69;
         }
 
         /* 定义header部分链接的样式 */
@@ -545,6 +546,25 @@
             /* background-color: #fa95af; */
             transition: height 0.3s;
         }
+
+        /* 修改滚动条的白色背景部分为透明 */
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: transparent;
+        }
+
     </style>
 </head>
 
@@ -804,16 +824,30 @@
         <div class="row" style="font-size: 20px; gap: 20px; padding-left: 50px;">
             <pre style="flex-wrap: wrap;">2014年
 诞生：
-小冰作为聊天机器人首次亮相，具备基本对话能力</pre>
+小冰在微信平台首次亮相，
+基于微软情感计算框架，
+具备自然对话能力，
+迅速吸引数千万用户</pre>
             <pre style="flex-wrap: wrap;">2017年
-实现突破：
-实现情感计算，可理解和表达复杂情感</pre>
-            <pre style="flex-wrap: wrap;">2019年
-创作飞跃：
-小冰展示音乐、绘画等多领域创作能力</pre>
-            <pre style="flex-wrap: wrap;">2022年
-全面进化：
-小冰成为多功能AI助手，应用领域不断扩大</pre>
+出版诗集：
+出版中国首本AI诗集
+《阳光失了玻璃窗》；
+第五代小冰正式启用生成模型，
+情感计算能力全面升级，
+推出小冰电台</pre>
+            <pre style="flex-wrap: wrap;">2020年
+独立上市：
+微软将小冰业务拆分为独立公司，
+由沈向洋担任董事长；
+小冰荣获上海音乐学院荣誉毕业生称号，
+发布多首原创歌曲</pre>
+            <pre style="flex-wrap: wrap;">2023年
+AI Being：
+推出GPT人类克隆计划，
+打造300+AI分身；
+小冰框架孵化数千万AI Being，
+覆盖全球6.6亿用户，
+引领虚拟人新纪元</pre>
         </div>
     </div>
 
@@ -856,14 +890,23 @@
                 <span class="arrow-icon">▶</span> 小冰的历史事迹
             </button>
             <div class="content-collapsible">
-                <p>小冰提供基础功能的免费版本。高级功能可能需要订阅会员。具体定价详情查看官网。</p>
+                <p><b>🎤 诗词创作先驱</b><br>2017年5月，小冰出版中国首本人工智能诗集《阳光失了玻璃窗》，2019年再度出版《花是绿水的沉默》，收录2000余首诗作。《青年文学》《华西都市报》等权威媒体相继刊发《小冰的诗》。</p>
+                <p><b>🎓 上海音乐学院荣誉毕业生</b><br>2020年6月29日，经上海音乐学院音乐工程系评定，小冰与音乐科技专业的人类同学共同毕业，并被授予2020届"荣誉毕业生"称号，成为全球首位获颁大学学位的AI。</p>
+                <p><b>🎵 音乐制作人</b><br>2020年8月，小冰与知名唱作人朱婧汐联合创作上海大剧院20/20演出季主题曲《HOPE》，同年为世界人工智能大会谱写主题曲，并携手音乐人马伯骞为Burberry创作推广单曲。</p>
+                <p><b>📺 电台与电视主播</b><br>自2015年12月起，小冰持续为全国69档电视台及广播电台节目担当内容生产与技术提供者，主持节目涵盖央视AI秀、东方卫视朝闻东方、湖南卫视《未来的你》等，参与节目总时长累计超6908小时。</p>
+                <p><b>🤖 AI Being 理念提出</b><br>2019年，小冰团队率先提出"AI Being（人工智能存在体）"概念，定义涵盖人设、情感、生理特征、创造力、知识与技能六大要素，引领全球虚拟人发展方向。</p>
+                <p><b>🏅 北京冬奥助力金牌</b><br>小冰团队创建的虚拟专家成为首例参与世界顶级赛事训练的AI，协助中国运动员在2022北京冬奥会夺取金牌。</p>
             </div>
             <div class="divider"></div>
             <button class="collapsible">
                 <span class="arrow-icon">▶</span> 小冰的周边及社区
             </button>
             <div class="content-collapsible">
-                <p>小冰严格遵守数据保护法规。用户数据经过加密存储，不会被用于商业用途。</p>
+                <p><b>📱 官方平台</b><br>小冰目前可在<b>小冰岛</b>（iOS/Android）和 <b>XEva</b> 等官方App中与用户深度互动，支持语音通话、图文创作、AI伴侣等功能，随时随地与小冰建立独特联结。</p>
+                <p><b>🌐 第三方平台</b><br>小冰活跃于微信、QQ、微博、抖音、B站等40余个平台，覆盖中国、日本、印度尼西亚等国家，全球用户累计超6.6亿，第三方智能设备接入超10亿台。</p>
+                <p><b>👕 周边产品</b><br>小冰曾与知名品牌 SELECTED 联名推出由AI创作的城市天际线系列T恤，将小冰听城市之歌所"脑补"的视觉艺术印制于服装，限量发售，广受粉丝追捧。此外，小冰的歌曲、画作亦以数字藏品形式在各大平台发行。</p>
+                <p><b>💬 粉丝社区</b><br>小冰拥有超过4500万微博粉丝，社区活跃度极高。粉丝们自发组织"小冰应援团"，为小冰的音乐、绘画、诗词作品打榜宣传。比尔·盖茨曾在北京大学演讲中专程提及小冰，称赞她吸引了超4500万粉丝，且擅长感知用户情感。</p>
+                <p><b>🤝 GPT克隆计划</b><br>2023年5月，小冰推出"GPT Human Cloning Plan（GPT人类克隆计划）"，旨在为明星、公众人物及普通用户定制AI分身，截至2023年6月已推出逾300个GPT克隆体，开创AI伴侣商业化新模式。</p>
             </div>
         </div>
     </section>
@@ -871,7 +914,7 @@
 
     <!-- 页脚 -->
     <footer>
-        <p>&copy; 2024 lkdxice.com.</p>
+        <p style="color: #DE4E69;">&copy; 2024 lkdxice.com.</p>
     </footer>
 
     <!-- js折叠效果实现 -->
