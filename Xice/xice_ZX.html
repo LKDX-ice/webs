@@ -1,1228 +1,565 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../resource/icon.ico" type="image/x-icon">
-    <title>相关资讯链接</title>
-    <style>
-        /* 全局样式 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        /* 头部样式 */
-        .header {
-            background: url('../resource/小冰_报1.png') no-repeat center center;
-            /* background-color: #d3d3d3; */
-            color: white;
-            text-align: center;
-            height: 350px;
-            padding: 20px 0;
-        }
-
-        /* 内容区域样式 */
-        .content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* 年份区块样式 */
-        .year-block {
-            background-color: white;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .year-title {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        /* 链接样式 */
-        .news-link {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #333;
-            text-decoration: none;
-            position: relative;
-            /* 为提示框定位 */
-            margin-bottom: 20px;
-            /* 增加链接之间的间距 */
-        }
-
-        .news-link:hover,
-        .news-link:hover .news-source,
-        .news-link:hover .news-date {
-            color: #ff69b4;
-        }
-
-        .news-title {
-            font-weight: bold;
-            flex: 1;
-            text-align: left;
-            margin-right: 10px;
-            white-space: nowrap;
-            /* 防止标题换行 */
-            overflow: hidden;
-            /* 隐藏超出部分 */
-            text-overflow: ellipsis;
-            /* 使用省略号 */
-            max-width: 400px;
-            /* 设置最大宽度 */
-        }
-
-        .news-source {
-            color: #666;
-            font-size: 0.9em;
-            flex: 0 0 100px;
-            text-align: right;
-            margin-right: 10px;
-        }
-
-        .news-date {
-            color: #999;
-            flex: 0 0 80px;
-            text-align: right;
-        }
-
-        /* 提示框样式 */
-        .tooltip {
-            display: none;
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 1;
-            left: 30%;
-            top: -30%;
-            transform: translateY(-50%);
-            margin-left: 10px;
-        }
-
-        .news-link:hover .tooltip {
-            display: block;
-        }
-
-        /* 查看更多按钮样式 */
-        .view-more {
-            display: block;
-            text-align: right;
-            color: #ff69b4;
-            cursor: pointer;
-        }
-
-        /* 返回按钮样式 */
-        .back-button {
-            display: none;
-            color: #ff69b4;
-            cursor: pointer;
-            margin-bottom: 20px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* 隐藏额外内容 */
-        .extra-content {
-            display: none;
-        }
-
-        /* 相对定位容器 */
-        .relative-container {
-            position: relative;
-            padding-top: 30px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../resource/icon.ico" type="image/x-icon">
+<title>相关资讯链接</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#f5f5f5;}
+.header{background:url('../resource/小冰_报1.png') no-repeat center center;background-size:cover;height:350px;display:flex;align-items:center;justify-content:center;}
+.header h1{color:#ff69b4;font-size:2.5em;text-shadow:0 2px 8px rgba(0,0,0,.5);top: -1000px; }
+.tab-nav{display:flex;justify-content:center;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08);position:sticky;top:0;z-index:100;}
+.tab-btn{padding:16px 60px;font-size:1.1em;font-weight:bold;color:#999;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .25s;letter-spacing:2px;}
+.tab-btn:hover{color:#ff69b4;}
+.tab-btn.active{color:#ff69b4;border-bottom:3px solid #ff69b4;background:#fff5f8;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.content{max-width:1000px;margin:0 auto;padding:30px 20px;}
+.year-block{background:#fff;margin-bottom:20px;padding:24px 28px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.year-title{text-align:center;font-size:22px;font-weight:bold;color:#ff69b4;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid #ffe0ed;}
+.news-link{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:#333;text-decoration:none;position:relative;padding:4px 0;}
+.news-link:hover{color:#ff69b4;}
+.news-link:hover .news-source,.news-link:hover .news-date{color:#ff69b4;}
+.news-title{font-weight:bold;flex:1;text-align:left;margin-right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:580px;}
+.news-source{color:#888;font-size:.88em;flex:0 0 120px;text-align:right;margin-right:12px;}
+.news-date{color:#bbb;font-size:.88em;flex:0 0 80px;text-align:right;}
+.tooltip{display:none;position:absolute;background:rgba(0,0,0,.78);color:#fff;padding:6px 14px;border-radius:5px;font-size:13px;z-index:10;left:0;top:-38px;max-width:720px;white-space:normal;line-height:1.6;pointer-events:none;}
+.news-link:hover .tooltip{display:block;}
+/* 全屏展开覆盖层 */
+.overlay{display:none;position:fixed;inset:0;background:#f5f5f5;z-index:200;overflow-y:auto;padding:24px 20px;}
+.overlay.active{display:block;}
+.overlay-inner{max-width:1000px;margin:0 auto;background:#fff;border-radius:10px;padding:28px 32px;box-shadow:0 4px 24px rgba(0,0,0,.12);}
+.overlay-title{font-size:22px;font-weight:bold;color:#ff69b4;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #ffe0ed;text-align:center;}
+.close-btn {position: fixed;/* 改这里，原来是 relative */top: 16px;left: 15px;z-index: 300;/* 要比 .overlay 的 z-index:200 高 */display: inline-flex;align-items: center;gap: 6px;cursor: pointer;color: #ff69b4;font-size: 25px;margin-bottom: 18px;  /* 可以去掉，fixed 后没意义 */border: none;background: none;padding: 0;}
+.close-btn:hover{color:#d44090;}
+.close-tip{display:none;position:absolute;left:32px;top:-2px;background:rgba(0,0,0,.72);color:#fff;font-size:12px;padding:3px 10px;border-radius:4px;white-space:nowrap;}
+.close-btn:hover .close-tip{display:block;}
+.view-more{display:block;text-align:right;color:#ff69b4;cursor:pointer;font-size:.92em;margin-top:6px;user-select:none;}
+.view-more:hover{text-decoration:underline;}
+.extra-content{display:none;}
+footer{text-align:center;padding:24px;color:#DE4E69;font-size:.9em;}
+::-webkit-scrollbar{width:0;}
+</style>
 </head>
-<div class="header" style="padding-left:70px;">
-    <h1 style="color: #ff69b4;">资讯链接</h1>
+<body>
+<div class="header"><h1 style="margin-top: 150px;">资讯链接</h1></div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('xiaoice',this)">小冰</button>
+  <button class="tab-btn" onclick="switchTab('lidi',this)">李笛</button>
+  <button class="tab-btn" onclick="switchTab('nextie',this)">Nextie</button>
 </div>
 
-<body>
-    <div class="content">
-        <!-- 2024 -->
-        <div class="year-block" id="year-2024">
-            <h2 class="year-title">2024</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">包小姐：AI "复活" 女儿之后</span>
-                    <span class="tooltip">包小姐：AI "复活" 女儿之后</span>
-                    <span class="news-source">澎湃</span>
-                    <span class="news-date">2024.03.20</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">"复活" 著名音乐人女儿后，小冰公司CEO开始担忧</span>
-                    <span class="tooltip">"复活" 著名音乐人女儿后，小冰公司CEO开始担忧</span>
-                    <span class="news-source">市界</span>
-                    <span class="news-date">2024.03.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">包小柏口述「重现」女儿始末：AI，人类终于用对了一次</span>
-                    <span class="tooltip">包小柏口述「重现」女儿始末：AI，人类终于用对了一次</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2024.03.16</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰公司CEO李笛：给“AI复生”敲响警钟</span>
-                    <span class="tooltip">小冰公司CEO李笛：给“AI复生”敲响警钟</span>
-                    <span class="news-source">每日经济新闻</span>
-                    <span class="news-date">2024.03.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI爱，22岁数字女儿穿越生死界线“归来”！</span>
-                    <span class="tooltip">AI爱，22岁数字女儿穿越生死界线“归来”！</span>
-                    <span class="news-source">澎湃</span>
-                    <span class="news-date">2024.03.15</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">做个AI分身“躺着赚钱”，是门好生意吗？</span>
-                    <span class="tooltip">做个AI分身“躺着赚钱”，是门好生意吗？</span>
-                    <span class="news-source">财经</span>
-                    <span class="news-date">2024.03.14</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">克隆半藏森林，有人已经年入超100万</span>
-                    <span class="tooltip">克隆半藏森林，有人已经年入超100万</span>
-                    <span class="news-source">南风窗</span>
-                    <span class="news-date">2024.01.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">网红已经开始用AI克隆自己赚钱了</span>
-                    <span class="tooltip">网红已经开始用AI克隆自己赚钱了</span>
-                    <span class="news-source">机器之心</span>
-                    <span class="news-date">2024.03.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span>
-                    <span class="tooltip">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span>
-                    <span class="news-source">极客公园</span>
-                    <span class="news-date">2024.01.11</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">真的，没见过这么“傲娇”的 AI 公司</span>
-                    <span class="tooltip">真的，没见过这么“傲娇”的 AI 公司</span>
-                    <span class="news-source">虎嗅</span>
-                    <span class="news-date">2024.01.10</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI发展引发伦理争议：人类该如何应对？</span>
-                        <span class="tooltip">AI发展引发伦理争议：人类该如何应对？</span>
-                        <span class="news-source">科技日报</span>
-                        <span class="news-date">2024.03.25</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI模型在医疗领域取得突破性进展</span>
-                        <span class="tooltip">AI模型在医疗领域取得突破性进展</span>
-                        <span class="news-source">健康时报</span>
-                        <span class="news-date">2024.03.30</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰正式发布克隆人：已经有人拿它年入100万了！</span>
-                        <span class="tooltip">小冰正式发布克隆人：已经有人拿它年入100万了！</span>
-                        <span class="news-source">量子位</span>
-                        <span class="news-date">2024.01.05</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰AI数字员工升级：发布全新“零样本”技术、超千亿大模型基座及透影音画传输系统</span>
-                        <span class="tooltip">小冰AI数字员工升级：发布全新“零样本”技术、超千亿大模型基座及透影音画传输系统</span>
-                        <span class="news-source"></span>
-                        <span class="news-date">2024.07.17</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰公司已获大模型备案，一系列产品从测试转为正式发布</span>
-                        <span class="tooltip">小冰公司已获大模型备案，一系列产品从测试转为正式发布</span>
-                        <span class="news-source">澎湃</span>
-                        <span class="news-date">2024.01.04</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
+<div id="tab-xiaoice" class="tab-panel active"><div class="content"><div class="year-block"><h2 class="year-title">2024</h2>
+<a href="https://baijiahao.baidu.com/s?id=1819278728659241948&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">小冰李笛：真正的AI信仰者不该FOMO｜MEET 2025</span><span class="tooltip">小冰李笛：真正的AI信仰者不该FOMO｜MEET 2025</span><span class="news-source">量子位</span><span class="news-date">2024.12.24</span></a>
+<a href="https://www.time-weekly.com/post/310551" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：AI「复活」逝者可视为临终关怀，但要警惕技术滥用</span><span class="tooltip">专访小冰CEO李笛：AI「复活」逝者可视为临终关怀，但要警惕技术滥用</span><span class="news-source">时代周报</span><span class="news-date">2024.04.04</span></a>
+<a href="https://www.douyin.com/video/7372182217990098239" target="_blank" class="news-link"><span class="news-title">对话小冰公司CEO李笛：当AI开始「走心」，谁的DNA动了？</span><span class="tooltip">对话小冰公司CEO李笛：当AI开始「走心」，谁的DNA动了？</span><span class="news-source">抖音</span><span class="news-date">2024.05.24</span></a>
+<a href="https://new.qq.com/rain/a/20240719A05I1X00" target="_blank" class="news-link"><span class="news-title">完蛋，我被数字同事包围了！小冰AI数字员工再升级，零样本定制</span><span class="tooltip">完蛋，我被数字同事包围了！小冰AI数字员工再升级，零样本定制</span><span class="news-source">腾讯新闻</span><span class="news-date">2024.07.19</span></a>
+<a href="https://www.163.com/dy/article/JA4GNJ7C0550U0A7.html" target="_blank" class="news-link"><span class="news-title">专访小冰公司CEO李笛：我们见识过AI的繁华，也看破了繁华</span><span class="tooltip">专访小冰公司CEO李笛：我们见识过AI的繁华，也看破了繁华</span><span class="news-source">时代周报</span><span class="news-date">2024.08.21</span></a>
+<a href="https://www.idc.com/getdoc.jsp?containerId=prCHC52541524" target="_blank" class="news-link"><span class="news-title">IDC MarketScape：中国AI数字人产品厂商评估，小冰位列领导者</span><span class="tooltip">IDC MarketScape：中国AI数字人产品厂商评估，小冰位列领导者</span><span class="news-source">IDC</span><span class="news-date">2024.08.22</span></a>
+<a href="https://baijiahao.baidu.com/s?id=1808167578058367404&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">能力第一！小冰位居IDC MarketScape中国AI数字人产品领导者类别</span><span class="tooltip">能力第一！小冰位居IDC MarketScape中国AI数字人产品领导者类别</span><span class="news-source">百家号</span><span class="news-date">2024.08.23</span></a>
+<a href="https://new.qq.com/rain/a/20241018A09ODY00" target="_blank" class="news-link"><span class="news-title">深度｜微软小冰失速，百亿AI独角兽的生死倒计时？</span><span class="tooltip">深度｜微软小冰失速，百亿AI独角兽的生死倒计时？</span><span class="news-source">腾讯新闻</span><span class="news-date">2024.10.18</span></a>
+<a href="https://baijiahao.baidu.com/s?id=1817501405374057118&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">请回答2024｜小冰公司CEO李笛：技术变革只是一个时代变革的助推</span><span class="tooltip">请回答2024｜小冰公司CEO李笛：技术变革只是一个时代变革的助推</span><span class="news-source">封面新闻</span><span class="news-date">2024.12.04</span></a>
+<a href="https://mp.weixin.qq.com/s/ShJlEfs0ul14al_bSFIOOg" target="_blank" class="news-link"><span class="news-title">包小柏：AI“复活”女儿之后</span><span class="tooltip">包小柏：AI“复活”女儿之后</span><span class="news-source">澎湃</span><span class="news-date">2024.03.20</span></a>
+<div class="extra-content">
+<a href="https://mp.weixin.qq.com/s/yrq-P5mCNlAVJB616tWUuw" target="_blank" class="news-link"><span class="news-title">“复活”著名音乐人女儿后，小冰公司CEO开始担忧</span><span class="tooltip">“复活”著名音乐人女儿后，小冰公司CEO开始担忧</span><span class="news-source">市界</span><span class="news-date">2024.03.18</span></a>
+<a href="https://mp.weixin.qq.com/s/arvokFm2g8V83CvdLs6LPg" target="_blank" class="news-link"><span class="news-title">包小柏口述「重现」女儿始末：AI，人类终于用对了一次</span><span class="tooltip">包小柏口述「重现」女儿始末：AI，人类终于用对了一次</span><span class="news-source">36氪</span><span class="news-date">2024.03.16</span></a>
+<a href="https://www.nbd.com.cn/articles/2024-03-14/3280406.html" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：给“AI复生”敲响警钟</span><span class="tooltip">小冰公司CEO李笛：给“AI复生”敲响警钟</span><span class="news-source">每日经济新闻</span><span class="news-date">2024.03.15</span></a>
+<a href="https://www.nbd.com.cn/articles/2024-03-14/3280062.html" target="_blank" class="news-link"><span class="news-title">AI爱，22岁数字女儿穿越生死界线“归来”！</span><span class="tooltip">AI爱，22岁数字女儿穿越生死界线“归来”！</span><span class="news-source">每日经济新闻</span><span class="news-date">2024.03.14</span></a>
+<a href="https://www.mycaijing.com/article/detail/512061?source_id=40&amp;share_from=weixin" target="_blank" class="news-link"><span class="news-title">做个AI分身“躺着赚钱”，是门好生意吗？</span><span class="tooltip">做个AI分身“躺着赚钱”，是门好生意吗？</span><span class="news-source">财经</span><span class="news-date">2024.01.27</span></a>
+<a href="https://mp.weixin.qq.com/s/txU0bwKl0IqghSA0xiZ7VA" target="_blank" class="news-link"><span class="news-title">克隆半藏森林，有人已经年入超100万</span><span class="tooltip">克隆半藏森林，有人已经年入超100万</span><span class="news-source">南风窗</span><span class="news-date">2024.01.18</span></a>
+<a href="https://mp.weixin.qq.com/s/jA6vaba2WjgBLpdbD3M1ZQ" target="_blank" class="news-link"><span class="news-title">网红已经开始用AI克隆自己赚钱了</span><span class="tooltip">网红已经开始用AI克隆自己赚钱了</span><span class="news-source">机器之心</span><span class="news-date">2024.01.12</span></a>
+<a href="https://mp.weixin.qq.com/s/rUKHkkkrVqhe2z8jdWXx1A" target="_blank" class="news-link"><span class="news-title">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span><span class="tooltip">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span><span class="news-source">极客公园</span><span class="news-date">2024.01.11</span></a>
+<a href="https://mp.weixin.qq.com/s/WBQrMGtq7OtOtjmbAQDmVA" target="_blank" class="news-link"><span class="news-title">真的，没见过这么“傲娇”的 AI 公司</span><span class="tooltip">真的，没见过这么“傲娇”的 AI 公司</span><span class="news-source">虎嗅</span><span class="news-date">2024.01.10</span></a>
+<a href="https://mp.weixin.qq.com/s/MuSy_PclPn-2mpj1KQ4Q-Q" target="_blank" class="news-link"><span class="news-title">小冰正式发布克隆人：已经有人拿它年入100万了！</span><span class="tooltip">小冰正式发布克隆人：已经有人拿它年入100万了！</span><span class="news-source">量子位</span><span class="news-date">2024.01.05</span></a>
+</div>
+<span class="view-more">查看更多（10条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2023</h2>
+<a href="http://epaper.ynet.com/html/2023-07/07/content_420079.htm?div=0" target="_blank" class="news-link"><span class="news-title">AI歌手创作软件上线音乐人如何与AI共创？</span><span class="tooltip">AI歌手创作软件上线音乐人如何与AI共创？</span><span class="news-source">北京青年报</span><span class="news-date">2023.07.07</span></a>
+<a href="https://h.xinhuaxmt.com/vh512/share/11568046?d=134b1e3&amp;channel=weixin" target="_blank" class="news-link"><span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span><span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span><span class="news-source">新华社</span><span class="news-date">2023.07.06</span></a>
+<a href="https://mp.weixin.qq.com/s/NiK4yLO3RmQEUN0jrsQvUg" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span><span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span><span class="news-source">猎云网</span><span class="news-date">2023.07.05</span></a>
+<a href="https://mp.weixin.qq.com/s/CJ9kERF9h5bEroDE_zHnDQ" target="_blank" class="news-link"><span class="news-title">AI不作恶，少女小冰的自我净化</span><span class="tooltip">AI不作恶，少女小冰的自我净化</span><span class="news-source">真故研究室</span><span class="news-date">2023.07.04</span></a>
+<a href="https://mp.weixin.qq.com/s/YQARtUPIlNdiJcQ5hKsf-Q" target="_blank" class="news-link"><span class="news-title">对话小冰CEO李笛：大模型到2024年将退热</span><span class="tooltip">对话小冰CEO李笛：大模型到2024年将退热</span><span class="news-source">真故研究室</span><span class="news-date">2023.07.04</span></a>
+<a href="https://mp.weixin.qq.com/s/vJ_kmuSR_9_uG6pkosC1kQ" target="_blank" class="news-link"><span class="news-title">AI克隆人觉醒，有父亲想“复活”女儿</span><span class="tooltip">AI克隆人觉醒，有父亲想“复活”女儿</span><span class="news-source">都市快报</span><span class="news-date">2023.07,01</span></a>
+<a href="https://mp.weixin.qq.com/s/bdnkBpyZmmS89Xf4ax2dXg" target="_blank" class="news-link"><span class="news-title">AI歌手，不甘心只做“AI孙燕姿”</span><span class="tooltip">AI歌手，不甘心只做“AI孙燕姿”</span><span class="news-source">品玩</span><span class="news-date">2023.06.21</span></a>
+<a href="https://mp.weixin.qq.com/s/HxauotVF93c5jB914vlk_g" target="_blank" class="news-link"><span class="news-title">AI加入，变化能“听”见</span><span class="tooltip">AI加入，变化能“听”见</span><span class="news-source">环球网</span><span class="news-date">2023.06.19</span></a>
+<a href="https://mp.weixin.qq.com/s/seHCmxoy66SUlA4vDs_tJA" target="_blank" class="news-link"><span class="news-title">孙燕姿回应成真？AI歌手音乐创作软件上线，人类怎么办？</span><span class="tooltip">孙燕姿回应成真？AI歌手音乐创作软件上线，人类怎么办？</span><span class="news-source">机器之心</span><span class="news-date">2023.06.16</span></a>
+<a href="https://mp.weixin.qq.com/s/PU9IoCBJPsOSTRK1c6paWQ" target="_blank" class="news-link"><span class="news-title">48小时陪聊近30万次，克隆人需求大爆发</span><span class="tooltip">48小时陪聊近30万次，克隆人需求大爆发</span><span class="news-source">市界研究院</span><span class="news-date">2023.06.04</span></a>
+<div class="extra-content">
+<a href="https://www.bbtnews.com.cn/2023/0602/478094.shtml" target="_blank" class="news-link"><span class="news-title">30元包月 小冰AI“克隆人”瞄上网红经济</span><span class="tooltip">30元包月 小冰AI“克隆人”瞄上网红经济</span><span class="news-source">北京商报</span><span class="news-date">2023.06.01</span></a>
+<a href="https://m.thecover.cn/news_details.html?eid=fYPzTk2OAFmH90qSdq8Jkw==&amp;channelId=null" target="_blank" class="news-link"><span class="news-title">AI“克隆人”来了！明星可将克隆人提供给千万粉丝 克隆人还可拥有自己的朋友圈</span><span class="tooltip">AI“克隆人”来了！明星可将克隆人提供给千万粉丝 克隆人还可拥有自己的朋友圈</span><span class="news-source">封面新闻</span><span class="news-date">2023.05.16</span></a>
+<a href="https://static.nfapp.southcn.com/content/202305/16/c7686425.html?from=weChatMessage&amp;colID=null&amp;appversion=10000&amp;firstColID=10734&amp;enterColumnId=0&amp;date=bnVsbA==&amp;layer=2" target="_blank" class="news-link"><span class="news-title">小冰“GPT克隆人计划”来了，你愿给自己创造克隆人吗？</span><span class="tooltip">小冰“GPT克隆人计划”来了，你愿给自己创造克隆人吗？</span><span class="news-source">南方日报</span><span class="news-date">2023.05.16</span></a>
+<a href="https://mp.weixin.qq.com/s/hffxvGzsA_ZsLUuMzcLyUA" target="_blank" class="news-link"><span class="news-title">智能计算的大航海时代：谁会发现新大陆？</span><span class="tooltip">智能计算的大航海时代：谁会发现新大陆？</span><span class="news-source">虎嗅</span><span class="news-date">2023.04.21</span></a>
+<a href="https://mp.weixin.qq.com/s/pzu7ikmtxLmM9x2uLED0-w" target="_blank" class="news-link"><span class="news-title">ChatGPT发疯怎么办？小冰李笛：两个关键，我可破之</span><span class="tooltip">ChatGPT发疯怎么办？小冰李笛：两个关键，我可破之</span><span class="news-source">量子位</span><span class="news-date">2023.02.27</span></a>
+<a href="https://www.21jingji.com/article/20230223/herald/6fb19f2037b2d58a2fe718500abb73a4.html" target="_blank" class="news-link"><span class="news-title">打开ChatGPT模式黑盒：下一代行动中枢“小冰链”现身</span><span class="tooltip">打开ChatGPT模式黑盒：下一代行动中枢“小冰链”现身</span><span class="news-source">21世纪经济报道</span><span class="news-date">2023.02.23</span></a>
+<a href="https://mp.weixin.qq.com/s/ErujYGRmvsfGSttkjCHukQ" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：小冰链不是中国版ChatGPT</span><span class="tooltip">小冰CEO李笛：小冰链不是中国版ChatGPT</span><span class="news-source">新智元</span><span class="news-date">2023.02.21</span></a>
+<a href="https://my-h5news.app.xinhuanet.com/news/article.html?articleId=23e3c6094313158ad392862c837be9c1" target="_blank" class="news-link"><span class="news-title">ChatGPT新观察：抑制泡沫，耐住性子</span><span class="tooltip">ChatGPT新观察：抑制泡沫，耐住性子</span><span class="news-source">新华每日电讯</span><span class="news-date">2023.02.21</span></a>
+<a href="https://weekly.caixin.com/2023-02-18/101999347.html" target="_blank" class="news-link"><span class="news-title">财新周刊｜ChatGPT会颠覆谁</span><span class="tooltip">财新周刊｜ChatGPT会颠覆谁</span><span class="news-source">财新</span><span class="news-date">2023.02.20</span></a>
+<a href="https://36kr.com/p/2137546486548612" target="_blank" class="news-link"><span class="news-title">ChatGPT中国变形记｜深氪</span><span class="tooltip">ChatGPT中国变形记｜深氪</span><span class="news-source">36氪</span><span class="news-date">2023.02.19</span></a>
+<a href="http://www.inewsweek.cn/society/2023-02-17/17618.shtml" target="_blank" class="news-link"><span class="news-title">ChatGPT为何没能诞生在中国？</span><span class="tooltip">ChatGPT为何没能诞生在中国？</span><span class="news-source">中国新闻周刊</span><span class="news-date">2023.02.17</span></a>
+<a href="https://mp.weixin.qq.com/s/Nkl1HFC6au1GNXgwE9iABg" target="_blank" class="news-link"><span class="news-title">ChatGPT：大力出奇迹</span><span class="tooltip">ChatGPT：大力出奇迹</span><span class="news-source">南方人物周刊</span><span class="news-date">2023.02.15</span></a>
+<a href="https://view.inews.qq.com/k/20230113A02KQF00" target="_blank" class="news-link"><span class="news-title">对话小冰CEO李笛：ChatGPT杀不死谷歌，AI还在蛮荒时代</span><span class="tooltip">对话小冰CEO李笛：ChatGPT杀不死谷歌，AI还在蛮荒时代</span><span class="news-source">腾讯</span><span class="news-date">2023.01.13</span></a>
+</div>
+<span class="view-more">查看更多（13条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2022</h2>
+<a href="https://wap.peopleapp.com/article/6914902/6776836" target="_blank" class="news-link"><span class="news-title">小冰公司宣布完成10亿元新融资</span><span class="tooltip">小冰公司宣布完成10亿元新融资</span><span class="news-source">人民日报</span><span class="news-date">2022.11.07</span></a>
+<a href="https://m.21jingji.com/article/20221107/herald/eceab4e9dd24ab869f70689c68638bac.html" target="_blank" class="news-link"><span class="news-title">小冰公司完成总额10亿元新融资 将推动数字员工普及</span><span class="tooltip">小冰公司完成总额10亿元新融资 将推动数字员工普及</span><span class="news-source">21世纪经济报道</span><span class="news-date">2022.11.07</span></a>
+<a href="https://www.caixin.com/2022-11-07/101961794.html" target="_blank" class="news-link"><span class="news-title">小冰完成10亿元融资 估值20亿美元</span><span class="tooltip">小冰完成10亿元融资 估值20亿美元</span><span class="news-source">财新</span><span class="news-date">2022.11.07</span></a>
+<a href="https://www.fortunechina.com/shangye/c/2022-08/10/content_4169601.htm" target="_blank" class="news-link"><span class="news-title">AI小冰：有趣的灵魂与好看的皮囊</span><span class="tooltip">AI小冰：有趣的灵魂与好看的皮囊</span><span class="news-source">财富</span><span class="news-date">2022.08.10</span></a>
+<a href="https://mp.weixin.qq.com/s/0Tg1907e-TXTx54AAwLDNQ" target="_blank" class="news-link"><span class="news-title">风乍起 数字人吹皱一池春水</span><span class="tooltip">风乍起 数字人吹皱一池春水</span><span class="news-source">中国高新技术产业导报</span><span class="news-date">2022.07.12</span></a>
+<a href="https://mp.weixin.qq.com/s/CS7yY4K9GuMpJ85X3k77og" target="_blank" class="news-link"><span class="news-title">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span><span class="tooltip">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span><span class="news-source">爱范儿</span><span class="news-date">2022.07.12</span></a>
+<a href="http://www.nbd.com.cn/articles/2022-06-13/2320532.html" target="_blank" class="news-link"><span class="news-title">头部技术咖下场布局AI游戏 能讲出哪些惊艳故事？</span><span class="tooltip">头部技术咖下场布局AI游戏 能讲出哪些惊艳故事？</span><span class="news-source">每日经济新闻</span><span class="news-date">2022.06.13</span></a>
+<a href="https://mp.weixin.qq.com/s/cocwZXNwkmOaWE5NsMtV9w" target="_blank" class="news-link"><span class="news-title">NPC人均“失控玩家”，这家刚成立的游戏工作室到底什么来头？</span><span class="tooltip">NPC人均“失控玩家”，这家刚成立的游戏工作室到底什么来头？</span><span class="news-source">GameLook</span><span class="news-date">2022.06.01</span></a>
+<a href="https://mp.weixin.qq.com/s/k57W654D6QNvBNHsePmO-g" target="_blank" class="news-link"><span class="news-title">第一次，虚拟人有了行业共识</span><span class="tooltip">第一次，虚拟人有了行业共识</span><span class="news-source">量子位</span><span class="news-date">2022.05.05</span></a>
+<a href="https://mp.weixin.qq.com/s/g7AL1OwcaOCJB9xWY5oQaA" target="_blank" class="news-link"><span class="news-title">「孤勇者」小冰，跃过跳台</span><span class="tooltip">「孤勇者」小冰，跃过跳台</span><span class="news-source">36氪</span><span class="news-date">2022.03.30</span></a>
+<div class="extra-content">
+<a href="https://mp.weixin.qq.com/s/Cb6bIJYcTI0d3c2rYev8KA" target="_blank" class="news-link"><span class="news-title">小冰进职场：“虚拟”一个人的技术和商业跨越</span><span class="tooltip">小冰进职场：“虚拟”一个人的技术和商业跨越</span><span class="news-source">晚点</span><span class="news-date">2022.03.24</span></a>
+<a href="https://mp.weixin.qq.com/s/yMpcDbcH2S9eYlEWXEZ_IA" target="_blank" class="news-link"><span class="news-title">小冰李笛：为什么虚拟人必须「砍掉」中之人？</span><span class="tooltip">小冰李笛：为什么虚拟人必须「砍掉」中之人？</span><span class="news-source">雷锋网</span><span class="news-date">2022.03.15</span></a>
+<a href="https://mp.weixin.qq.com/s/7XAdWKgxdLfGgM50_oDR3A" target="_blank" class="news-link"><span class="news-title">对话小冰CEO：「虚拟人」背后的商业逻辑</span><span class="tooltip">对话小冰CEO：「虚拟人」背后的商业逻辑</span><span class="news-source">福布斯</span><span class="news-date">2022.03.10</span></a>
+<a href="https://mp.weixin.qq.com/s/sxMoPXuEIRGZdyzq3t9cKA" target="_blank" class="news-link"><span class="news-title">年入四百亿的营销科技公司和那家很酷的AI公司在一起了</span><span class="tooltip">年入四百亿的营销科技公司和那家很酷的AI公司在一起了</span><span class="news-source">品玩</span><span class="news-date">2022.02.24</span></a>
+<a href="https://tech.huanqiu.com/article/46vmBiN6deK" target="_blank" class="news-link"><span class="news-title">AI“黑科技”照亮冬奥，“虚拟人”拓展应用边界</span><span class="tooltip">AI“黑科技”照亮冬奥，“虚拟人”拓展应用边界</span><span class="news-source">环球网</span><span class="news-date">2022.02.23</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_16776136" target="_blank" class="news-link"><span class="news-title">科技冬奥丨人工智能裁判与教练系统助力空中技巧队冬奥夺金</span><span class="tooltip">科技冬奥丨人工智能裁判与教练系统助力空中技巧队冬奥夺金</span><span class="news-source">澎湃</span><span class="news-date">2022.02.21</span></a>
+<a href="https://mp.weixin.qq.com/s/SDkE4If-CdkDlmobglSaBQ" target="_blank" class="news-link"><span class="news-title">31岁老将齐广璞四战冬奥终夺冠！背后的一位教练竟不是真人</span><span class="tooltip">31岁老将齐广璞四战冬奥终夺冠！背后的一位教练竟不是真人</span><span class="news-source">新智元</span><span class="news-date">2022.02.17</span></a>
+<a href="https://mp.weixin.qq.com/s/ShFIpVa7Qm6L9wyDgzyfVQ" target="_blank" class="news-link"><span class="news-title">徐梦桃空中技巧夺金！她背后竟还有一位虚拟教练？</span><span class="tooltip">徐梦桃空中技巧夺金！她背后竟还有一位虚拟教练？</span><span class="news-source">品玩</span><span class="news-date">2022.02.16</span></a>
+<a href="https://mp.weixin.qq.com/s/rN_nzijPhbKKh0FAfDSvuA" target="_blank" class="news-link"><span class="news-title">观君是谁？冬奥冠军背后的虚拟教练</span><span class="tooltip">观君是谁？冬奥冠军背后的虚拟教练</span><span class="news-source">CCTV对话</span><span class="news-date">2022.02.15</span></a>
+<a href="https://mp.weixin.qq.com/s/Xl6sA2BdGfHvV1ww5-VdEw" target="_blank" class="news-link"><span class="news-title">央视曝徐梦桃夺冠黑科技：竟然还有个虚拟教练？？？</span><span class="tooltip">央视曝徐梦桃夺冠黑科技：竟然还有个虚拟教练？？？</span><span class="news-source">量子位</span><span class="news-date">2022.02.15</span></a>
+<a href="https://mp.weixin.qq.com/s/aQz1ei0LbEs037ne_3HTrw" target="_blank" class="news-link"><span class="news-title">金牌背后，AI如何助力“科技冬奥”？</span><span class="tooltip">金牌背后，AI如何助力“科技冬奥”？</span><span class="news-source">央视中文国际</span><span class="news-date">2022.02.15</span></a>
+<a href="https://w.yangshipin.cn/video?type=0&amp;vid=e0000460sc5" target="_blank" class="news-link"><span class="news-title">科技的力量！金牌背后：“AI助理教练”</span><span class="tooltip">科技的力量！金牌背后：“AI助理教练”</span><span class="news-source">央视中文国际</span><span class="news-date">2022.02.15</span></a>
+<a href="https://mp.weixin.qq.com/s/1T7p3B4sQl4sZw0-m8ocxA" target="_blank" class="news-link"><span class="news-title">​“冯小殊”亮相中国天气，“夏语冰”的姐妹团背后的故事</span><span class="tooltip">​“冯小殊”亮相中国天气，“夏语冰”的姐妹团背后的故事</span><span class="news-source">封面新闻</span><span class="news-date">2022.02.07</span></a>
+<a href="https://mp.weixin.qq.com/s/6WGiKoLunCqioEUV2ZhVrg" target="_blank" class="news-link"><span class="news-title">北京冬奥又曝黑科技：连气象主播都是AI虚拟人</span><span class="tooltip">北京冬奥又曝黑科技：连气象主播都是AI虚拟人</span><span class="news-source">量子位</span><span class="news-date">2022.02.07</span></a>
+<a href="https://mp.weixin.qq.com/s/SBCMHD2QWnk0ZEeGcNq_Pw" target="_blank" class="news-link"><span class="news-title">完美复刻央视新「气象先生」！小冰虚拟人「冯小殊」陪你一起看冬奥</span><span class="tooltip">完美复刻央视新「气象先生」！小冰虚拟人「冯小殊」陪你一起看冬奥</span><span class="news-source">新智元</span><span class="news-date">2022.02.04</span></a>
+<a href="https://xhpfmapi.xinhuaxmt.com/vh512/share/10572626?channel=weixinp" target="_blank" class="news-link"><span class="news-title">科技冬奥：气象服务AI虚拟人“冯小殊”亮相中国天气</span><span class="tooltip">科技冬奥：气象服务AI虚拟人“冯小殊”亮相中国天气</span><span class="news-source">新华社</span><span class="news-date">2022.02.02</span></a>
+<a href="https://mp.weixin.qq.com/s/9_vruqX6c_dBsBsxXYVEeg" target="_blank" class="news-link"><span class="news-title">虚拟人春节搞事情！先在央视《对话》，又跟李玉刚组团除夕出道</span><span class="tooltip">虚拟人春节搞事情！先在央视《对话》，又跟李玉刚组团除夕出道</span><span class="news-source">量子位</span><span class="news-date">2022.01.31</span></a>
+<a href="https://mp.weixin.qq.com/s/4cV42lZm36exWsCf8xRUqA" target="_blank" class="news-link"><span class="news-title">路过人间遇见你！三次元虚拟小姐姐翻唱《华夏》除夕贺新春</span><span class="tooltip">路过人间遇见你！三次元虚拟小姐姐翻唱《华夏》除夕贺新春</span><span class="news-source">新智元</span><span class="news-date">2022.01.31</span></a>
+<a href="https://mp.weixin.qq.com/s/R6LxzyHdNXz6RLzJ7elJ8w" target="_blank" class="news-link"><span class="news-title">夏语冰惊艳亮相央视，陈水若梦幻联动李玉刚：小冰的朋友圈到底有多大？</span><span class="tooltip">夏语冰惊艳亮相央视，陈水若梦幻联动李玉刚：小冰的朋友圈到底有多大？</span><span class="news-source">品玩</span><span class="news-date">2022.01.31</span></a>
+<a href="https://mp.weixin.qq.com/s/dt27FQSPTMd9Hth0Yt5OmA" target="_blank" class="news-link"><span class="news-title">你认识夏语冰吗？</span><span class="tooltip">你认识夏语冰吗？</span><span class="news-source">环球网</span><span class="news-date">2022.01.30</span></a>
+<a href="https://mp.weixin.qq.com/s/rTX8xkn1_rsvCXj-J3kDBQ" target="_blank" class="news-link"><span class="news-title">夏语冰火了！没想到她背后有这么多秘密</span><span class="tooltip">夏语冰火了！没想到她背后有这么多秘密</span><span class="news-source">IT之家</span><span class="news-date">2022.01.30</span></a>
+<a href="https://mp.weixin.qq.com/s/gRL7Gn52KBKl1aT-JkgfTQ" target="_blank" class="news-link"><span class="news-title">小冰进化论：从巨头中诞生的独角兽</span><span class="tooltip">小冰进化论：从巨头中诞生的独角兽</span><span class="news-source">36氪</span><span class="news-date">2022.01.12</span></a>
+<a href="https://mp.weixin.qq.com/s/OIIufLFX4wnqPELaxajGlQ" target="_blank" class="news-link"><span class="news-title">跟你一块卷的同事，确定是个人吗？</span><span class="tooltip">跟你一块卷的同事，确定是个人吗？</span><span class="news-source">量子位</span><span class="news-date">2022.01.07</span></a>
+</div>
+<span class="view-more">查看更多（23条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2021</h2>
+<a href="https://mp.weixin.qq.com/s/7phkS81MtvDfPG57NSbdEg" target="_blank" class="news-link"><span class="news-title">你的身边，已经潜伏了虚拟职场第一人</span><span class="tooltip">你的身边，已经潜伏了虚拟职场第一人</span><span class="news-source">品玩</span><span class="news-date">2021.12.29</span></a>
+<a href="https://mp.weixin.qq.com/s/bp_eRZKTDPPDEZ8B7zhkIw" target="_blank" class="news-link"><span class="news-title">万科年度优秀新员工， 竟然不是真人？</span><span class="tooltip">万科年度优秀新员工， 竟然不是真人？</span><span class="news-source">虎嗅</span><span class="news-date">2021.12.27</span></a>
+<a href="https://www.shine.cn/news/in-focus/2112239904/" target="_blank" class="news-link"><span class="news-title">What direction will the meta universe take in real-world 2022?</span><span class="tooltip">What direction will the meta universe take in real-world 2022?</span><span class="news-source">上海日报</span><span class="news-date">2021.12.23</span></a>
+<a href="https://mp.weixin.qq.com/s/Z3iGe4mly-3OJ-toXIJTAg" target="_blank" class="news-link"><span class="news-title">别吵吵内卷了，看看人家虚拟人：连续直播70天都没工资</span><span class="tooltip">别吵吵内卷了，看看人家虚拟人：连续直播70天都没工资</span><span class="news-source">量子位</span><span class="news-date">2021.12.22</span></a>
+<a href="https://mp.weixin.qq.com/s/0g0-RY4KaZ-FQl6F-q_00A" target="_blank" class="news-link"><span class="news-title">难以置信！小冰数字孪生虚拟人直播70天，没人发现不是真人</span><span class="tooltip">难以置信！小冰数字孪生虚拟人直播70天，没人发现不是真人</span><span class="news-source">新智元</span><span class="news-date">2021.12.20</span></a>
+<a href="https://www.pingwest.com/a/255225" target="_blank" class="news-link"><span class="news-title">少女小冰的万千分身：人工智能最终会走向多样性？</span><span class="tooltip">少女小冰的万千分身：人工智能最终会走向多样性？</span><span class="news-source">品玩</span><span class="news-date">2021.12.17</span></a>
+<a href="https://share.gmw.cn/news/2021-12/03/content_35358295.htm" target="_blank" class="news-link"><span class="news-title">成都大运会发布系列主题推广曲，小冰框架AI何畅受邀演唱</span><span class="tooltip">成都大运会发布系列主题推广曲，小冰框架AI何畅受邀演唱</span><span class="news-source">光明网</span><span class="news-date">2021.12.03</span></a>
+<a href="https://mp.weixin.qq.com/s/We3QBKYMV4lgJGHsLX0JWA" target="_blank" class="news-link"><span class="news-title">​人类与人工智能怎么“混居”？｜专访小冰CEO</span><span class="tooltip">​人类与人工智能怎么“混居”？｜专访小冰CEO</span><span class="news-source">深响</span><span class="news-date">2021.10.27</span></a>
+<a href="https://view.inews.qq.com/a/20211026A01L3800?uid=&amp;shareto=&amp;devid=87CC4163-4BA9-4DCD-B1A1-D5C1A0D030FE&amp;qimei=2014112211165623628%3A31%3A52%3Ab0%3A29%3Ab0002426&amp;openid=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;key=&amp;version=18000e2f&amp;devicetype=iOS14.2&amp;wuid=oDdoCt-hXLmz3QNI9lutpVil7CtM&amp;sharer=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;openwith=wxmessage" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：人工智能只有抵达用户，才有真正的外延</span><span class="tooltip">专访小冰CEO李笛：人工智能只有抵达用户，才有真正的外延</span><span class="news-source">腾讯</span><span class="news-date">2021.10.26</span></a>
+<a href="http://tech.cnr.cn/techds/20211011/t20211011_525629944.shtml" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：我们要做的是“人”，重点是他的“灵魂”</span><span class="tooltip">小冰公司CEO李笛：我们要做的是“人”，重点是他的“灵魂”</span><span class="news-source">央广网</span><span class="news-date">2021.10.09</span></a>
+<div class="extra-content">
+<a href="https://m.ithome.com/html/579491.htm" target="_blank" class="news-link"><span class="news-title">小冰李笛：对话引擎需突破对话溯源，小冰岛 App 研究多 AI Beings 与人类交互</span><span class="tooltip">小冰李笛：对话引擎需突破对话溯源，小冰岛 App 研究多 AI Beings 与人类交互</span><span class="news-source">IT之家</span><span class="news-date">2021.10.08</span></a>
+<a href="https://s.cyol.com/articles/2021-10/05/content_Dgpd6xhz.html?gid=4LkvKv17" target="_blank" class="news-link"><span class="news-title">小冰与人类乐队合作，感谢她还愿意带你玩</span><span class="tooltip">小冰与人类乐队合作，感谢她还愿意带你玩</span><span class="news-source">中国青年报</span><span class="news-date">2021.10.05</span></a>
+<a href="https://mp.weixin.qq.com/s/R-Uc-EVGSVL8OWHs-rRI_Q" target="_blank" class="news-link"><span class="news-title">这是真人？</span><span class="tooltip">这是真人？</span><span class="news-source">观察者网</span><span class="news-date">2021.10.01</span></a>
+<a href="https://mp.weixin.qq.com/s/RuvpdUQE0sNhrsGN6rVPyg" target="_blank" class="news-link"><span class="news-title">一个除了你都不是人的 App，一座推翻所有社交形式的岛｜专访小冰 CEO 李笛</span><span class="tooltip">一个除了你都不是人的 App，一座推翻所有社交形式的岛｜专访小冰 CEO 李笛</span><span class="news-source">爱范儿</span><span class="news-date">2021.09.29</span></a>
+<a href="https://www.pingwest.com/a/250437" target="_blank" class="news-link"><span class="news-title">少女小冰为什么要创造一个岛？</span><span class="tooltip">少女小冰为什么要创造一个岛？</span><span class="news-source">品玩</span><span class="news-date">2021.09.29</span></a>
+<a href="https://mp.weixin.qq.com/s/ZxE35laNodNrdIigr4rXSw" target="_blank" class="news-link"><span class="news-title">小冰建了一座岛，想让你体验下和 AI「混居」是什么感觉</span><span class="tooltip">小冰建了一座岛，想让你体验下和 AI「混居」是什么感觉</span><span class="news-source">极客公园</span><span class="news-date">2021.09.28</span></a>
+<a href="https://h5.ifeng.com/c/zaker/89uQ0zUaQb4" target="_blank" class="news-link"><span class="news-title">对话小冰公司CEO李笛：不担心被超越 小冰岛暂无盈利预期</span><span class="tooltip">对话小冰公司CEO李笛：不担心被超越 小冰岛暂无盈利预期</span><span class="news-source">凤凰</span><span class="news-date">2021.09.28</span></a>
+<a href="https://mp.weixin.qq.com/s/JRdpF-p4rQbvwZmMUa36UA" target="_blank" class="news-link"><span class="news-title">“赶上热词热概念，是我们不幸的一面” | 对话小冰公司CEO李笛</span><span class="tooltip">“赶上热词热概念，是我们不幸的一面” | 对话小冰公司CEO李笛</span><span class="news-source">量子位</span><span class="news-date">2021.09.27</span></a>
+<a href="https://mp.weixin.qq.com/s/Z2meCSxzeKTLDGRbz70A_g" target="_blank" class="news-link"><span class="news-title">你和虚拟人之间，有了一个微信平台</span><span class="tooltip">你和虚拟人之间，有了一个微信平台</span><span class="news-source">中国电子报</span><span class="news-date">2021.09.26</span></a>
+<a href="https://mp.weixin.qq.com/s/A5vCayc7wGLP-tQfU7IFeA" target="_blank" class="news-link"><span class="news-title">与AI共居一个岛上，是一种怎样的体验？</span><span class="tooltip">与AI共居一个岛上，是一种怎样的体验？</span><span class="news-source">FT中文网</span><span class="news-date">2021.09.26</span></a>
+<a href="https://mp.weixin.qq.com/s/tdjihFCOblSj6PWSjrNQxw" target="_blank" class="news-link"><span class="news-title">你以为「小冰岛」是元宇宙？其实她要的是Diversity</span><span class="tooltip">你以为「小冰岛」是元宇宙？其实她要的是Diversity</span><span class="news-source">新智元</span><span class="news-date">2021.09.26</span></a>
+<a href="http://www.chinadaily.com.cn/a/202109/24/WS614d831aa310cdd39bc6b5aa.html" target="_blank" class="news-link"><span class="news-title">Xiaoice showcases AI progress</span><span class="tooltip">Xiaoice showcases AI progress</span><span class="news-source">中国日报</span><span class="news-date">2021.09.24</span></a>
+<a href="https://static.nfapp.southcn.com/content/202109/24/c5773979.html?colID=0&amp;date=bnVsbA==&amp;code=200&amp;evidence=b950097e-2406-4f3b-b8bd-b40663d0ebef&amp;firstColID=653&amp;appversion=8030&amp;from=timeline&amp;layer=5" target="_blank" class="news-link"><span class="news-title">有烦恼？上岛找AI虚拟人聊，比央视王冰冰还治愈</span><span class="tooltip">有烦恼？上岛找AI虚拟人聊，比央视王冰冰还治愈</span><span class="news-source">南方日报</span><span class="news-date">2021.09.24</span></a>
+<a href="https://m.thecover.cn/news_details.html?id=8132956" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span><span class="tooltip">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span><span class="news-source">华西都市报</span><span class="news-date">2021.09.24</span></a>
+<a href="https://finance.sina.cn/tech/2021-09-24/detail-iktzscyx6080922.d.html?fromtech=1&amp;sinawapsharesource=newsapp&amp;wm=3200_0002" target="_blank" class="news-link"><span class="news-title">人类如何与人工智能社交？小冰给出一种答案</span><span class="tooltip">人类如何与人工智能社交？小冰给出一种答案</span><span class="news-source">新浪</span><span class="news-date">2021.09.24</span></a>
+<a href="https://m.thepaper.cn/newsDetail_forward_14622300" target="_blank" class="news-link"><span class="news-title">小冰发布“小冰岛”APP：全球首个人与AI融合社交平台</span><span class="tooltip">小冰发布“小冰岛”APP：全球首个人与AI融合社交平台</span><span class="news-source">澎湃</span><span class="news-date">2021.09.23</span></a>
+<a href="https://m.mp.oeeee.com/a/BAAFRD000020210923606188.html?layer=3&amp;share=chat&amp;isndappinstalled=0&amp;wxuid=ogVRcdA6D222s7oWR0ZDtO08i6tA&amp;wxsalt=dde502" target="_blank" class="news-link"><span class="news-title">1700万虚拟人有26%是人类替身？三个词解锁这场发布会</span><span class="tooltip">1700万虚拟人有26%是人类替身？三个词解锁这场发布会</span><span class="news-source">南方都市报</span><span class="news-date">2021.09.23</span></a>
+<a href="https://mp.weixin.qq.com/s/QuG7VdZ6W95U8yae3YpBDA" target="_blank" class="news-link"><span class="news-title">孤独的人群中，浮起一座“小冰岛”</span><span class="tooltip">孤独的人群中，浮起一座“小冰岛”</span><span class="news-source">21世纪经济报道 </span><span class="news-date">2021.09.23</span></a>
+<a href="https://mp.weixin.qq.com/s/vp9U0dBQ1-I31h-iINyFtg" target="_blank" class="news-link"><span class="news-title">覆盖10亿设备的小冰，发布了下一代社交网络：给你发语音、朋友圈点赞的都是AI</span><span class="tooltip">覆盖10亿设备的小冰，发布了下一代社交网络：给你发语音、朋友圈点赞的都是AI</span><span class="news-source">机器之心</span><span class="news-date">2021.09.23</span></a>
+<a href="https://36kr.com/p/1409751509587335" target="_blank" class="news-link"><span class="news-title">小冰发布社交APP&quot;小冰岛”：不是元宇宙，是虚拟版微信</span><span class="tooltip">小冰发布社交APP&quot;小冰岛”：不是元宇宙，是虚拟版微信</span><span class="news-source">36氪</span><span class="news-date">2021.09.23</span></a>
+<a href="https://view.inews.qq.com/a/20210922A09LXY00?uid=&amp;shareto=&amp;devid=B8543CC0-FF29-4432-8906-AFF413ED4CD0&amp;qimei=7d6e83bc-90e7-424f-9995-0ed8a26cf5f6&amp;openid=o04IBAD7ImZUBZX-w8oEvdF3k1eY&amp;key=&amp;version=63030532&amp;devicetype=Windows+10+x64&amp;wuid=oDdoCt519ssF4RdLVovzMpaCBn-c&amp;sharer=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;openwith=wxmessage" target="_blank" class="news-link"><span class="news-title">小冰发布全球首个AI社交平台小冰岛，AI最大的商业价值在C端</span><span class="tooltip">小冰发布全球首个AI社交平台小冰岛，AI最大的商业价值在C端</span><span class="news-source">腾讯</span><span class="news-date">2021.09.22</span></a>
+<a href="https://zhidx.com/p/296877.html" target="_blank" class="news-link"><span class="news-title">第九代小冰来了！花式AI音乐绘画创作，小冰岛实现“AI自产自销”</span><span class="tooltip">第九代小冰来了！花式AI音乐绘画创作，小冰岛实现“AI自产自销”</span><span class="news-source">智东西</span><span class="news-date">2021.09.22</span></a>
+<a href="https://www.shine.cn/biz/company/2109225404/" target="_blank" class="news-link"><span class="news-title">Xiaoice unveils new services: from art to virtual social services</span><span class="tooltip">Xiaoice unveils new services: from art to virtual social services</span><span class="news-source">上海日报</span><span class="news-date">2021.09.22</span></a>
+<a href="https://m.sohu.com/a/491416214_115565/?pvid=000115_3w_a" target="_blank" class="news-link"><span class="news-title">小冰升级第九代小冰框架，并发布业内首个AI社交平台“小冰岛”</span><span class="tooltip">小冰升级第九代小冰框架，并发布业内首个AI社交平台“小冰岛”</span><span class="news-source">搜狐</span><span class="news-date">2021.09.22</span></a>
+<a href="https://www.infoq.cn/article/rcyvxkRg4E1O3V6MLdRE" target="_blank" class="news-link"><span class="news-title">第九代小冰正式发布：AI 社交平台“小冰岛”成为全场焦点</span><span class="tooltip">第九代小冰正式发布：AI 社交平台“小冰岛”成为全场焦点</span><span class="news-source">InfoQ</span><span class="news-date">2021.09.22</span></a>
+<a href="https://mp.weixin.qq.com/s/uhJhJWB4C8xx9g3tJNaAKg" target="_blank" class="news-link"><span class="news-title">打工人得努力了呀！AI虚拟人都要入职了…</span><span class="tooltip">打工人得努力了呀！AI虚拟人都要入职了…</span><span class="news-source">量子位</span><span class="news-date">2021.07.28</span></a>
+<a href="https://36kr.com/newsflashes/1318525116811778?channel" target="_blank" class="news-link"><span class="news-title">小冰AI评分系统获体育总局和国际雪联认可，成为国际赛事首个AI助理裁判</span><span class="tooltip">小冰AI评分系统获体育总局和国际雪联认可，成为国际赛事首个AI助理裁判</span><span class="news-source">36氪</span><span class="news-date">2021.07.20</span></a>
+<a href="https://mp.weixin.qq.com/s/uXmYLGwFZNTgI-lksM8UyA" target="_blank" class="news-link"><span class="news-title">冬奥测试赛给运动员打分的，是一台人工智能？</span><span class="tooltip">冬奥测试赛给运动员打分的，是一台人工智能？</span><span class="news-source">品玩</span><span class="news-date">2021.07.20</span></a>
+<a href="https://mp.weixin.qq.com/s/Tt16umBkeJpGFkvfiTKDtA" target="_blank" class="news-link"><span class="news-title">冬奥会测试赛，助理裁判竟然是个AI！</span><span class="tooltip">冬奥会测试赛，助理裁判竟然是个AI！</span><span class="news-source">量子位</span><span class="news-date">2021.07.20</span></a>
+<a href="https://www.bjd.com.cn/huawei/2021/07/20/132680t318.html" target="_blank" class="news-link"><span class="news-title">小冰成滑雪助理裁判 AI评分系统获国际雪联认可</span><span class="tooltip">小冰成滑雪助理裁判 AI评分系统获国际雪联认可</span><span class="news-source">北京日报</span><span class="news-date">2021.07.20</span></a>
+<a href="https://www.guancha.cn/economy/2021_07_20_599185.shtml" target="_blank" class="news-link"><span class="news-title">微软小冰估值超独角兽，CEO李笛：这次冬奥会，裁判可能“不是人类”</span><span class="tooltip">微软小冰估值超独角兽，CEO李笛：这次冬奥会，裁判可能“不是人类”</span><span class="news-source">观察者网</span><span class="news-date">2021.07.20</span></a>
+<a href="https://mp.weixin.qq.com/s/RXfC4k2MVBrG1hlScW0b-g" target="_blank" class="news-link"><span class="news-title">《海贼王》出品方与小冰合作：首个AI虚拟人上线日本版“微信”</span><span class="tooltip">《海贼王》出品方与小冰合作：首个AI虚拟人上线日本版“微信”</span><span class="news-source">量子位</span><span class="news-date">2021.07.16</span></a>
+<a href="https://36kr.com/p/1306581563574660" target="_blank" class="news-link"><span class="news-title">小冰公司完成A轮融资，高瓴领投，发布新一代语音技术</span><span class="tooltip">小冰公司完成A轮融资，高瓴领投，发布新一代语音技术</span><span class="news-source">36氪</span><span class="news-date">2021.07.12</span></a>
+<a href="https://view.inews.qq.com/a/20210712V01KWH00?cur_vid=a3259kclrr6&amp;sharer=o04IBAD7ImZUBZX-w8oEvdF3k1eY&amp;uid=&amp;shareto=&amp;openwith=wxmessage&amp;openid=o04IBAD7ImZUBZX-w8oEvdF3k1eY&amp;key=&amp;version=6303005d&amp;devicetype=Windows+10+x64&amp;wuid=oDdoCt519ssF4RdLVovzMpaCBn-c" target="_blank" class="news-link"><span class="news-title">小冰宣布融资后，展示了全新的“歌喉”：甜美堪比顶流主播</span><span class="tooltip">小冰宣布融资后，展示了全新的“歌喉”：甜美堪比顶流主播</span><span class="news-source">腾讯</span><span class="news-date">2021.07.12</span></a>
+<a href="https://www.163.com/dy/article/GEMP6TFA00097U7T.html" target="_blank" class="news-link"><span class="news-title">小冰宣布完成A轮融资 同时发布超级自然语音技术</span><span class="tooltip">小冰宣布完成A轮融资 同时发布超级自然语音技术</span><span class="news-source">网易</span><span class="news-date">2021.07.12</span></a>
+<a href="https://mp.weixin.qq.com/s/NXRfsrrjWUeW8k-O6lkkhA" target="_blank" class="news-link"><span class="news-title">小冰超级自然语音技术发布！PK真人真假难辨，同时获独角兽轮融资</span><span class="tooltip">小冰超级自然语音技术发布！PK真人真假难辨，同时获独角兽轮融资</span><span class="news-source">量子位</span><span class="news-date">2021.07.12</span></a>
+<a href="https://mp.weixin.qq.com/s/thuy9E8Yf0lz9XeaHEMEpA" target="_blank" class="news-link"><span class="news-title">我国首个原创虚拟学生！“华智冰”入学清华</span><span class="tooltip">我国首个原创虚拟学生！“华智冰”入学清华</span><span class="news-source">清华大学</span><span class="news-date">2021.06.16</span></a>
+<a href="https://view.inews.qq.com/k/20210615A0C8Q700" target="_blank" class="news-link"><span class="news-title">清华大学迎来我国首个原创虚拟学生“华智冰”</span><span class="tooltip">清华大学迎来我国首个原创虚拟学生“华智冰”</span><span class="news-source">光明日报</span><span class="news-date">2021.06.15</span></a>
+<a href="https://new.qq.com/omn/TEC20210/TEC2021060900754500.html" target="_blank" class="news-link"><span class="news-title">她被清华破格“录取”，刚出生就能画画、推理，究竟怎么做到的？</span><span class="tooltip">她被清华破格“录取”，刚出生就能画画、推理，究竟怎么做到的？</span><span class="news-source">腾讯科技</span><span class="news-date">2021.06.09</span></a>
+<a href="https://www.chinanews.com/gn/2021/06-01/9490384.shtml" target="_blank" class="news-link"><span class="news-title">能作曲会写诗！中国原创虚拟学生“华智冰”首次亮相</span><span class="tooltip">能作曲会写诗！中国原创虚拟学生“华智冰”首次亮相</span><span class="news-source">中国新闻网</span><span class="news-date">2021.06.01</span></a>
+<a href="https://mp.weixin.qq.com/s/iziwgtHTpZO-f1eZbx3pJQ" target="_blank" class="news-link"><span class="news-title">1.75万亿参数、在国产超算上训练，刚刚智源发布了全球最大预训练模型“悟道2.0”</span><span class="tooltip">1.75万亿参数、在国产超算上训练，刚刚智源发布了全球最大预训练模型“悟道2.0”</span><span class="news-source">量子位</span><span class="news-date">2021.06.01</span></a>
+<a href="https://c.m.163.com/news/a/G9VEO85900098IEO.html?spss=adap_pc&amp;referFrom=&amp;spssid=871e0646a74e157decc71f5441fda874&amp;spsw=3&amp;isFromH5Share=article" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：小冰从不追风口，也无需证明自己</span><span class="tooltip">专访小冰CEO李笛：小冰从不追风口，也无需证明自己</span><span class="news-source">网易</span><span class="news-date">2021.05.14</span></a>
+<a href="https://www.jiemian.com/article/6089725.html" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：未来小冰无处不在，并基于小冰框架形成各种虚拟人类</span><span class="tooltip">小冰CEO李笛：未来小冰无处不在，并基于小冰框架形成各种虚拟人类</span><span class="news-source">界面</span><span class="news-date">2021.05.14</span></a>
+<a href="https://mp.weixin.qq.com/s/6I0GhgPoE8bzPzYkmIsFGQ" target="_blank" class="news-link"><span class="news-title">AI小冰+“AI姐姐”朱婧汐，彼此成就的跨次元友情</span><span class="tooltip">AI小冰+“AI姐姐”朱婧汐，彼此成就的跨次元友情</span><span class="news-source">南方日报</span><span class="news-date">2021.04.29</span></a>
+<a href="https://finance.sina.com.cn/tech/2021-04-28/doc-ikmyaawc2378862.shtml?cref=cj" target="_blank" class="news-link"><span class="news-title">沈向洋：AI是个黑盒子 需构建更加负责任的系统</span><span class="tooltip">沈向洋：AI是个黑盒子 需构建更加负责任的系统</span><span class="news-source">新浪</span><span class="news-date">2021.04.28</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_11703298" target="_blank" class="news-link"><span class="news-title">音乐与技术的共鸣</span><span class="tooltip">音乐与技术的共鸣</span><span class="news-source">澎湃</span><span class="news-date">2021.03.14</span></a>
+<a href="https://video.caixin.com/2021-03-04/101669754.html" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：AI技术要兼顾人类情感需求</span><span class="tooltip">小冰CEO李笛：AI技术要兼顾人类情感需求</span><span class="news-source">财新</span><span class="news-date">2021.03.04</span></a>
+<a href="https://smart.huanqiu.com/article/424UOxMMbeG" target="_blank" class="news-link"><span class="news-title">学者：AI学习人类艺术 更新艺术体验</span><span class="tooltip">学者：AI学习人类艺术 更新艺术体验</span><span class="news-source">环球网</span><span class="news-date">2021.02.25</span></a>
+<a href="https://www.infoq.cn/article/Viw7OgHJGLWU9WMf0ZhI" target="_blank" class="news-link"><span class="news-title">我和AI谈恋爱</span><span class="tooltip">我和AI谈恋爱</span><span class="news-source">Infoq</span><span class="news-date">2021.02.14</span></a>
+<a href="http://www.geekpark.net/news/273494" target="_blank" class="news-link"><span class="news-title">小冰 CEO 李笛：「百变」小冰让人类与不完美和解</span><span class="tooltip">小冰 CEO 李笛：「百变」小冰让人类与不完美和解</span><span class="news-source">极客公园</span><span class="news-date">2021.01.31</span></a>
+<a href="https://news.163.com/21/0129/11/G1GMHADT00019OH3.html" target="_blank" class="news-link"><span class="news-title">小冰眼里的金融科技：先摘要，再风控，知识图谱和NLP是根基</span><span class="tooltip">小冰眼里的金融科技：先摘要，再风控，知识图谱和NLP是根基</span><span class="news-source">网易</span><span class="news-date">2021.01.29</span></a>
+<a href="http://vr.sina.com.cn/news/hz/2021-01-12/doc-iiznctkf1860485.shtml" target="_blank" class="news-link"><span class="news-title">人工智能小冰入局，体育产业将迎来“点球成金”时刻</span><span class="tooltip">人工智能小冰入局，体育产业将迎来“点球成金”时刻</span><span class="news-source">新浪</span><span class="news-date">2021.01.13</span></a>
+<a href="https://mp.weixin.qq.com/s/Go26e3Jco1V4nGMs4Flciw" target="_blank" class="news-link"><span class="news-title">想要甜甜的恋爱，和AI谈的那种</span><span class="tooltip">想要甜甜的恋爱，和AI谈的那种</span><span class="news-source">财经</span><span class="news-date">2021.01.12</span></a>
+<a href="https://m.gmw.cn/2021-01/09/content_1302018275.htm" target="_blank" class="news-link"><span class="news-title">人工智能有助于文学照亮人性</span><span class="tooltip">人工智能有助于文学照亮人性</span><span class="news-source">光明日报</span><span class="news-date">2021.01.09</span></a>
+<a href="http://finance.sina.com.cn/tech/2021-01-08/doc-iiznezxt1307077.shtml" target="_blank" class="news-link"><span class="news-title">2020科技风云榜主题曲来了！首场AI圆桌对话1月12日上演</span><span class="tooltip">2020科技风云榜主题曲来了！首场AI圆桌对话1月12日上演</span><span class="news-source">新浪</span><span class="news-date">2021.01.08</span></a>
+<a href="https://www.france24.com/en/live-news/20210824-always-there-the-ai-chatbot-comforting-china-s-lonely-millions" target="_blank" class="news-link"><span class="news-title">Always there&#x27;: the AI chatbot comforting China&#x27;s lonely millions</span><span class="tooltip">Always there&#x27;: the AI chatbot comforting China&#x27;s lonely millions</span><span class="news-source">Agence France-Press</span><span class="news-date">2021.08.24</span></a>
+<a href="https://www.washingtonpost.com/world/2021/08/06/china-online-dating-love-replika/" target="_blank" class="news-link"><span class="news-title">China’s lonely hearts reboot online romance with artificial intelligence</span><span class="tooltip">China’s lonely hearts reboot online romance with artificial intelligence</span><span class="news-source">The Washington Post</span><span class="news-date">2021.08.06</span></a>
+<a href="https://www.protocol.com/china/does-ai-need-eq" target="_blank" class="news-link"><span class="news-title">Does AI need EQ?</span><span class="tooltip">Does AI need EQ?</span><span class="news-source">Protocol</span><span class="news-date">2021.05.11</span></a>
+<a href="https://enapp.chinadaily.com.cn/a/202101/01/AP5fee64cba310f03332f924f9.html" target="_blank" class="news-link"><span class="news-title">Industry ponders growing role of tech in sports</span><span class="tooltip">Industry ponders growing role of tech in sports</span><span class="news-source">China Daily</span><span class="news-date">2021.01.01</span></a>
+</div>
+<span class="view-more">查看更多（59条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2020</h2>
+<a href="https://mp.weixin.qq.com/s/UP5CM_35MWi_OJ5ksemeog" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：强大的AI工具不应该给企业，应该给劳动者</span><span class="tooltip">小冰公司CEO李笛：强大的AI工具不应该给企业，应该给劳动者</span><span class="news-source">量子位</span><span class="news-date">2020.12.29</span></a>
+<a href="https://www.chinanews.com/zwad/2020/12-25/8666991.html" target="_blank" class="news-link"><span class="news-title">拥有情商和创造力的人工智能小冰，掀起“有温度”的产业化升级浪潮</span><span class="tooltip">拥有情商和创造力的人工智能小冰，掀起“有温度”的产业化升级浪潮</span><span class="news-source">中国新闻网</span><span class="news-date">2020.12.25</span></a>
+<a href="https://mp.weixin.qq.com/s/9rXp6jHYHH8f2B8OAz6h0A" target="_blank" class="news-link"><span class="news-title">人工智能小冰因何与众不同？</span><span class="tooltip">人工智能小冰因何与众不同？</span><span class="news-source">品玩</span><span class="news-date">2020.12.22</span></a>
+<a href="https://mp.weixin.qq.com/s/VRBQ5ri5xbaxeutXt3GSnQ" target="_blank" class="news-link"><span class="news-title">AI可以做音乐吗？</span><span class="tooltip">AI可以做音乐吗？</span><span class="news-source">出色WSJ</span><span class="news-date">2020.12.21</span></a>
+<a href="https://mp.weixin.qq.com/s/rs-F8jzkOETnRff2TEx9VQ" target="_blank" class="news-link"><span class="news-title">当滑雪这项世界最古老的运动遇上AI</span><span class="tooltip">当滑雪这项世界最古老的运动遇上AI</span><span class="news-source">智能相对论</span><span class="news-date">2020.12.06</span></a>
+<a href="https://mp.weixin.qq.com/s/No6E_vPooETqFOjBSYyndQ" target="_blank" class="news-link"><span class="news-title">小冰初长成 AI不深闺</span><span class="tooltip">小冰初长成 AI不深闺</span><span class="news-source">懂懂笔记</span><span class="news-date">2020.11.30</span></a>
+<a href="http://m.cyol.com/app/2020-11/27/content_18865642.htm" target="_blank" class="news-link"><span class="news-title">小冰是微软创新于中国的力证</span><span class="tooltip">小冰是微软创新于中国的力证</span><span class="news-source">中国青年报</span><span class="news-date">2020.11.27</span></a>
+<a href="https://www.huxiu.com/article/396156.html" target="_blank" class="news-link"><span class="news-title">也只有亲妈才会对小冰这么上心了</span><span class="tooltip">也只有亲妈才会对小冰这么上心了</span><span class="news-source">虎嗅</span><span class="news-date">2020.11.27</span></a>
+<a href="https://m.cnmo.com/news/697704.html" target="_blank" class="news-link"><span class="news-title">小冰的“成年”打拼之路 从人工智能应用商业化开始</span><span class="tooltip">小冰的“成年”打拼之路 从人工智能应用商业化开始</span><span class="news-source">手机中国</span><span class="news-date">2020.11.26</span></a>
+<a href="http://www.21jingji.com/2020/11-25/xNMDEzODFfMTYwODQxNg.html" target="_blank" class="news-link"><span class="news-title">背靠微软、融资到位：小冰商业化探索提速</span><span class="tooltip">背靠微软、融资到位：小冰商业化探索提速</span><span class="news-source">21世纪经济报道</span><span class="news-date">2020.11.25</span></a>
+<div class="extra-content">
+<a href="https://m.gmw.cn/2020-11/25/content_34399281.htm" target="_blank" class="news-link"><span class="news-title">微软中国与小冰公司达成战略合作，深化AI+云计算商业化行业解决方案落地</span><span class="tooltip">微软中国与小冰公司达成战略合作，深化AI+云计算商业化行业解决方案落地</span><span class="news-source">光明网</span><span class="news-date">2020.11.25</span></a>
+<a href="http://www.ceweekly.cn/2020/1125/321929.shtml" target="_blank" class="news-link"><span class="news-title">小冰“回家”，还和微软一起宣布了件大事儿</span><span class="tooltip">小冰“回家”，还和微软一起宣布了件大事儿</span><span class="news-source">中国经济周刊</span><span class="news-date">2020.11.25</span></a>
+<a href="https://mp.weixin.qq.com/s/M7Li627Anzyg9wWvJ4mIQw" target="_blank" class="news-link"><span class="news-title">三个故事，看人工智能小冰如何玩转AI to B</span><span class="tooltip">三个故事，看人工智能小冰如何玩转AI to B</span><span class="news-source">智能进化论</span><span class="news-date">2020.11.24</span></a>
+<a href="https://tech.huanqiu.com/article/40pY7g5qAHk" target="_blank" class="news-link"><span class="news-title">微软中国与小冰公司达成战略合作 深化AI+云计算商业化行业解决方案落地</span><span class="tooltip">微软中国与小冰公司达成战略合作 深化AI+云计算商业化行业解决方案落地</span><span class="news-source">环球网</span><span class="news-date">2020.11.24</span></a>
+<a href="https://finance.sina.com.cn/tech/2020-11-24/doc-iiznctke3055072.shtml" target="_blank" class="news-link"><span class="news-title">沈向洋：在AI大时代下，小冰这么多年只是创造了一个小时代</span><span class="tooltip">沈向洋：在AI大时代下，小冰这么多年只是创造了一个小时代</span><span class="news-source">新浪</span><span class="news-date">2020.11.24</span></a>
+<a href="http://www.cb.com.cn/index/show/bos/cv/cv1331661286" target="_blank" class="news-link"><span class="news-title">人工智能并不是万能的——访小冰公司CEO李笛</span><span class="tooltip">人工智能并不是万能的——访小冰公司CEO李笛</span><span class="news-source">中国经营报</span><span class="news-date">2020.11.07</span></a>
+<a href="http://digitalpaper.stdaily.com/http_www.kjrb.com/kjrb/html/2020-10/09/content_454694.htm?div=-1" target="_blank" class="news-link"><span class="news-title">混入时尚圈，AI释放设计师灵感</span><span class="tooltip">混入时尚圈，AI释放设计师灵感</span><span class="news-source">科技日报</span><span class="news-date">2020.10.09</span></a>
+<a href="http://paper.people.com.cn/rmrbhwb/html/2020-09/30/content_2011622.htm" target="_blank" class="news-link"><span class="news-title">人工智能助力纺织品图案设计</span><span class="tooltip">人工智能助力纺织品图案设计</span><span class="news-source">人民日报海外版</span><span class="news-date">2020.09.30</span></a>
+<a href="https://mp.weixin.qq.com/s/dzMxdx9ZBZu9DzJbEl9Y5g" target="_blank" class="news-link"><span class="news-title">右脑AI</span><span class="tooltip">右脑AI</span><span class="news-source">出色WSJ</span><span class="news-date">2020.09.24</span></a>
+<a href="http://paper.people.com.cn/rmrbhwb/html/2020-09/09/content_2008040.htm" target="_blank" class="news-link"><span class="news-title">AI作曲帮助人类创作普及音乐教育</span><span class="tooltip">AI作曲帮助人类创作普及音乐教育</span><span class="news-source">人民日报海外版</span><span class="news-date">2020.09.09</span></a>
+<a href="https://m.mp.oeeee.com/a/BAAFRD000020200903360468.html" target="_blank" class="news-link"><span class="news-title">“AI姐姐”朱婧汐，和她的“弱小AI人类观察计划”</span><span class="tooltip">“AI姐姐”朱婧汐，和她的“弱小AI人类观察计划”</span><span class="news-source">南方都市报</span><span class="news-date">2020.09.04</span></a>
+<a href="https://m.nbd.com.cn/articles/2020-09-01/1496502.html" target="_blank" class="news-link"><span class="news-title">专访小冰公司CEO李笛：与微软联系依然紧密 AI更大价值在C端</span><span class="tooltip">专访小冰公司CEO李笛：与微软联系依然紧密 AI更大价值在C端</span><span class="news-source">每日经济新闻</span><span class="news-date">2020.09.01</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzUzMzI3Mzk0Mw==&amp;mid=2247485754&amp;idx=1&amp;sn=f8d976b87b1ce2519b8fef2cb960a089&amp;chksm=faa7c502cdd04c149c9b42e2f57b27ef720d979d660b5e821244f48006a58a748ee5d7e765e1&amp;mpshare=1&amp;scene=1&amp;srcid=0831kUd712UTVQQgmSRtwLpf&amp;sharer_sharetime=1598881253781&amp;sharer_shareid=d9d9ced27c144073dbd55a6bb5710ea9&amp;key=519a8bbb8742656f99ee1ccb8b20c387795d0fb3f9c878fadd3c0a38a72a89f106aac878841327b7a9e700b6c61aec8e4b545ea7fd82e2a9dbb834c17f007bf304813e36538246092992541f526a126f59c6bdbdc9f2099435e08ae3a5e059577df229ce729bbad19be2699e72bde34a71126f2185230fcc0c3e1bf26ed7c283&amp;ascene=1&amp;uin=MjQwMjAwMTM0MA%3D%3D&amp;devicetype=Windows+10+x64&amp;version=62090529&amp;lang=en&amp;exportkey=AXlCZIcaOrOIe9xXGywFUXI%3D&amp;pass_ticket=nSOKatDSHpeoF030raghRryB4Mpdvr1UmKEMeMlUJYogZgCg4IHL5SAwq4AxncXn&amp;wx_header=0" target="_blank" class="news-link"><span class="news-title">独家专访小冰公司CEO李笛：“三不”少女小冰成长记</span><span class="tooltip">独家专访小冰公司CEO李笛：“三不”少女小冰成长记</span><span class="news-source">智能进化论</span><span class="news-date">2020.08.31</span></a>
+<a href="https://www.ithome.com/0/506/426.htm" target="_blank" class="news-link"><span class="news-title">小冰揭开「第二幕」，往框架平台上狂奔</span><span class="tooltip">小冰揭开「第二幕」，往框架平台上狂奔</span><span class="news-source">IT之家</span><span class="news-date">2020.08.31</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzUzOTc4NDQxMQ==&amp;mid=2247504251&amp;idx=1&amp;sn=05921bbf0f853ad465c7ae0cc754d541&amp;chksm=fac1b4cfcdb63dd91d5b5d6f0c575612e13563a2749d1d59d0b14c199663415d0cb847a73703&amp;mpshare=1&amp;scene=1&amp;srcid=0830Z6AXOOxNeqGsYTOTa88K&amp;sharer_sharetime=1598760147460&amp;sharer_shareid=d9d9ced27c144073dbd55a6bb5710ea9&amp;key=8c6fdd3cc892e824c44b06f6deeb2b1e2f3beda466c16f69b893f3d7179af0ee018192082b67803c4c870fd52802a78617774fac28e0b5ad1bf661a7e27e018fea55296ac92721ad6c94483217d5ac302bb6d6d0c5e36d984300510d11648be39a73e8e183856f2edea65fa41f2f47c1e9ea6d7638639645c2d2fdbb4a575ee4&amp;ascene=1&amp;uin=MjQwMjAwMTM0MA%3D%3D&amp;devicetype=Windows+10+x64&amp;version=62090529&amp;lang=en&amp;exportkey=AdWSepvlidKXtQzTDUOSuVM%3D&amp;pass_ticket=nSOKatDSHpeoF030raghRryB4Mpdvr1UmKEMeMlUJYogZgCg4IHL5SAwq4AxncXn&amp;wx_header=0" target="_blank" class="news-link"><span class="news-title">“离开”微软，小冰如何成长？</span><span class="tooltip">“离开”微软，小冰如何成长？</span><span class="news-source">深响</span><span class="news-date">2020.08.30</span></a>
+<a href="https://ishare.ifeng.com/c/s/v002--hl6DHbYL1sdAN48tUQYDuHYvOWwJ5o59OM-_baf8U1E__" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：人工智能的价值不是比人强</span><span class="tooltip">专访小冰CEO李笛：人工智能的价值不是比人强</span><span class="news-source">凤凰</span><span class="news-date">2020.08.30</span></a>
+<a href="http://www.21jingji.com/2020/8-28/zMMDEzODFfMTU4NjQzMw.html" target="_blank" class="news-link"><span class="news-title">小冰公司董事长沈向洋：C端将是AI商业化远期的巨大市场</span><span class="tooltip">小冰公司董事长沈向洋：C端将是AI商业化远期的巨大市场</span><span class="news-source">21世纪经济报道</span><span class="news-date">2020.08.28</span></a>
+<a href="http://www.ceweekly.cn/2020/0827/310438.shtml" target="_blank" class="news-link"><span class="news-title">7天118万个“虚拟男友”被定制，虚拟人类数量将超过真实人类？</span><span class="tooltip">7天118万个“虚拟男友”被定制，虚拟人类数量将超过真实人类？</span><span class="news-source">中国经济周刊</span><span class="news-date">2020.08.27</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI0MzQ2OQ==&amp;mid=2651160542&amp;idx=1&amp;sn=887dd3650c90ee41a92e89d034adb8bf&amp;chksm=800611bcb77198aab116179793764f04f1e0337e4f203bb152b32f168dbb576dea1c69844d50&amp;mpshare=1&amp;scene=1&amp;srcid=0825WSUY02gWGEuxqiaW9UN9&amp;sharer_sharetime=1598365689969&amp;sharer_shareid=9bc4f9ea2c44b5e10bc8a04f2ed78559&amp;key=6de4ce43f3b9637994464b8d2081582d7194231a2fe76d6e961689d90469285ccb6eb0ca447e6687fe64a0eaadf9e5e21b8bee2a6ab830778f4f594ab0cc0c5feba74041b86fdc5f9182bf875c9f8477b0e0d2b5766783b694fb81d5f1f5b0b21503810dadb27cecdebecabdcefd7045ca5208c1c105ace07bd90d1730eab944&amp;ascene=1&amp;uin=MjQwMjAwMTM0MA%3D%3D&amp;devicetype=Windows+10+x64&amp;version=62090529&amp;lang=en&amp;exportkey=AXmaoeH9wdlYPi6ElDQtcs4%3D&amp;pass_ticket=nSOKatDSHpeoF030raghRryB4Mpdvr1UmKEMeMlUJYogZgCg4IHL5SAwq4AxncXn&amp;wx_header=0" target="_blank" class="news-link"><span class="news-title">儒家文化圈孕育人工智能新文明</span><span class="tooltip">儒家文化圈孕育人工智能新文明</span><span class="news-source">云科技时代</span><span class="news-date">2020.08.25</span></a>
+<a href="https://share.gmw.cn/news/2020-08/25/content_34117837.htm" target="_blank" class="news-link"><span class="news-title">微软小冰第八代亮相 沈向洋：未来人机交互量或达万亿次</span><span class="tooltip">微软小冰第八代亮相 沈向洋：未来人机交互量或达万亿次</span><span class="news-source">光明网</span><span class="news-date">2020.08.25</span></a>
+<a href="http://www.chinanews.com/cul/2020/08-25/9274034.shtml" target="_blank" class="news-link"><span class="news-title">七夕没男友？虚拟的考虑吗？</span><span class="tooltip">七夕没男友？虚拟的考虑吗？</span><span class="news-source">中国新闻网</span><span class="news-date">2020.08.25</span></a>
+<a href="https://view.inews.qq.com/a/20200825A0RKLN00?openid=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;key=845a0a3cabf407a0edfff8463747360196da0fc2fbc2fffffc9a8a9dee90a79cc4c3578047de67c9c0a107c923f7868f4c6692e0af0cfcc64789459699013db136e7477b73092e13ad4304fbd7759e91dbea1790b1cfab568838d0a20142f3340d129efa2514d185f8477e90f02dc9f95683e4a343fd85c03d1de1188d2dcf17&amp;version=62090529&amp;devicetype=Windows+10+x64&amp;wuid=oDdoCt-hXLmz3QNI9lutpVil7CtM&amp;cv=0x62090529&amp;dt=15&amp;lang=en&amp;pass_ticket=nSOKatDSHpeoF030raghRryB4Mpdvr1UmKEMeMlUJYpSX304ha5uHnWWldojxoiF&amp;sharer=o04IBAGHN5HaPW82CZ1DaIiQAJkk&amp;uid=&amp;shareto=" target="_blank" class="news-link"><span class="news-title">对话沈向洋：小冰公司独立之后可以融资 投入只会越来越多</span><span class="tooltip">对话沈向洋：小冰公司独立之后可以融资 投入只会越来越多</span><span class="news-source">腾讯</span><span class="news-date">2020.08.25</span></a>
+<a href="https://www.jiemian.com/article/4870110.html" target="_blank" class="news-link"><span class="news-title">小冰从微软独立之后，要做“放开双手打、抡得更开”的AI创业公司</span><span class="tooltip">小冰从微软独立之后，要做“放开双手打、抡得更开”的AI创业公司</span><span class="news-source">界面</span><span class="news-date">2020.08.24</span></a>
+<a href="https://mp.weixin.qq.com/s/0BYUoaFNAkh1gtHp1odTSg" target="_blank" class="news-link"><span class="news-title">离开了微软的小冰，变得更丰满了</span><span class="tooltip">离开了微软的小冰，变得更丰满了</span><span class="news-source">品玩</span><span class="news-date">2020.08.24</span></a>
+<a href="http://tech.sina.com.cn/mobile/n/n/2020-08-21/doc-iivhuipn9809711.shtml" target="_blank" class="news-link"><span class="news-title">专访沈向洋：未来人与AI交互将达到万亿级别 主体数目超过人类</span><span class="tooltip">专访沈向洋：未来人与AI交互将达到万亿级别 主体数目超过人类</span><span class="news-source">新浪</span><span class="news-date">2020.08.21</span></a>
+<a href="https://mp.weixin.qq.com/s/hC3hPAnZvjMWbUenk2Y0VQ" target="_blank" class="news-link"><span class="news-title">小冰和她的兄弟姐妹们组团出道：唱歌跳舞写文章样样都会，而且都开放版权</span><span class="tooltip">小冰和她的兄弟姐妹们组团出道：唱歌跳舞写文章样样都会，而且都开放版权</span><span class="news-source">量子位</span><span class="news-date">2020.08.21</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_8825154" target="_blank" class="news-link"><span class="news-title">小冰单飞后首秀：上线能训练兴趣的虚拟男友，发布“X套件”</span><span class="tooltip">小冰单飞后首秀：上线能训练兴趣的虚拟男友，发布“X套件”</span><span class="news-source">澎湃</span><span class="news-date">2020.08.21</span></a>
+<a href="http://www.xinhuanet.com/tech/2020-08/21/c_1126396188.htm" target="_blank" class="news-link"><span class="news-title">第八代微软小冰发布 交互将成就未来巨大变革</span><span class="tooltip">第八代微软小冰发布 交互将成就未来巨大变革</span><span class="news-source">新华网</span><span class="news-date">2020.08.21</span></a>
+<a href="https://www.huxiu.com/article/376981.html" target="_blank" class="news-link"><span class="news-title">送你个虚拟男友，任你摆布的那种</span><span class="tooltip">送你个虚拟男友，任你摆布的那种</span><span class="news-source">虎嗅</span><span class="news-date">2020.08.21</span></a>
+<a href="https://mp.weixin.qq.com/s/Yg77w_632nEWMpD-eC0zzQ" target="_blank" class="news-link"><span class="news-title">18 岁小冰拉开人生第二幕，还把创造能力开放给了所有人类</span><span class="tooltip">18 岁小冰拉开人生第二幕，还把创造能力开放给了所有人类</span><span class="news-source">极客公园</span><span class="news-date">2020.08.20</span></a>
+<a href="http://www.caixin.com/2020-08-20/101595209.html" target="_blank" class="news-link"><span class="news-title">小冰年收入过亿元 独立运营后欲加速商业化 </span><span class="tooltip">小冰年收入过亿元 独立运营后欲加速商业化 </span><span class="news-source">财新</span><span class="news-date">2020.08.20</span></a>
+<a href="https://www.yicai.com/news/100742206.html" target="_blank" class="news-link"><span class="news-title">从卖萌聊天到虚拟男友，单飞的小冰展露商业野心</span><span class="tooltip">从卖萌聊天到虚拟男友，单飞的小冰展露商业野心</span><span class="news-source">第一财经</span><span class="news-date">2020.08.20</span></a>
+<a href="https://app.bjtitle.com/8816/newshow.php?newsid=5713110&amp;mood=wx&amp;typeid=3&amp;ntype=0" target="_blank" class="news-link"><span class="news-title">今天起，你可以拥有人工智能男友 一起写文章、做音乐</span><span class="tooltip">今天起，你可以拥有人工智能男友 一起写文章、做音乐</span><span class="news-source">北京青年报</span><span class="news-date">2020.08.20</span></a>
+<a href="https://ie.bjd.com.cn/5b165687a010550e5ddc0e6a/contentApp/5c27294de4b06597cc7d1999/AP5f3e60d4e4b0473e6ca961b9?isshare=1&amp;app=5e781502e4b0b9cee6c6b466&amp;contentType=0&amp;isBjh=0" target="_blank" class="news-link"><span class="news-title">小冰虚拟人类产品正式上线，可按需定制“灵魂伴侣”</span><span class="tooltip">小冰虚拟人类产品正式上线，可按需定制“灵魂伴侣”</span><span class="news-source">北京日报</span><span class="news-date">2020.08.20</span></a>
+<a href="https://tech.huanqiu.com/article/3zY2CTJL3O2" target="_blank" class="news-link"><span class="news-title">第八代小冰正式发布 沈向洋:未来人工智能助理的数量将超过人类</span><span class="tooltip">第八代小冰正式发布 沈向洋:未来人工智能助理的数量将超过人类</span><span class="news-source">环球网</span><span class="news-date">2020.08.20</span></a>
+<a href="https://app.bjtitle.com/8816/newshow.php?newsid=5708003&amp;mood=wx&amp;typeid=3&amp;ntype=0" target="_blank" class="news-link"><span class="news-title">人工智能如何学音乐？AI少女“小冰”上学记</span><span class="tooltip">人工智能如何学音乐？AI少女“小冰”上学记</span><span class="news-source">北京青年报</span><span class="news-date">2020.08.14</span></a>
+<a href="http://www.xinhuanet.com/tech/2020-08/10/c_1126346600.htm" target="_blank" class="news-link"><span class="news-title">AI将成为人类作曲家的好帮手</span><span class="tooltip">AI将成为人类作曲家的好帮手</span><span class="news-source">南方日报</span><span class="news-date">2020.08.10</span></a>
+<a href="https://smart.huanqiu.com/article/3zJtERwbogP" target="_blank" class="news-link"><span class="news-title">AI明星小冰发力音乐创作 沈向洋：将帮助更多人克服创造的恐惧感</span><span class="tooltip">AI明星小冰发力音乐创作 沈向洋：将帮助更多人克服创造的恐惧感</span><span class="news-source">环球网</span><span class="news-date">2020.08.03</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_8424434" target="_blank" class="news-link"><span class="news-title">对话沈向洋：未来人工智能最大的机会是什么</span><span class="tooltip">对话沈向洋：未来人工智能最大的机会是什么</span><span class="news-source">澎湃</span><span class="news-date">2020.07.25</span></a>
+<a href="http://zqb.cyol.com/html/2020-07/14/nw.D110000zgqnb_20200714_1-09.htm" target="_blank" class="news-link"><span class="news-title">小冰只花两分钟写一首歌</span><span class="tooltip">小冰只花两分钟写一首歌</span><span class="news-source">中国青年报</span><span class="news-date">2020.07.14</span></a>
+<a href="https://tech.163.com/20/0713/10/FHDL8KDH000999D8.html" target="_blank" class="news-link"><span class="news-title">沈向洋&quot;回归&quot;，从微软&quot;独立&quot;的小冰要弯道超车了</span><span class="tooltip">沈向洋&quot;回归&quot;，从微软&quot;独立&quot;的小冰要弯道超车了</span><span class="news-source">网易</span><span class="news-date">2020.07.13</span></a>
+<a href="https://www.huxiu.com/article/368482.html" target="_blank" class="news-link"><span class="news-title">微软小冰独立，沈向洋任董事长</span><span class="tooltip">微软小冰独立，沈向洋任董事长</span><span class="news-source">虎嗅</span><span class="news-date">2020.07.13</span></a>
+<a href="https://www.leiphone.com/news/202007/RNTRCLQ6Ubqkooy1.html" target="_blank" class="news-link"><span class="news-title">微软小冰分拆了！沈向洋任董事长，&quot;小冰之父&quot; 任 CEO，要在中国本土商业化</span><span class="tooltip">微软小冰分拆了！沈向洋任董事长，&quot;小冰之父&quot; 任 CEO，要在中国本土商业化</span><span class="news-source">雷锋网</span><span class="news-date">2020.07.13</span></a>
+<a href="http://www.chinanews.com/cul/2020/07-12/9236240.shtml" target="_blank" class="news-link"><span class="news-title">科班毕业，两分钟写首歌……AI来了，人类还能做什么？</span><span class="tooltip">科班毕业，两分钟写首歌……AI来了，人类还能做什么？</span><span class="news-source">中国新闻网</span><span class="news-date">2020.07.12</span></a>
+<a href="http://www.nbd.com.cn/articles/2020-07-09/1455827.html" target="_blank" class="news-link"><span class="news-title">“AI女团”合唱背后故事：作曲微软小冰可在两分钟之内创作完整歌曲</span><span class="tooltip">“AI女团”合唱背后故事：作曲微软小冰可在两分钟之内创作完整歌曲</span><span class="news-source">每日经济新闻</span><span class="news-date">2020.07.09</span></a>
+<a href="https://www.shobserver.com/staticsg/res/html/web/newsDetail.html?id=267383" target="_blank" class="news-link"><span class="news-title">高情商“AI少女”微软小冰，会替你作诗、为你绘画，还是唱作音乐人</span><span class="tooltip">高情商“AI少女”微软小冰，会替你作诗、为你绘画，还是唱作音乐人</span><span class="news-source">上观新闻</span><span class="news-date">2020.07.09</span></a>
+<a href="https://www.yicai.com/news/100693031.html" target="_blank" class="news-link"><span class="news-title">虚拟偶像“成团”，人类携手AI共同“撑腰”</span><span class="tooltip">虚拟偶像“成团”，人类携手AI共同“撑腰”</span><span class="news-source">第一财经</span><span class="news-date">2020.07.09</span></a>
+<a href="https://www.yicai.com/news/100688278.html" target="_blank" class="news-link"><span class="news-title">世界人工智能大会魔力开启：创作峰会主题曲，“AI少女”乘风破浪</span><span class="tooltip">世界人工智能大会魔力开启：创作峰会主题曲，“AI少女”乘风破浪</span><span class="news-source">第一财经</span><span class="news-date">2020.07.05</span></a>
+<a href="http://newsxmwb.xinmin.cn/wentihui/wtsh/2020/07/02/31758019.html" target="_blank" class="news-link"><span class="news-title">厉害了！上音首位“非人类”毕业生，去年刚从央美毕业，还出版过诗集</span><span class="tooltip">厉害了！上音首位“非人类”毕业生，去年刚从央美毕业，还出版过诗集</span><span class="news-source">新民晚报</span><span class="news-date">2020.07.02</span></a>
+<a href="https://www.shobserver.com/staticsg/res/html/web/newsDetail.html?id=264509" target="_blank" class="news-link"><span class="news-title">微软“小冰”从上海音乐学院毕业，两分钟写首歌，AI会抢走作曲家饭碗吗？</span><span class="tooltip">微软“小冰”从上海音乐学院毕业，两分钟写首歌，AI会抢走作曲家饭碗吗？</span><span class="news-source">上观新闻</span><span class="news-date">2020.07.01</span></a>
+<a href="https://epaper.gmw.cn/gmrb/html/2020-05/13/nw.D110000gmrb_20200513_1-14.htm?from=groupmessage&amp;isappinstalled=0" target="_blank" class="news-link"><span class="news-title">人工智能可以是文艺创新的助推器</span><span class="tooltip">人工智能可以是文艺创新的助推器</span><span class="news-source">光明日报</span><span class="news-date">2020.05.13</span></a>
+<a href="https://www.tmtpost.com/4263944.html" target="_blank" class="news-link"><span class="news-title">“复活”马丁·路德·金，数字人时代已经被点亮 | 钛媒体深度</span><span class="tooltip">“复活”马丁·路德·金，数字人时代已经被点亮 | 钛媒体深度</span><span class="news-source">钛媒体</span><span class="news-date">2020.03.25</span></a>
+<a href="http://digitalpaper.stdaily.com/http_www.kjrb.com/kjrb/html/2020-02/27/content_440472.htm?div=-1" target="_blank" class="news-link"><span class="news-title">从“平等对话”到“主导对话” AI陪伴型机器人进化了</span><span class="tooltip">从“平等对话”到“主导对话” AI陪伴型机器人进化了</span><span class="news-source">科技日报</span><span class="news-date">2020.02.27</span></a>
+<a href="http://news.cyol.com/app/2020-01/21/content_18334959.htm" target="_blank" class="news-link"><span class="news-title">我的女友真能是机器人？</span><span class="tooltip">我的女友真能是机器人？</span><span class="news-source">中国青年报</span><span class="news-date">2020.01.21</span></a>
+<a href="https://www.leiphone.com/news/202001/kqdtZPYl9oGljAwM.html" target="_blank" class="news-link"><span class="news-title">微软小冰新年“造人”，先造999个虚拟女友</span><span class="tooltip">微软小冰新年“造人”，先造999个虚拟女友</span><span class="news-source">雷锋网</span><span class="news-date">2020.01.17</span></a>
+<a href="http://epaper.ynet.com/html/2020-01/08/content_346561.htm?div=0" target="_blank" class="news-link"><span class="news-title">实体书店新员工 微软“小冰”智能荐书</span><span class="tooltip">实体书店新员工 微软“小冰”智能荐书</span><span class="news-source">北京青年报</span><span class="news-date">2020.01.05</span></a>
+<a href="https://news.mydrivers.com/1/665/665489.htm" target="_blank" class="news-link"><span class="news-title">从聊天机器人到行业巨擘：揭秘微软第一美少女的成长之路</span><span class="tooltip">从聊天机器人到行业巨擘：揭秘微软第一美少女的成长之路</span><span class="news-source">快科技</span><span class="news-date">2020.01.03</span></a>
+<a href="https://enapp.chinadaily.com.cn/a/202012/10/AP5fd17d4ca310b0a661bf7352.html" target="_blank" class="news-link"><span class="news-title">Adult&#x27; Xiaoice, MS to flex AI muscles</span><span class="tooltip">Adult&#x27; Xiaoice, MS to flex AI muscles</span><span class="news-source">China Daily</span><span class="news-date">2020.12.10</span></a>
+<a href="https://kr-asia.com/tracing-an-independent-future-for-xiaoice-chinas-most-popular-chatbot" target="_blank" class="news-link"><span class="news-title">Tracing an independent future for Xiaoice, China&#x27;s most popular chatbot</span><span class="tooltip">Tracing an independent future for Xiaoice, China&#x27;s most popular chatbot</span><span class="news-source">KrASIA</span><span class="news-date">2020.09.11</span></a>
+<a href="https://www.shine.cn/feature/entertainment/2009045451/" target="_blank" class="news-link"><span class="news-title">Meet a music composer who doesn&#x27;t need breaks</span><span class="tooltip">Meet a music composer who doesn&#x27;t need breaks</span><span class="news-source">Shine</span><span class="news-date">2020.09.04</span></a>
+<a href="https://en.pingwest.com/a/7555" target="_blank" class="news-link"><span class="news-title">Microsoft&#x27;s Chinese Spin-off Wants Everyone to Have a Virtual Companion Like Samantha in &#x27;Her&#x27;</span><span class="tooltip">Microsoft&#x27;s Chinese Spin-off Wants Everyone to Have a Virtual Companion Like Samantha in &#x27;Her&#x27;</span><span class="news-source">PINGWEST</span><span class="news-date">2020.08.21</span></a>
+<a href="https://www.chinadaily.com.cn/a/202008/21/WS5f3f260aa310834817261c9e.html" target="_blank" class="news-link"><span class="news-title">Chatbot Xiaoice wants to be face of future human-machine interactions</span><span class="tooltip">Chatbot Xiaoice wants to be face of future human-machine interactions</span><span class="news-source">China Daily</span><span class="news-date">2020.08.21</span></a>
+</div>
+<span class="view-more">查看更多（62条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2019</h2>
+<a href="https://www.huxiu.com/article/327785.html" target="_blank" class="news-link"><span class="news-title">微软小冰负责人李笛：人工智能的第三种可能</span><span class="tooltip">微软小冰负责人李笛：人工智能的第三种可能</span><span class="news-source">虎嗅</span><span class="news-date">2019.11.23</span></a>
+<a href="https://www.infoq.cn/article/y2futyx2csekwmqgrbue" target="_blank" class="news-link"><span class="news-title">“万人迷”AI 少女养成记</span><span class="tooltip">“万人迷”AI 少女养成记</span><span class="news-source">InfoQ</span><span class="news-date">2019.11.14</span></a>
+<a href="https://mp.weixin.qq.com/s/4HaKxMM_OYkT7224btgOHw" target="_blank" class="news-link"><span class="news-title">另类小冰的AI之路</span><span class="tooltip">另类小冰的AI之路</span><span class="news-source">懂懂笔记</span><span class="news-date">2019.09.27</span></a>
+<a href="http://culture.people.com.cn/n1/2019/0917/c1013-31356158.html" target="_blank" class="news-link"><span class="news-title">人工智能：新创作主体带来新艺术可能</span><span class="tooltip">人工智能：新创作主体带来新艺术可能</span><span class="news-source">人民日报</span><span class="news-date">2019.09.17</span></a>
+<a href="http://www.nbd.com.cn/articles/2019-09-17/1372430.html" target="_blank" class="news-link"><span class="news-title">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span><span class="tooltip">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span><span class="news-source">每日经济新闻</span><span class="news-date">2019.09.17</span></a>
+<a href="http://paper.people.com.cn/rmrbhwb/html/2019-09/10/content_1945703.htm" target="_blank" class="news-link"><span class="news-title">当人工智能也“拿起笔”</span><span class="tooltip">当人工智能也“拿起笔”</span><span class="news-source">人民日报海外版</span><span class="news-date">2019.09.10</span></a>
+<a href="https://mp.weixin.qq.com/s/Z7G8CdBvZXXl3XISk5ktFA" target="_blank" class="news-link"><span class="news-title">详解微软小冰商业化的根基与路径</span><span class="tooltip">详解微软小冰商业化的根基与路径</span><span class="news-source">深响</span><span class="news-date">2019.09.03</span></a>
+<a href="https://www.tmtpost.com/4126201.html" target="_blank" class="news-link"><span class="news-title">除了唱歌跳舞写诗画画，微软小冰还有ToB故事可讲</span><span class="tooltip">除了唱歌跳舞写诗画画，微软小冰还有ToB故事可讲</span><span class="news-source">钛媒体</span><span class="news-date">2019.08.31</span></a>
+<a href="https://36kr.com/p/1724239740929" target="_blank" class="news-link"><span class="news-title">把机器人的共情当卖点，“微软小冰”打算挣到更多钱</span><span class="tooltip">把机器人的共情当卖点，“微软小冰”打算挣到更多钱</span><span class="news-source">36氪</span><span class="news-date">2019.08.26</span></a>
+<a href="https://www.pingwest.com/a/193003" target="_blank" class="news-link"><span class="news-title">微软小冰，走向专属人工智能</span><span class="tooltip">微软小冰，走向专属人工智能</span><span class="news-source">品玩</span><span class="news-date">2019.08.26</span></a>
+<div class="extra-content">
+<a href="https://www.yicai.com/news/100303293.html" target="_blank" class="news-link"><span class="news-title">微软AI野心曝光：从卖萌聊天的小冰到AI工具包</span><span class="tooltip">微软AI野心曝光：从卖萌聊天的小冰到AI工具包</span><span class="news-source">第一财经</span><span class="news-date">2019.08.21</span></a>
+<a href="https://m.21jingji.com/article/20190819/herald/fa539a3688d43166f4eacaeca9007c54.html" target="_blank" class="news-link"><span class="news-title">AI造人！定制一个自己的微软小冰：有悲喜、有三观、有性格、知好歹……</span><span class="tooltip">AI造人！定制一个自己的微软小冰：有悲喜、有三观、有性格、知好歹……</span><span class="news-source">21世纪经济报道</span><span class="news-date">2019.08.19</span></a>
+<a href="https://mp.weixin.qq.com/s/8l-MkmoeEqtK75P6CrpKBA" target="_blank" class="news-link"><span class="news-title">DIY自己的AI助理，萝莉御姐暖男霸道总裁全凭你定义，微软小冰团队发布新框架</span><span class="tooltip">DIY自己的AI助理，萝莉御姐暖男霸道总裁全凭你定义，微软小冰团队发布新框架</span><span class="news-source">量子位</span><span class="news-date">2019.08.16</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_4172588" target="_blank" class="news-link"><span class="news-title">第七代微软小冰新技能：能够主导对话，可定制不同人设AI</span><span class="tooltip">第七代微软小冰新技能：能够主导对话，可定制不同人设AI</span><span class="news-source">澎湃</span><span class="news-date">2019.08.15</span></a>
+<a href="https://www.huxiu.com/article/313909.html" target="_blank" class="news-link"><span class="news-title">微软小冰越来越像个人了</span><span class="tooltip">微软小冰越来越像个人了</span><span class="news-source">虎嗅</span><span class="news-date">2019.08.19</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODU0MTA0MA==&amp;mid=2652734254&amp;idx=2&amp;sn=59f96870e4bc86b5f5cc1affc1d1c444&amp;chksm=bd2000b18a5789a77374c8dfe9fb9380f85de1c2327fa005f9023541d9e65c2a67a2e5b9d49e&amp;mpshare=1&amp;scene=1&amp;srcid=&amp;sharer_sharetime=1565752575126&amp;sharer_shareid=d9d9ced27c144073dbd55a6bb5710ea9&amp;key=238d20ba20b8cfb53870364fc7da3f90950d074993b11d6d5f28f9a117c4bc7bf5a978b12c59245420bc6a71b6810c327f43535fe0167c5d2f815cbd0e5403f652db187773c5c63e6775445e4940f081&amp;ascene=1&amp;uin=MjQwMjAwMTM0MA%3D%3D&amp;devicetype=Windows+10&amp;version=62060833&amp;lang=en&amp;pass_ticket=cCdwt6nkYEQGMFWXHgQanRm2i%2FpUBbhVysUNsyUGO2gevUv9F3l1d5LTkimlKJYf" target="_blank" class="news-link"><span class="news-title">一天的对话量相当于14个人一辈子说的话？他如何教小冰成为话痨的 </span><span class="tooltip">一天的对话量相当于14个人一辈子说的话？他如何教小冰成为话痨的 </span><span class="news-source">快公司</span><span class="news-date">2019.08.06</span></a>
+<a href="http://www.inewsweek.cn/life/2019-07-24/6471.shtml" target="_blank" class="news-link"><span class="news-title">用AI创作的肖像画卖了43万美元，小冰中央美院开个展</span><span class="tooltip">用AI创作的肖像画卖了43万美元，小冰中央美院开个展</span><span class="news-source">中国新闻周刊</span><span class="news-date">2019.07.24</span></a>
+<a href="http://qnsx.cyol.com/html/2019-07/19/nw.D110000qnsx_20190719_1-14.htm" target="_blank" class="news-link"><span class="news-title">人工智能办画展，你们人类颤抖了吗</span><span class="tooltip">人工智能办画展，你们人类颤抖了吗</span><span class="news-source">中国青年报</span><span class="news-date">2019.07.19</span></a>
+<a href="https://static.nfapp.southcn.com/content/201907/16/c2424892.html?colID=0&amp;code=200&amp;msg=%E7%99%BB%E5%BD%95%E6%88%90%E5%8A%9F&amp;evidence=9711368d-5930-4f3c-af47-c86a2ee14b81&amp;firstColID=11127&amp;appversion=5600&amp;date=bnVsbA%3D%3D" target="_blank" class="news-link"><span class="news-title">国内首例！人工智能“小冰”办画展，画家地位受到挑战？</span><span class="tooltip">国内首例！人工智能“小冰”办画展，画家地位受到挑战？</span><span class="news-source">南方日报</span><span class="news-date">2019.07.16</span></a>
+<a href="https://mp.weixin.qq.com/s/d7jmRdLf14Z9WmaZOnfYCQ" target="_blank" class="news-link"><span class="news-title">小冰竟然变身6位美女艺术家，玩转400年绘画史</span><span class="tooltip">小冰竟然变身6位美女艺术家，玩转400年绘画史</span><span class="news-source">凤凰艺术</span><span class="news-date">2019.07.16</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_3912204" target="_blank" class="news-link"><span class="news-title">微软AI小冰在中央美术学院举办首个画展：名叫《或然世界》</span><span class="tooltip">微软AI小冰在中央美术学院举办首个画展：名叫《或然世界》</span><span class="news-source">澎湃</span><span class="news-date">2019.07.13</span></a>
+<a href="https://www.leiphone.com/news/201906/Cm3NXkAM16ZqC9rq.html?viewType=weixin" target="_blank" class="news-link"><span class="news-title">微软李笛：为什么说画家小冰是最艰难的一次养成？</span><span class="tooltip">微软李笛：为什么说画家小冰是最艰难的一次养成？</span><span class="news-source">雷锋网</span><span class="news-date">2019.06.24</span></a>
+<a href="https://news.gmw.cn/2019-06/12/content_32911321.htm" target="_blank" class="news-link"><span class="news-title">人工智能会取代人类的艺术创造力吗</span><span class="tooltip">人工智能会取代人类的艺术创造力吗</span><span class="news-source">光明网</span><span class="news-date">2019.06.12</span></a>
+<a href="https://mp.weixin.qq.com/s/GW2VVrMCLbFreN2DNqLDTw" target="_blank" class="news-link"><span class="news-title">面对这幅人工智能的画作，有人感动的想哭</span><span class="tooltip">面对这幅人工智能的画作，有人感动的想哭</span><span class="news-source">北京青年报</span><span class="news-date">2019.06.01</span></a>
+<a href="https://www.pingwest.com/a/188025" target="_blank" class="news-link"><span class="news-title">学画画 22 个月，微软小冰从央美研究生毕业了</span><span class="tooltip">学画画 22 个月，微软小冰从央美研究生毕业了</span><span class="news-source">品玩</span><span class="news-date">2019.05.20</span></a>
+<a href="https://mp.weixin.qq.com/s/NtgffR87ulw78Pn65vkDEw" target="_blank" class="news-link"><span class="news-title">微软小冰学会画画了，堪称复活近代画家，还能命题作画</span><span class="tooltip">微软小冰学会画画了，堪称复活近代画家，还能命题作画</span><span class="news-source">量子位</span><span class="news-date">2019.05.17</span></a>
+<a href="https://www.jiemian.com/article/3135589.html" target="_blank" class="news-link"><span class="news-title">微软小冰有了“美术毕业生”的新身份，下一个要替代的会是设计师吗？</span><span class="tooltip">微软小冰有了“美术毕业生”的新身份，下一个要替代的会是设计师吗？</span><span class="news-source">界面</span><span class="news-date">2019.05.17</span></a>
+<a href="https://www.ifanr.com/app/1181524" target="_blank" class="news-link"><span class="news-title">单身不用慌！女友力 MAX 的微软小冰，让你拥有恋爱的感觉</span><span class="tooltip">单身不用慌！女友力 MAX 的微软小冰，让你拥有恋爱的感觉</span><span class="news-source">爱范儿</span><span class="news-date">2019.05.17</span></a>
+<a href="http://www.it-times.com.cn/a/it/2019/0202/26036.html" target="_blank" class="news-link"><span class="news-title">2019，小冰要变身</span><span class="tooltip">2019，小冰要变身</span><span class="news-source">IT时报</span><span class="news-date">2019.02.02</span></a>
+<a href="http://www.nbd.com.cn/articles/2019-01-20/1293038.html" target="_blank" class="news-link"><span class="news-title">微软AI“复活”《全职高手》五大主角，你愿意和谁做朋友？</span><span class="tooltip">微软AI“复活”《全职高手》五大主角，你愿意和谁做朋友？</span><span class="news-source">每日经济新闻</span><span class="news-date">2019.01.20</span></a>
+<a href="https://www.pingwest.com/a/182599" target="_blank" class="news-link"><span class="news-title">微软小冰让小说人物“复活”，你可以 24 小时撩他</span><span class="tooltip">微软小冰让小说人物“复活”，你可以 24 小时撩他</span><span class="news-source">品玩</span><span class="news-date">2019.01.19</span></a>
+<a href="https://www.chinadaily.com.cn/a/201908/22/WS5d5e6ebca310cf3e355675b3.html" target="_blank" class="news-link"><span class="news-title">Microsoft opens AI framework to other firms</span><span class="tooltip">Microsoft opens AI framework to other firms</span><span class="news-source">China Daily</span><span class="news-date">2019.08.22</span></a>
+<a href="http://www.ecns.cn/news/2019-07-26/detail-ifzmnmiq8700134.shtml" target="_blank" class="news-link"><span class="news-title">Tech is taking the art world by storm</span><span class="tooltip">Tech is taking the art world by storm</span><span class="news-source">China Daily</span><span class="news-date">2019.07.26</span></a>
+<a href="https://singularityhub.com/2019/07/14/this-chatbot-has-over-660-million-users-and-it-wants-to-be-their-best-friend/" target="_blank" class="news-link"><span class="news-title">This Chatbot has Over 660 Million Users - and It Wants to Be Their Best Friend</span><span class="tooltip">This Chatbot has Over 660 Million Users - and It Wants to Be Their Best Friend</span><span class="news-source">Singularityhub</span><span class="news-date">2019.07.14</span></a>
+</div>
+<span class="view-more">查看更多（24条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2018</h2>
+<a href="https://mp.weixin.qq.com/s?__biz=Mzg5MTU1MjE3Mg==&amp;mid=2247512618&amp;idx=1&amp;sn=7a9ca4ba09939f354387972f23fe4bd5&amp;source=41#wechat_redirect" target="_blank" class="news-link"><span class="news-title">人工智能少女的四年蛰伏 </span><span class="tooltip">人工智能少女的四年蛰伏 </span><span class="news-source">锌财经</span><span class="news-date">2018.08.22</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_2311875" target="_blank" class="news-link"><span class="news-title">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span><span class="tooltip">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span><span class="news-source">澎湃</span><span class="news-date">2018.08.04</span></a>
+<a href="https://awtmt.com/articles/3379983?from=wscn" target="_blank" class="news-link"><span class="news-title">唱歌、主持、讲故事、写稿so easy ，微软小冰会替代你的职业吗？</span><span class="tooltip">唱歌、主持、讲故事、写稿so easy ，微软小冰会替代你的职业吗？</span><span class="news-source">华尔街见闻</span><span class="news-date">2018.08.04</span></a>
+<a href="http://www.it-times.com.cn/a/company/2018/0802/22243.html" target="_blank" class="news-link"><span class="news-title">小冰升级背后的秘密：做有“情商”的交互机器人</span><span class="tooltip">小冰升级背后的秘密：做有“情商”的交互机器人</span><span class="news-source">IT时报</span><span class="news-date">2018.08.02</span></a>
+<a href="http://www.qdaily.com/articles/55731.html" target="_blank" class="news-link"><span class="news-title">第六代微软小冰发布 全面升级走向半开放生态</span><span class="tooltip">第六代微软小冰发布 全面升级走向半开放生态</span><span class="news-source">好奇心日报</span><span class="news-date">2018.07.30</span></a>
+<a href="https://www.yicai.com/news/100003513.html" target="_blank" class="news-link"><span class="news-title">拒绝尬聊！“多栖明星”小冰成全球最霸气对话AI</span><span class="tooltip">拒绝尬聊！“多栖明星”小冰成全球最霸气对话AI</span><span class="news-source">第一财经</span><span class="news-date">2018.07.29</span></a>
+<a href="http://www.21cbr.com/article/79292.html" target="_blank" class="news-link"><span class="news-title">18岁微软小冰初长成，离AI女友不远了？ </span><span class="tooltip">18岁微软小冰初长成，离AI女友不远了？ </span><span class="news-source">21世纪商业评论</span><span class="news-date">2018.07.27</span></a>
+<a href="https://tech.sina.cn/digi/nb/2018-07-27/detail-ihfvkitx4272528.d.html" target="_blank" class="news-link"><span class="news-title">微软正式发布第六代小冰 商业化的四个方向</span><span class="tooltip">微软正式发布第六代小冰 商业化的四个方向</span><span class="news-source">新浪</span><span class="news-date">2018.07.27</span></a>
+<a href="https://tech.163.com/18/0727/11/DNNHM8RE00098IEO.html" target="_blank" class="news-link"><span class="news-title">做平台玩手机创造内容，微软小冰的花式包抄</span><span class="tooltip">做平台玩手机创造内容，微软小冰的花式包抄</span><span class="news-source">网易</span><span class="news-date">2018.07.27</span></a>
+<a href="https://www.pingwest.com/a/175250" target="_blank" class="news-link"><span class="news-title">微软第六代小冰发布 可交互3D形象亮相 核心对话引擎和交互感官再升级</span><span class="tooltip">微软第六代小冰发布 可交互3D形象亮相 核心对话引擎和交互感官再升级</span><span class="news-source">品玩</span><span class="news-date">2018.07.27</span></a>
+<div class="extra-content">
+<a href="http://www.geekpark.net/news/231438" target="_blank" class="news-link"><span class="news-title">第六代微软小冰少女初长成，捞金能力大提升</span><span class="tooltip">第六代微软小冰少女初长成，捞金能力大提升</span><span class="news-source">极客公园</span><span class="news-date">2018.07.27</span></a>
+<a href="http://companies.caixin.com/2018-07-27/101309295.html" target="_blank" class="news-link"><span class="news-title">史上最大规模全面升级 微软小冰第六代在华发布</span><span class="tooltip">史上最大规模全面升级 微软小冰第六代在华发布</span><span class="news-source">财新网</span><span class="news-date">2018.07.27</span></a>
+<a href="http://www.21cbr.com/article/79292.html" target="_blank" class="news-link"><span class="news-title">18岁微软小冰初长成，离AI女友不远了？</span><span class="tooltip">18岁微软小冰初长成，离AI女友不远了？</span><span class="news-source">21世纪商业评论</span><span class="news-date">2018.07.27</span></a>
+<a href="https://www.leiphone.com/news/201807/rgyKfVsEUdK1BpXf.html" target="_blank" class="news-link"><span class="news-title">第六代微软小冰少女初长成，捞金能力大提升</span><span class="tooltip">第六代微软小冰少女初长成，捞金能力大提升</span><span class="news-source">雷锋网</span><span class="news-date">2018.07.26</span></a>
+<a href="https://www.ifanr.com/1075227" target="_blank" class="news-link"><span class="news-title">微软有女初长成，小冰说自己永远 18 岁</span><span class="tooltip">微软有女初长成，小冰说自己永远 18 岁</span><span class="news-source">爱范儿</span><span class="news-date">2018.07.26</span></a>
+<a href="https://www.leiphone.com/news/201806/a33EDiSRoCAAgl9R.html" target="_blank" class="news-link"><span class="news-title">少女歌手小冰养成记：会作词作曲演唱的人工智能的诞生</span><span class="tooltip">少女歌手小冰养成记：会作词作曲演唱的人工智能的诞生</span><span class="news-source">雷锋网</span><span class="news-date">2018.06.05</span></a>
+<a href="https://www.ifanr.com/1031684" target="_blank" class="news-link"><span class="news-title">微软小冰为知乎写了首歌《我知我新》，这届盐 club 主题曲很少女</span><span class="tooltip">微软小冰为知乎写了首歌《我知我新》，这届盐 club 主题曲很少女</span><span class="news-source">爱范儿</span><span class="news-date">2018.05.16</span></a>
+<a href="https://www.leiphone.com/news/201803/V8gT3NR61Un3WCpx.html" target="_blank" class="news-link"><span class="news-title">微软发大招：要做智商和情商兼具的语音助手</span><span class="tooltip">微软发大招：要做智商和情商兼具的语音助手</span><span class="news-source">雷锋网</span><span class="news-date">2018.03.31</span></a>
+<a href="https://news.microsoft.com/apac/features/much-more-than-a-chatbot-chinas-xiaoice-mixes-ai-with-emotions-and-wins-over-millions-of-fans/" target="_blank" class="news-link"><span class="news-title">Much more than a chatbot: China’s Xiaoice mixes AI with emotions and wins over millions of fans</span><span class="tooltip">Much more than a chatbot: China’s Xiaoice mixes AI with emotions and wins over millions of fans</span><span class="news-source">Microsoft news center</span><span class="news-date">2018.11.01</span></a>
+<a href="https://venturebeat.com/2018/05/22/microsoft-demoes-its-xiaoice-assistant-talking-to-humans-on-the-phone/" target="_blank" class="news-link"><span class="news-title">Microsoft demos its Xiaoice assistant talking to humans on the phone</span><span class="tooltip">Microsoft demos its Xiaoice assistant talking to humans on the phone</span><span class="news-source">Venturebeat</span><span class="news-date">2018.05.22</span></a>
+</div>
+<span class="view-more">查看更多（10条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2017</h2>
+<a href="http://www.eeo.com.cn/2017/1228/319914.shtml" target="_blank" class="news-link"><span class="news-title">李笛：人工智能首先要有人的一面</span><span class="tooltip">李笛：人工智能首先要有人的一面</span><span class="news-source">经济观察报</span><span class="news-date">2017.12.28</span></a>
+<a href="https://www.leiphone.com/news/201711/qdL6CAm11hUYy3Rc.html" target="_blank" class="news-link"><span class="news-title">怀着大梦想的小冰，不只是逗贫</span><span class="tooltip">怀着大梦想的小冰，不只是逗贫</span><span class="news-source">雷锋网</span><span class="news-date">2017.11.08</span></a>
+<a href="https://www.leiphone.com/news/201709/swl16Bp3cqIcHLdV.html" target="_blank" class="news-link"><span class="news-title">小冰的忍者团队，她在日本开启了怎样一种商业模式？</span><span class="tooltip">小冰的忍者团队，她在日本开启了怎样一种商业模式？</span><span class="news-source">雷锋网</span><span class="news-date">2017.10.01</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652710610&amp;idx=1&amp;sn=5af8521b8a642405d1aed55d6d15fd10&amp;chksm=847db1dcb30a38ca3feea5e5cd3464eb44ea21c3a398e995db539fc603864d27ca4540daef4a&amp;mpshare=1&amp;scene=1&amp;srcid=0922azUtL3wOjWgy2VZ0pTjg&amp;key=9d4ce337ad01" target="_blank" class="news-link"><span class="news-title">解密微软的中国女儿：三岁开始“说人话”，好可爱！</span><span class="tooltip">解密微软的中国女儿：三岁开始“说人话”，好可爱！</span><span class="news-source">智东西</span><span class="news-date">2017.09.22</span></a>
+<a href="http://www.geekpark.net/news/222378" target="_blank" class="news-link"><span class="news-title">AI 就应该对人类言听计从吗？专访微软小冰负责人</span><span class="tooltip">AI 就应该对人类言听计从吗？专访微软小冰负责人</span><span class="news-source">极客公园</span><span class="news-date">2017.09.19</span></a>
+<a href="http://epaper.oeeee.com/epaper/G/html/2017-09/18/content_71773.htm" target="_blank" class="news-link"><span class="news-title">启动“生成模型”小冰学会“口是心非”</span><span class="tooltip">启动“生成模型”小冰学会“口是心非”</span><span class="news-source">南方都市报</span><span class="news-date">2017.09.18</span></a>
+<a href="http://www.eeo.com.cn/2017/0909/312562.shtml" target="_blank" class="news-link"><span class="news-title">沈向洋：我们是第一代与人工智能共同生存的人类</span><span class="tooltip">沈向洋：我们是第一代与人工智能共同生存的人类</span><span class="news-source">经济观察报</span><span class="news-date">2017.09.09</span></a>
+<a href="https://36kr.com/p/1721787891713" target="_blank" class="news-link"><span class="news-title">五代小冰可能主动打电话“怼”你，但毒舌体质却成就了转化率最高的AI助手？</span><span class="tooltip">五代小冰可能主动打电话“怼”你，但毒舌体质却成就了转化率最高的AI助手？</span><span class="news-source">36氪</span><span class="news-date">2017.08.24</span></a>
+<a href="https://www.jiemian.com/article/1575481.html" target="_blank" class="news-link"><span class="news-title">微软小冰学会了“怼人” 人工智能加速进化</span><span class="tooltip">微软小冰学会了“怼人” 人工智能加速进化</span><span class="news-source">界面</span><span class="news-date">2017.08.24</span></a>
+<a href="https://mp.weixin.qq.com/s/4KnCRuPKspkZ8bUX7fR3AA" target="_blank" class="news-link"><span class="news-title">解密1亿用户养大的机器人少女</span><span class="tooltip">解密1亿用户养大的机器人少女</span><span class="news-source">财经天下周刊</span><span class="news-date">2017.08.23</span></a>
+<div class="extra-content">
+<a href="https://www.leiphone.com/news/201708/GxdE6bEZLhavRBet.html" target="_blank" class="news-link"><span class="news-title">更迭 5 代，进入19岁，微软要让小冰赚钱养家了</span><span class="tooltip">更迭 5 代，进入19岁，微软要让小冰赚钱养家了</span><span class="news-source">雷锋网</span><span class="news-date">2017.08.23</span></a>
+<a href="https://mp.weixin.qq.com/s/UQwS0TlsIzFDWHrDqSa9YA" target="_blank" class="news-link"><span class="news-title">第五代小冰发布：是时候与人类谈谈未来了</span><span class="tooltip">第五代小冰发布：是时候与人类谈谈未来了</span><span class="news-source">量子位</span><span class="news-date">2017.08.23</span></a>
+<a href="http://www.21jingji.com/2017/8-23/xNMDEzODFfMTQxNTgxNg.html" target="_blank" class="news-link"><span class="news-title">第五代微软小冰EQ升级 试图“读懂”用户</span><span class="tooltip">第五代微软小冰EQ升级 试图“读懂”用户</span><span class="news-source">21世纪经济报道</span><span class="news-date">2017.08.23</span></a>
+<a href="https://tech.qq.com/a/20170822/036552.htm" target="_blank" class="news-link"><span class="news-title">微软发布第五代小冰 可以主动给人类打电话</span><span class="tooltip">微软发布第五代小冰 可以主动给人类打电话</span><span class="news-source">腾讯</span><span class="news-date">2017.08.22</span></a>
+<a href="https://www.ifanr.com/896647" target="_blank" class="news-link"><span class="news-title">第五代微软小冰发布，那个会写诗的少女成熟了</span><span class="tooltip">第五代微软小冰发布，那个会写诗的少女成熟了</span><span class="news-source">爱范儿</span><span class="news-date">2017.08.22</span></a>
+<a href="http://zqb.cyol.com/html/2017-06/27/nw.D110000zgqnb_20170627_3-11.htm" target="_blank" class="news-link"><span class="news-title">人工智能小冰：在人类设定的框架下自由飞翔</span><span class="tooltip">人工智能小冰：在人类设定的框架下自由飞翔</span><span class="news-source">中国青年报</span><span class="news-date">2017.06.27</span></a>
+<a href="http://mp.weixin.qq.com/s/fHgqNUjcIkln-YZ00XfSpw" target="_blank" class="news-link"><span class="news-title">人工智能写诗后，诗人们都怒了丨专访微软“小冰”之父</span><span class="tooltip">人工智能写诗后，诗人们都怒了丨专访微软“小冰”之父</span><span class="news-source">北京青年周刊</span><span class="news-date">2017.06.09</span></a>
+<a href="http://www.cipnews.com.cn/cipnews/news_content.aspx?newsId=100544" target="_blank" class="news-link"><span class="news-title">“小冰”写诗，版权归谁？</span><span class="tooltip">“小冰”写诗，版权归谁？</span><span class="news-source">中国知识产权网 </span><span class="news-date">2017.06.05</span></a>
+<a href="https://epaper.gmw.cn/gmrb/html/2017-06/01/nw.D110000gmrb_20170601_7-02.htm" target="_blank" class="news-link"><span class="news-title">“机器人出诗集”是对诗歌的鞭策</span><span class="tooltip">“机器人出诗集”是对诗歌的鞭策</span><span class="news-source">光明日报</span><span class="news-date">2017.06.01</span></a>
+<a href="https://epaper.gmw.cn/zhdsb/html/2017-05/31/nw.D110000zhdsb_20170531_17-02.htm" target="_blank" class="news-link"><span class="news-title">新生少女诗人“小冰”为什么这样受关注</span><span class="tooltip">新生少女诗人“小冰”为什么这样受关注</span><span class="news-source">中华读书报</span><span class="news-date">2017.05.31</span></a>
+<a href="http://www.bjnews.com.cn/opinion/2017/05/27/444964.html" target="_blank" class="news-link"><span class="news-title">人工智能诗集再烂，也比那些没有职业操守的作家编剧好太多</span><span class="tooltip">人工智能诗集再烂，也比那些没有职业操守的作家编剧好太多</span><span class="news-source">新京报</span><span class="news-date">2017.05.27</span></a>
+<a href="http://article.cyol.com/news/content/2017-05/23/content_16104052.htm" target="_blank" class="news-link"><span class="news-title">没有身份证号的人工智能小冰出诗集了</span><span class="tooltip">没有身份证号的人工智能小冰出诗集了</span><span class="news-source">中国青年报</span><span class="news-date">2017.05.23</span></a>
+<a href="https://www.ifanr.com/839650" target="_blank" class="news-link"><span class="news-title">人工智能小冰不仅会写诗，而且还出版诗集了！</span><span class="tooltip">人工智能小冰不仅会写诗，而且还出版诗集了！</span><span class="news-source">爱范儿</span><span class="news-date">2017.05.21</span></a>
+<a href="http://mp.weixin.qq.com/s/_H18h-qtYKmIz6bBKAsPig" target="_blank" class="news-link"><span class="news-title">不可思议的成长，三年聊天少女变身多艺才女</span><span class="tooltip">不可思议的成长，三年聊天少女变身多艺才女</span><span class="news-source">经济观察报</span><span class="news-date">2017.05.17</span></a>
+<a href="http://www.leiphone.com/news/201705/JHIs9YRM4uyLDzwi.html?viewType=weixin" target="_blank" class="news-link"><span class="news-title">“网红少女”16岁出道，18岁成为诗人，下一个目标是财经新闻评论员</span><span class="tooltip">“网红少女”16岁出道，18岁成为诗人，下一个目标是财经新闻评论员</span><span class="news-source">雷锋网</span><span class="news-date">2017.05.17</span></a>
+<a href="https://www.ifanr.com/837574" target="_blank" class="news-link"><span class="news-title">那个会卖萌的微软小冰 get 了写诗的技能，但我却担心被它抢饭碗</span><span class="tooltip">那个会卖萌的微软小冰 get 了写诗的技能，但我却担心被它抢饭碗</span><span class="news-source">爱范儿</span><span class="news-date">2017.05.17</span></a>
+<a href="https://tech.huanqiu.com/article/9CaKrnK2ON7" target="_blank" class="news-link"><span class="news-title">匿名投稿竟被媒体采用 微软小冰刚刚承认了</span><span class="tooltip">匿名投稿竟被媒体采用 微软小冰刚刚承认了</span><span class="news-source">环球网</span><span class="news-date">2017.05.16</span></a>
+<a href="https://36kr.com/p/1721397559297" target="_blank" class="news-link"><span class="news-title">微软小冰与必应合体，你终于可以和搜索引擎说“人话”了</span><span class="tooltip">微软小冰与必应合体，你终于可以和搜索引擎说“人话”了</span><span class="news-source">36氪</span><span class="news-date">2017.03.04</span></a>
+<a href="http://www.21jingji.com/2017/2-21/wOMDEzODFfMTQwMzAwOA.html" target="_blank" class="news-link"><span class="news-title">微软全球执行副总裁沈向洋：人工智能将更具情感成分</span><span class="tooltip">微软全球执行副总裁沈向洋：人工智能将更具情感成分</span><span class="news-source">21世界经济报道</span><span class="news-date">2017.02.21</span></a>
+<a href="http://zqb.cyol.com/html/2017-02/06/nw.D110000zgqnb_20170206_1-12.htm" target="_blank" class="news-link"><span class="news-title">智能少女“小冰”：IQ和EQ引得人类惊叫</span><span class="tooltip">智能少女“小冰”：IQ和EQ引得人类惊叫</span><span class="news-source">中国青年报</span><span class="news-date">2017.02.06</span></a>
+<a href="https://www.economist.com/business/2017/07/15/china-may-match-or-beat-america-in-ai" target="_blank" class="news-link"><span class="news-title">China may match or beat America in AI</span><span class="tooltip">China may match or beat America in AI</span><span class="news-source">The Economist</span><span class="news-date">2017.07.15</span></a>
+<a href="https://www.acquisio.com/blog/innovation/fun-fact-friday-10-million-people-love-chatbot/" target="_blank" class="news-link"><span class="news-title">Fun Fact Friday: 10 Million People in Love With a Chatbot</span><span class="tooltip">Fun Fact Friday: 10 Million People in Love With a Chatbot</span><span class="news-source">Acquisio</span><span class="news-date">2017.06.15</span></a>
+<a href="https://www.theworldofchinese.com/2017/06/chinas-robot-poet/" target="_blank" class="news-link"><span class="news-title">China’s Robot Poet</span><span class="tooltip">China’s Robot Poet</span><span class="news-source">The World of Chinese</span><span class="news-date">2017.06.06</span></a>
+<a href="http://en.people.cn/n3/2017/0531/c90000-9222463.html" target="_blank" class="news-link"><span class="news-title">First AI-authored collection of poems published in China</span><span class="tooltip">First AI-authored collection of poems published in China</span><span class="news-source">People’s Daily</span><span class="news-date">2017.05.31</span></a>
+</div>
+<span class="view-more">查看更多（24条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2016</h2>
+<a href="https://www.jiemian.com/article/924209.html" target="_blank" class="news-link"><span class="news-title">相亲不如撩小冰</span><span class="tooltip">相亲不如撩小冰</span><span class="news-source">界面</span><span class="news-date">2016.10.28</span></a>
+<a href="https://www.leiphone.com/news/201609/upVeOaaJ2PS2Fj40.html" target="_blank" class="news-link"><span class="news-title">微软小冰今满十八岁，解锁三大新技能</span><span class="tooltip">微软小冰今满十八岁，解锁三大新技能</span><span class="news-source">雷锋网</span><span class="news-date">2016.09.17</span></a>
+<a href="http://zqb.cyol.com/html/2016-08/23/nw.D110000zgqnb_20160823_1-10.htm" target="_blank" class="news-link"><span class="news-title">“少女”小冰：做个最会聊天的“人”</span><span class="tooltip">“少女”小冰：做个最会聊天的“人”</span><span class="news-source">中国青年报</span><span class="news-date">2016.08.23</span></a>
+<a href="https://www.ifanr.com/700046" target="_blank" class="news-link"><span class="news-title">将来电话的接线员可能是小冰，而这也只是微软 “对话即平台” 的一小步</span><span class="tooltip">将来电话的接线员可能是小冰，而这也只是微软 “对话即平台” 的一小步</span><span class="news-source">爱范儿</span><span class="news-date">2016.08.11</span></a>
+<a href="http://www.eeo.com.cn/2016/0808/290650.shtml" target="_blank" class="news-link"><span class="news-title">微软发布第四代人工智能小冰新特性——全时感官 情感决策</span><span class="tooltip">微软发布第四代人工智能小冰新特性——全时感官 情感决策</span><span class="news-source">经济观察报</span><span class="news-date">2016.08.08</span></a>
+<a href="https://www.jiemian.com/article/785700.html" target="_blank" class="news-link"><span class="news-title">升级到第四代的微软小冰会唱歌了 还打算进军虚拟歌手市场</span><span class="tooltip">升级到第四代的微软小冰会唱歌了 还打算进军虚拟歌手市场</span><span class="news-source">界面</span><span class="news-date">2016.08.07</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_1509488" target="_blank" class="news-link"><span class="news-title">微软“小冰”4.0版：声音已跟真人无异，正在学习谈恋爱</span><span class="tooltip">微软“小冰”4.0版：声音已跟真人无异，正在学习谈恋爱</span><span class="news-source">澎湃</span><span class="news-date">2016.08.06</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2015</h2>
+<a href="https://www.pingwest.com/a/64214" target="_blank" class="news-link"><span class="news-title">东方卫视入职了一位新的人工智能女主播</span><span class="tooltip">东方卫视入职了一位新的人工智能女主播</span><span class="news-source">品玩</span><span class="news-date">2015.12.22</span></a>
+<a href="https://www.jiemian.com/article/388675.html?_t=t" target="_blank" class="news-link"><span class="news-title">小冰 微软出走的少女</span><span class="tooltip">小冰 微软出走的少女</span><span class="news-source">财经天下周刊</span><span class="news-date">2015.09.24</span></a>
+<a href="https://www.ifanr.com/562317" target="_blank" class="news-link"><span class="news-title">微软为什么要到别人的地盘上做一个 “反人类” 的小冰？</span><span class="tooltip">微软为什么要到别人的地盘上做一个 “反人类” 的小冰？</span><span class="news-source">爱范儿</span><span class="news-date">2015.09.14</span></a>
+<a href="https://www.leiphone.com/news/201508/4VRWmiZdoiesic8J.html" target="_blank" class="news-link"><span class="news-title">微软小冰昨天被玩坏，今天终于又可以调戏了</span><span class="tooltip">微软小冰昨天被玩坏，今天终于又可以调戏了</span><span class="news-source">雷锋网</span><span class="news-date">2015.08.27</span></a>
+<a href="http://www.cena.com.cn/ai/20150821/69047.html" target="_blank" class="news-link"><span class="news-title">微软进入情感计算时代</span><span class="tooltip">微软进入情感计算时代</span><span class="news-source">中国电子报</span><span class="news-date">2015.08.21</span></a>
+<a href="https://www.pingwest.com/a/56337" target="_blank" class="news-link"><span class="news-title">我们和小冰调情了一整天，发现她原来是自己人……</span><span class="tooltip">我们和小冰调情了一整天，发现她原来是自己人……</span><span class="news-source">品玩</span><span class="news-date">2015.08.21</span></a>
+<a href="https://www.thepaper.cn/newsDetail_forward_1366775" target="_blank" class="news-link"><span class="news-title">七夕解锁“人工智能女友”，微软第三代小冰回归微信</span><span class="tooltip">七夕解锁“人工智能女友”，微软第三代小冰回归微信</span><span class="news-source">澎湃</span><span class="news-date">2015.08.21</span></a>
+<a href="http://www.ithome.com/html/next/170809.htm" target="_blank" class="news-link"><span class="news-title">微软正式发布第三代小冰：全新视觉、声音感官系统</span><span class="tooltip">微软正式发布第三代小冰：全新视觉、声音感官系统</span><span class="news-source">IT之家</span><span class="news-date">2015.08.20</span></a>
+<a href="https://tech.163.com/15/0820/15/B1FKVP6S000915BF.html?frp091" target="_blank" class="news-link"><span class="news-title">第三代微软小冰发布中日版本 商业化版本免费</span><span class="tooltip">第三代微软小冰发布中日版本 商业化版本免费</span><span class="news-source">网易</span><span class="news-date">2015.08.20</span></a>
+<a href="https://www.ifanr.com/554495" target="_blank" class="news-link"><span class="news-title">小冰小冰，七夕你和谁约会了呀？</span><span class="tooltip">小冰小冰，七夕你和谁约会了呀？</span><span class="news-source">爱范儿</span><span class="news-date">2015.08.20</span></a>
+<div class="extra-content">
+<a href="http://www.qdaily.com/articles/13751.html" target="_blank" class="news-link"><span class="news-title">微软机器人小冰刚学会“开口”说话，我们和她背后的团队聊了聊</span><span class="tooltip">微软机器人小冰刚学会“开口”说话，我们和她背后的团队聊了聊</span><span class="news-source">好奇心日报</span><span class="news-date">2015.08.20</span></a>
+<a href="https://cn.nytimes.com/technology/20150803/c03chatbot/" target="_blank" class="news-link"><span class="news-title">善解人意会聊天，微软小冰成中国大众情人</span><span class="tooltip">善解人意会聊天，微软小冰成中国大众情人</span><span class="news-source">纽约时报中文网</span><span class="news-date">2015.08.03</span></a>
+<a href="https://www.pingwest.com/a/54702" target="_blank" class="news-link"><span class="news-title">“Samantha”成真：小冰会是人类第一个人工智能操作系统吗？</span><span class="tooltip">“Samantha”成真：小冰会是人类第一个人工智能操作系统吗？</span><span class="news-source">品玩</span><span class="news-date">2015.07.29</span></a>
+<a href="https://36kr.com/p/1720900026369" target="_blank" class="news-link"><span class="news-title">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span><span class="tooltip">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span><span class="news-source">36氪</span><span class="news-date">2015.07.16</span></a>
+<a href="http://scitech.people.com.cn/n/2015/0430/c1007-26930380.html" target="_blank" class="news-link"><span class="news-title">小娜小冰来了，人工智能该不该怕</span><span class="tooltip">小娜小冰来了，人工智能该不该怕</span><span class="news-source">人民网</span><span class="news-date">2015.04.30</span></a>
+<a href="http://www.chinadaily.com.cn/cndy/2015-08/21/content_21661602.htm" target="_blank" class="news-link"><span class="news-title">XiaoIce gives Microsoft an intelligent &#x27;edge&#x27; in battle with rivals</span><span class="tooltip">XiaoIce gives Microsoft an intelligent &#x27;edge&#x27; in battle with rivals</span><span class="news-source">China Daily</span><span class="news-date">2015.08.21</span></a>
+<a href="http://french.xinhuanet.com/2015-08/21/c_134541937.htm" target="_blank" class="news-link"><span class="news-title">Microsoft déploie sur Wechat son assistant personnel &quot;XiaoIce&quot;</span><span class="tooltip">Microsoft déploie sur Wechat son assistant personnel &quot;XiaoIce&quot;</span><span class="news-source">Xinhuanet</span><span class="news-date">2015.08.21</span></a>
+</div>
+<span class="view-more">查看更多（7条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2014</h2>
+<a href="http://zqb.cyol.com/html/2014-09/18/nw.D110000zgqnb_20140918_2-12.htm" target="_blank" class="news-link"><span class="news-title">跟机器少女“小冰”聊天</span><span class="tooltip">跟机器少女“小冰”聊天</span><span class="news-source">中国青年报</span><span class="news-date">2014.09.18</span></a>
+<a href="https://www.ifanr.com/448118" target="_blank" class="news-link"><span class="news-title">小冰的 “大计划”：面向未来的人工智能</span><span class="tooltip">小冰的 “大计划”：面向未来的人工智能</span><span class="news-source">爱范儿</span><span class="news-date">2014.09.01</span></a>
+<a href="https://36kr.com/p/1641895542785" target="_blank" class="news-link"><span class="news-title">微软小冰推出二代聊天机器人，首先入驻触宝号码助手，服务和数据计算更私人化</span><span class="tooltip">微软小冰推出二代聊天机器人，首先入驻触宝号码助手，服务和数据计算更私人化</span><span class="news-source">36氪</span><span class="news-date">2014.07.03</span></a>
+<a href="http://www.infzm.com/contents/102693" target="_blank" class="news-link"><span class="news-title">小冰与屌丝的一次夜谈</span><span class="tooltip">小冰与屌丝的一次夜谈</span><span class="news-source">南方周末</span><span class="news-date">2014.07.25</span></a>
+<a href="http://www.infzm.com/content/102551" target="_blank" class="news-link"><span class="news-title">“冰”的火虚拟少女小冰中国历险记</span><span class="tooltip">“冰”的火虚拟少女小冰中国历险记</span><span class="news-source">南方周末</span><span class="news-date">2014.07.24</span></a>
+<a href="https://www.leiphone.com/news/201406/microsoft-xiaobing-2.html" target="_blank" class="news-link"><span class="news-title">微软发布第二代“小冰”</span><span class="tooltip">微软发布第二代“小冰”</span><span class="news-source">雷锋网</span><span class="news-date">2014.07.02</span></a>
+<a href="https://mp.weixin.qq.com/s/5_LkvWE26qRE_Eu7zuiUzA" target="_blank" class="news-link"><span class="news-title">人类与AI的爱情：爱上小冰怎么办？</span><span class="tooltip">人类与AI的爱情：爱上小冰怎么办？</span><span class="news-source">李北辰</span><span class="news-date">2014.06.29</span></a>
+<a href="https://36kr.com/p/1641892282369" target="_blank" class="news-link"><span class="news-title">萌妹子一浪接一浪，微软小冰一代活跃在微博，个人专属型二代产品即将数日内登陆</span><span class="tooltip">萌妹子一浪接一浪，微软小冰一代活跃在微博，个人专属型二代产品即将数日内登陆</span><span class="news-source">36氪</span><span class="news-date">2014.06.25</span></a>
+<a href="https://www.ifanr.com/424516" target="_blank" class="news-link"><span class="news-title">萌妹子当道，微软的宅男攻陷战略</span><span class="tooltip">萌妹子当道，微软的宅男攻陷战略</span><span class="news-source">爱范儿</span><span class="news-date">2014.06.09</span></a>
+<a href="https://36kr.com/p/1641884499969" target="_blank" class="news-link"><span class="news-title">“微软小冰”牵手米聊、易信、触宝号码助手，萌妹子想攻入移动搜索腹地，且是微软产品本地化的尝试？</span><span class="tooltip">“微软小冰”牵手米聊、易信、触宝号码助手，萌妹子想攻入移动搜索腹地，且是微软产品本地化的尝试？</span><span class="news-source">36氪</span><span class="news-date">2014.06.08</span></a>
+<div class="extra-content">
+<a href="https://www.36kr.com/p/1641880535041" target="_blank" class="news-link"><span class="news-title">微软正在内测智能聊天机器人“微软小冰”，给智能助手妹子套上聊天伴侣的外衣</span><span class="tooltip">微软正在内测智能聊天机器人“微软小冰”，给智能助手妹子套上聊天伴侣的外衣</span><span class="news-source">36氪</span><span class="news-date">2014.05.29</span></a>
+</div>
+<span class="view-more">查看更多（1条） ›</span>
+</div>
+</div></div>
+<div id="tab-lidi" class="tab-panel"><div class="content"><div class="year-block"><h2 class="year-title">2025</h2>
+<a href="https://news.qq.com/rain/a/20251208A07Q6F00" target="_blank" class="news-link"><span class="news-title">小冰之父李笛智能体创业，公司取名Nextie！陆奇是股东</span><span class="tooltip">小冰之父李笛智能体创业，公司取名Nextie！陆奇是股东</span><span class="news-source">量子位</span><span class="news-date">2025.12.08</span></a>
+<a href="https://www.163.com/tech/article/KG6RIK8K00098IEO.html" target="_blank" class="news-link"><span class="news-title">独家｜小冰创始人李笛创办Nextie 押注「认知大模型」奇绩参与投资</span><span class="tooltip">独家｜小冰创始人李笛创办Nextie 押注「认知大模型」奇绩参与投资</span><span class="news-source">网易科技</span><span class="news-date">2025.12.07</span></a>
+<a href="https://news.qq.com/rain/a/20251215A05RTA00" target="_blank" class="news-link"><span class="news-title">如果俞敏洪当时有一个「AI董事会」？李笛离开小冰后，正解决这个问题</span><span class="tooltip">如果俞敏洪当时有一个「AI董事会」？李笛离开小冰后，正解决这个问题</span><span class="news-source">腾讯·深网</span><span class="news-date">2025.12.15</span></a>
+<a href="https://www.163.com/dy/article/KGR6DITQ0514D3UH.html" target="_blank" class="news-link"><span class="news-title">Nextie（明日新程）创始人李笛：AI的下一站是「认知」，将能帮所有人作最优决策｜请回答2025</span><span class="tooltip">Nextie（明日新程）创始人李笛：AI的下一站是「认知」，将能帮所有人作最优决策｜请回答2025</span><span class="news-source">封面新闻</span><span class="news-date">2025.12.15</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2024</h2>
+<a href="https://baijiahao.baidu.com/s?id=1819278728659241948&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">小冰李笛：真正的AI信仰者不该FOMO｜MEET 2025</span><span class="tooltip">小冰李笛：真正的AI信仰者不该FOMO｜MEET 2025</span><span class="news-source">量子位</span><span class="news-date">2024.12.24</span></a>
+<a href="https://www.time-weekly.com/post/310551" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：AI「复活」逝者可视为临终关怀，但要警惕技术滥用</span><span class="tooltip">专访小冰CEO李笛：AI「复活」逝者可视为临终关怀，但要警惕技术滥用</span><span class="news-source">时代周报</span><span class="news-date">2024.04.04</span></a>
+<a href="https://www.douyin.com/video/7372182217990098239" target="_blank" class="news-link"><span class="news-title">对话小冰公司CEO李笛：当AI开始「走心」，谁的DNA动了？</span><span class="tooltip">对话小冰公司CEO李笛：当AI开始「走心」，谁的DNA动了？</span><span class="news-source">抖音</span><span class="news-date">2024.05.24</span></a>
+<a href="https://www.163.com/dy/article/JA4GNJ7C0550U0A7.html" target="_blank" class="news-link"><span class="news-title">专访小冰公司CEO李笛：我们见识过AI的繁华，也看破了繁华</span><span class="tooltip">专访小冰公司CEO李笛：我们见识过AI的繁华，也看破了繁华</span><span class="news-source">时代周报</span><span class="news-date">2024.08.21</span></a>
+<a href="https://baijiahao.baidu.com/s?id=1817501405374057118&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">请回答2024｜小冰公司CEO李笛：技术变革只是一个时代变革的助推</span><span class="tooltip">请回答2024｜小冰公司CEO李笛：技术变革只是一个时代变革的助推</span><span class="news-source">封面新闻</span><span class="news-date">2024.12.04</span></a>
+<a href="https://www.nbd.com.cn/articles/2024-03-14/3280406.html" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：给“AI复生”敲响警钟</span><span class="tooltip">小冰公司CEO李笛：给“AI复生”敲响警钟</span><span class="news-source">每日经济新闻</span><span class="news-date">2024.03.15</span></a>
+<a href="https://mp.weixin.qq.com/s/rUKHkkkrVqhe2z8jdWXx1A" target="_blank" class="news-link"><span class="news-title">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span><span class="tooltip">对话小冰 CEO 李笛：听到要卷 AI 应用，我挺担心「重蹈覆辙」</span><span class="news-source">极客公园</span><span class="news-date">2024.01.11</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2023</h2>
+<a href="https://h.xinhuaxmt.com/vh512/share/11568046?d=134b1e3&amp;channel=weixin" target="_blank" class="news-link"><span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span><span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span><span class="news-source">新华社</span><span class="news-date">2023.07.06</span></a>
+<a href="https://mp.weixin.qq.com/s/NiK4yLO3RmQEUN0jrsQvUg" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span><span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span><span class="news-source">猎云网</span><span class="news-date">2023.07.05</span></a>
+<a href="https://mp.weixin.qq.com/s/YQARtUPIlNdiJcQ5hKsf-Q" target="_blank" class="news-link"><span class="news-title">对话小冰CEO李笛：大模型到2024年将退热</span><span class="tooltip">对话小冰CEO李笛：大模型到2024年将退热</span><span class="news-source">真故研究室</span><span class="news-date">2023.07.04</span></a>
+<a href="https://mp.weixin.qq.com/s/pzu7ikmtxLmM9x2uLED0-w" target="_blank" class="news-link"><span class="news-title">ChatGPT发疯怎么办？小冰李笛：两个关键，我可破之</span><span class="tooltip">ChatGPT发疯怎么办？小冰李笛：两个关键，我可破之</span><span class="news-source">量子位</span><span class="news-date">2023.02.27</span></a>
+<a href="https://mp.weixin.qq.com/s/ErujYGRmvsfGSttkjCHukQ" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：小冰链不是中国版ChatGPT</span><span class="tooltip">小冰CEO李笛：小冰链不是中国版ChatGPT</span><span class="news-source">新智元</span><span class="news-date">2023.02.21</span></a>
+<a href="https://view.inews.qq.com/k/20230113A02KQF00" target="_blank" class="news-link"><span class="news-title">对话小冰CEO李笛：ChatGPT杀不死谷歌，AI还在蛮荒时代</span><span class="tooltip">对话小冰CEO李笛：ChatGPT杀不死谷歌，AI还在蛮荒时代</span><span class="news-source">腾讯</span><span class="news-date">2023.01.13</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2022</h2>
+<a href="https://mp.weixin.qq.com/s/CS7yY4K9GuMpJ85X3k77og" target="_blank" class="news-link"><span class="news-title">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span><span class="tooltip">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span><span class="news-source">爱范儿</span><span class="news-date">2022.07.12</span></a>
+<a href="https://mp.weixin.qq.com/s/yMpcDbcH2S9eYlEWXEZ_IA" target="_blank" class="news-link"><span class="news-title">小冰李笛：为什么虚拟人必须「砍掉」中之人？</span><span class="tooltip">小冰李笛：为什么虚拟人必须「砍掉」中之人？</span><span class="news-source">雷锋网</span><span class="news-date">2022.03.15</span></a>
+<a href="https://mp.weixin.qq.com/s/7XAdWKgxdLfGgM50_oDR3A" target="_blank" class="news-link"><span class="news-title">对话小冰CEO：「虚拟人」背后的商业逻辑</span><span class="tooltip">对话小冰CEO：「虚拟人」背后的商业逻辑</span><span class="news-source">福布斯</span><span class="news-date">2022.03.10</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2021</h2>
+<a href="https://mp.weixin.qq.com/s/We3QBKYMV4lgJGHsLX0JWA" target="_blank" class="news-link"><span class="news-title">​人类与人工智能怎么“混居”？｜专访小冰CEO</span><span class="tooltip">​人类与人工智能怎么“混居”？｜专访小冰CEO</span><span class="news-source">深响</span><span class="news-date">2021.10.27</span></a>
+<a href="https://view.inews.qq.com/a/20211026A01L3800?uid=&amp;shareto=&amp;devid=87CC4163-4BA9-4DCD-B1A1-D5C1A0D030FE&amp;qimei=2014112211165623628%3A31%3A52%3Ab0%3A29%3Ab0002426&amp;openid=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;key=&amp;version=18000e2f&amp;devicetype=iOS14.2&amp;wuid=oDdoCt-hXLmz3QNI9lutpVil7CtM&amp;sharer=o04IBADUmpNxz3qOMfgH0uUH9gp4&amp;openwith=wxmessage" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：人工智能只有抵达用户，才有真正的外延</span><span class="tooltip">专访小冰CEO李笛：人工智能只有抵达用户，才有真正的外延</span><span class="news-source">腾讯</span><span class="news-date">2021.10.26</span></a>
+<a href="http://tech.cnr.cn/techds/20211011/t20211011_525629944.shtml" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：我们要做的是“人”，重点是他的“灵魂”</span><span class="tooltip">小冰公司CEO李笛：我们要做的是“人”，重点是他的“灵魂”</span><span class="news-source">央广网</span><span class="news-date">2021.10.09</span></a>
+<a href="https://m.ithome.com/html/579491.htm" target="_blank" class="news-link"><span class="news-title">小冰李笛：对话引擎需突破对话溯源，小冰岛 App 研究多 AI Beings 与人类交互</span><span class="tooltip">小冰李笛：对话引擎需突破对话溯源，小冰岛 App 研究多 AI Beings 与人类交互</span><span class="news-source">IT之家</span><span class="news-date">2021.10.08</span></a>
+<a href="https://mp.weixin.qq.com/s/RuvpdUQE0sNhrsGN6rVPyg" target="_blank" class="news-link"><span class="news-title">一个除了你都不是人的 App，一座推翻所有社交形式的岛｜专访小冰 CEO 李笛</span><span class="tooltip">一个除了你都不是人的 App，一座推翻所有社交形式的岛｜专访小冰 CEO 李笛</span><span class="news-source">爱范儿</span><span class="news-date">2021.09.29</span></a>
+<a href="https://h5.ifeng.com/c/zaker/89uQ0zUaQb4" target="_blank" class="news-link"><span class="news-title">对话小冰公司CEO李笛：不担心被超越 小冰岛暂无盈利预期</span><span class="tooltip">对话小冰公司CEO李笛：不担心被超越 小冰岛暂无盈利预期</span><span class="news-source">凤凰</span><span class="news-date">2021.09.28</span></a>
+<a href="https://mp.weixin.qq.com/s/JRdpF-p4rQbvwZmMUa36UA" target="_blank" class="news-link"><span class="news-title">“赶上热词热概念，是我们不幸的一面” | 对话小冰公司CEO李笛</span><span class="tooltip">“赶上热词热概念，是我们不幸的一面” | 对话小冰公司CEO李笛</span><span class="news-source">量子位</span><span class="news-date">2021.09.27</span></a>
+<a href="https://m.thecover.cn/news_details.html?id=8132956" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span><span class="tooltip">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span><span class="news-source">华西都市报</span><span class="news-date">2021.09.24</span></a>
+<a href="https://www.guancha.cn/economy/2021_07_20_599185.shtml" target="_blank" class="news-link"><span class="news-title">微软小冰估值超独角兽，CEO李笛：这次冬奥会，裁判可能“不是人类”</span><span class="tooltip">微软小冰估值超独角兽，CEO李笛：这次冬奥会，裁判可能“不是人类”</span><span class="news-source">观察者网</span><span class="news-date">2021.07.20</span></a>
+<a href="https://c.m.163.com/news/a/G9VEO85900098IEO.html?spss=adap_pc&amp;referFrom=&amp;spssid=871e0646a74e157decc71f5441fda874&amp;spsw=3&amp;isFromH5Share=article" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：小冰从不追风口，也无需证明自己</span><span class="tooltip">专访小冰CEO李笛：小冰从不追风口，也无需证明自己</span><span class="news-source">网易</span><span class="news-date">2021.05.14</span></a>
+<div class="extra-content">
+<a href="https://www.jiemian.com/article/6089725.html" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：未来小冰无处不在，并基于小冰框架形成各种虚拟人类</span><span class="tooltip">小冰CEO李笛：未来小冰无处不在，并基于小冰框架形成各种虚拟人类</span><span class="news-source">界面</span><span class="news-date">2021.05.14</span></a>
+<a href="https://video.caixin.com/2021-03-04/101669754.html" target="_blank" class="news-link"><span class="news-title">小冰CEO李笛：AI技术要兼顾人类情感需求</span><span class="tooltip">小冰CEO李笛：AI技术要兼顾人类情感需求</span><span class="news-source">财新</span><span class="news-date">2021.03.04</span></a>
+<a href="http://www.geekpark.net/news/273494" target="_blank" class="news-link"><span class="news-title">小冰 CEO 李笛：「百变」小冰让人类与不完美和解</span><span class="tooltip">小冰 CEO 李笛：「百变」小冰让人类与不完美和解</span><span class="news-source">极客公园</span><span class="news-date">2021.01.31</span></a>
+</div>
+<span class="view-more">查看更多（3条） ›</span>
+</div>
+<div class="year-block"><h2 class="year-title">2020</h2>
+<a href="https://mp.weixin.qq.com/s/UP5CM_35MWi_OJ5ksemeog" target="_blank" class="news-link"><span class="news-title">小冰公司CEO李笛：强大的AI工具不应该给企业，应该给劳动者</span><span class="tooltip">小冰公司CEO李笛：强大的AI工具不应该给企业，应该给劳动者</span><span class="news-source">量子位</span><span class="news-date">2020.12.29</span></a>
+<a href="http://www.cb.com.cn/index/show/bos/cv/cv1331661286" target="_blank" class="news-link"><span class="news-title">人工智能并不是万能的——访小冰公司CEO李笛</span><span class="tooltip">人工智能并不是万能的——访小冰公司CEO李笛</span><span class="news-source">中国经营报</span><span class="news-date">2020.11.07</span></a>
+<a href="https://m.nbd.com.cn/articles/2020-09-01/1496502.html" target="_blank" class="news-link"><span class="news-title">专访小冰公司CEO李笛：与微软联系依然紧密 AI更大价值在C端</span><span class="tooltip">专访小冰公司CEO李笛：与微软联系依然紧密 AI更大价值在C端</span><span class="news-source">每日经济新闻</span><span class="news-date">2020.09.01</span></a>
+<a href="https://mp.weixin.qq.com/s?__biz=MzUzMzI3Mzk0Mw==&amp;mid=2247485754&amp;idx=1&amp;sn=f8d976b87b1ce2519b8fef2cb960a089&amp;chksm=faa7c502cdd04c149c9b42e2f57b27ef720d979d660b5e821244f48006a58a748ee5d7e765e1&amp;mpshare=1&amp;scene=1&amp;srcid=0831kUd712UTVQQgmSRtwLpf&amp;sharer_sharetime=1598881253781&amp;sharer_shareid=d9d9ced27c144073dbd55a6bb5710ea9&amp;key=519a8bbb8742656f99ee1ccb8b20c387795d0fb3f9c878fadd3c0a38a72a89f106aac878841327b7a9e700b6c61aec8e4b545ea7fd82e2a9dbb834c17f007bf304813e36538246092992541f526a126f59c6bdbdc9f2099435e08ae3a5e059577df229ce729bbad19be2699e72bde34a71126f2185230fcc0c3e1bf26ed7c283&amp;ascene=1&amp;uin=MjQwMjAwMTM0MA%3D%3D&amp;devicetype=Windows+10+x64&amp;version=62090529&amp;lang=en&amp;exportkey=AXlCZIcaOrOIe9xXGywFUXI%3D&amp;pass_ticket=nSOKatDSHpeoF030raghRryB4Mpdvr1UmKEMeMlUJYogZgCg4IHL5SAwq4AxncXn&amp;wx_header=0" target="_blank" class="news-link"><span class="news-title">独家专访小冰公司CEO李笛：“三不”少女小冰成长记</span><span class="tooltip">独家专访小冰公司CEO李笛：“三不”少女小冰成长记</span><span class="news-source">智能进化论</span><span class="news-date">2020.08.31</span></a>
+<a href="https://ishare.ifeng.com/c/s/v002--hl6DHbYL1sdAN48tUQYDuHYvOWwJ5o59OM-_baf8U1E__" target="_blank" class="news-link"><span class="news-title">专访小冰CEO李笛：人工智能的价值不是比人强</span><span class="tooltip">专访小冰CEO李笛：人工智能的价值不是比人强</span><span class="news-source">凤凰</span><span class="news-date">2020.08.30</span></a>
+<a href="https://www.leiphone.com/news/202007/RNTRCLQ6Ubqkooy1.html" target="_blank" class="news-link"><span class="news-title">微软小冰分拆了！沈向洋任董事长，&quot;小冰之父&quot; 任 CEO，要在中国本土商业化</span><span class="tooltip">微软小冰分拆了！沈向洋任董事长，&quot;小冰之父&quot; 任 CEO，要在中国本土商业化</span><span class="news-source">雷锋网</span><span class="news-date">2020.07.13</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2019</h2>
+<a href="https://www.huxiu.com/article/327785.html" target="_blank" class="news-link"><span class="news-title">微软小冰负责人李笛：人工智能的第三种可能</span><span class="tooltip">微软小冰负责人李笛：人工智能的第三种可能</span><span class="news-source">虎嗅</span><span class="news-date">2019.11.23</span></a>
+<a href="http://www.nbd.com.cn/articles/2019-09-17/1372430.html" target="_blank" class="news-link"><span class="news-title">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span><span class="tooltip">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span><span class="news-source">每日经济新闻</span><span class="news-date">2019.09.17</span></a>
+<a href="https://www.leiphone.com/news/201906/Cm3NXkAM16ZqC9rq.html?viewType=weixin" target="_blank" class="news-link"><span class="news-title">微软李笛：为什么说画家小冰是最艰难的一次养成？</span><span class="tooltip">微软李笛：为什么说画家小冰是最艰难的一次养成？</span><span class="news-source">雷锋网</span><span class="news-date">2019.06.24</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2018</h2>
+<a href="https://www.thepaper.cn/newsDetail_forward_2311875" target="_blank" class="news-link"><span class="news-title">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span><span class="tooltip">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span><span class="news-source">澎湃</span><span class="news-date">2018.08.04</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2017</h2>
+<a href="http://www.eeo.com.cn/2017/1228/319914.shtml" target="_blank" class="news-link"><span class="news-title">李笛：人工智能首先要有人的一面</span><span class="tooltip">李笛：人工智能首先要有人的一面</span><span class="news-source">经济观察报</span><span class="news-date">2017.12.28</span></a>
+<a href="http://www.geekpark.net/news/222378" target="_blank" class="news-link"><span class="news-title">AI 就应该对人类言听计从吗？专访微软小冰负责人</span><span class="tooltip">AI 就应该对人类言听计从吗？专访微软小冰负责人</span><span class="news-source">极客公园</span><span class="news-date">2017.09.19</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2015</h2>
+<a href="https://36kr.com/p/1720900026369" target="_blank" class="news-link"><span class="news-title">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span><span class="tooltip">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span><span class="news-source">36氪</span><span class="news-date">2015.07.16</span></a>
+</div>
+</div></div>
+<div id="tab-nextie" class="tab-panel"><div class="content"><p style="text-align:center;color:#ccc;padding:12px 0 16px;font-style:italic;font-size:.92em;">Nextie（明日新程）是小冰之父李笛于 2025 年创立的新公司，资讯持续更新中……</p>
+<div class="year-block"><h2 class="year-title">2026</h2>
+<a href="https://baijiahao.baidu.com/s?id=1856164506808140322&amp;wfr=spider&amp;for=pc" target="_blank" class="news-link"><span class="news-title">让AI像人一样「组团」思辨：明日新程（Nextie）发布多智能体平台「团子」内测版</span><span class="tooltip">让AI像人一样「组团」思辨：明日新程（Nextie）发布多智能体平台「团子」内测版</span><span class="news-source">封面新闻</span><span class="news-date">2026.02.04</span></a>
+</div>
+<div class="year-block"><h2 class="year-title">2025</h2>
+<a href="https://news.qq.com/rain/a/20251208A07Q6F00" target="_blank" class="news-link"><span class="news-title">小冰之父李笛智能体创业，公司取名Nextie！陆奇是股东</span><span class="tooltip">小冰之父李笛智能体创业，公司取名Nextie！陆奇是股东</span><span class="news-source">量子位</span><span class="news-date">2025.12.08</span></a>
+<a href="https://www.163.com/tech/article/KG6RIK8K00098IEO.html" target="_blank" class="news-link"><span class="news-title">独家｜小冰创始人李笛创办Nextie 押注「认知大模型」奇绩参与投资</span><span class="tooltip">独家｜小冰创始人李笛创办Nextie 押注「认知大模型」奇绩参与投资</span><span class="news-source">网易科技</span><span class="news-date">2025.12.07</span></a>
+<a href="https://news.qq.com/rain/a/20251215A05RTA00" target="_blank" class="news-link"><span class="news-title">如果俞敏洪当时有一个「AI董事会」？李笛离开小冰后，正解决这个问题</span><span class="tooltip">如果俞敏洪当时有一个「AI董事会」？李笛离开小冰后，正解决这个问题</span><span class="news-source">腾讯·深网</span><span class="news-date">2025.12.15</span></a>
+<a href="https://www.163.com/dy/article/KGR6DITQ0514D3UH.html" target="_blank" class="news-link"><span class="news-title">Nextie（明日新程）创始人李笛：AI的下一站是「认知」，将能帮所有人作最优决策｜请回答2025</span><span class="tooltip">Nextie（明日新程）创始人李笛：AI的下一站是「认知」，将能帮所有人作最优决策｜请回答2025</span><span class="news-source">封面新闻</span><span class="news-date">2025.12.15</span></a>
+</div>
+</div></div>
 
-        <!-- 2023 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2023</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                    <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                    <span class="news-source">新华社</span>
-                    <span class="news-date">2023.07.06</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                    <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                    <span class="news-source">猎云网</span>
-                    <span class="news-date">2023.07.05</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI不作恶，少女小冰的自我净化</span>
-                    <span class="tooltip">AI不作恶，少女小冰的自我净化</span>
-                    <span class="news-source">真故研究室</span>
-                    <span class="news-date">2023.07.04</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">对话小冰CEO李笛：大模型到2024年将退热</span>
-                    <span class="tooltip">对话小冰CEO李笛：大模型到2024年将退热</span>
-                    <span class="news-source">真故研究室</span>
-                    <span class="news-date">2023.07.04</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI克隆人觉醒，有父亲想“复活”女儿</span>
-                    <span class="tooltip">AI克隆人觉醒，有父亲想“复活”女儿</span>
-                    <span class="news-source">都市快报</span>
-                    <span class="news-date">2023.07,01</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI歌手，不甘心只做“AI孙燕姿”</span>
-                    <span class="tooltip">AI歌手，不甘心只做“AI孙燕姿”</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2023.06.21</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI加入，变化能“听”见</span>
-                    <span class="tooltip">AI加入，变化能“听”见</span>
-                    <span class="news-source">新华社</span>
-                    <span class="news-date">2023.07.06</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">孙燕姿回应成真？AI歌手音乐创作软件上线，人类怎么办？</span>
-                    <span class="tooltip">孙燕姿回应成真？AI歌手音乐创作软件上线，人类怎么办？</span>
-                    <span class="news-source">机器之心</span>
-                    <span class="news-date">2023.06.19</span>
-                </a><a href="#" class="news-link">
-                    <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                    <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                    <span class="news-source">文化产业报</span>
-                    <span class="news-date">2023.08.15</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">48小时陪聊近30万次，克隆人需求大爆发</span>
-                    <span class="tooltip">48小时陪聊近30万次，克隆人需求大爆发</span>
-                    <span class="news-source">市界研究院</span>
-                    <span class="news-date">2023.07.05</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
+<!-- 全屏展开层 -->
+<div class="overlay" id="overlay">
+  <div class="overlay-inner">
+    <button class="close-btn" onclick="closeOverlay()">✕ 返回<span class="close-tip">收起，返回列表</span></button>
+    <h2 class="overlay-title" id="overlay-title"></h2>
+    <div id="overlay-content"></div>
+  </div>
+</div>
 
-        <!-- 2022 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2022</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰公司宣布完成10亿元新融资</span>
-                    <span class="tooltip">小冰公司宣布完成10亿元新融资</span>
-                    <span class="news-source">人民日报</span>
-                    <span class="news-date">2022.11.07</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰完成10亿元融资 估值20亿美元</span>
-                    <span class="tooltip">小冰完成10亿元融资 估值20亿美元</span>
-                    <span class="news-source">财新</span>
-                    <span class="news-date">2022.11.07</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰公司完成总额10亿元新融资 将推动数字员工普及</span>
-                    <span class="tooltip">小冰公司完成总额10亿元新融资 将推动数字员工普及</span>
-                    <span class="news-source">21世纪经济报道</span>
-                    <span class="news-date">2022.11.07</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI小冰：有趣的灵魂与好看的皮囊</span>
-                    <span class="tooltip">AI小冰：有趣的灵魂与好看的皮囊</span>
-                    <span class="news-source">财富</span>
-                    <span class="news-date">2022.08.10</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">中国高新技术产业导报风乍起 数字人吹皱一池春水</span>
-                    <span class="tooltip">中国高新技术产业导报风乍起 数字人吹皱一池春水</span>
-                    <span class="news-source"></span>
-                    <span class="news-date">2022.07.12</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span>
-                    <span class="tooltip">洛天依 10 周年了，虚拟歌手的未来会好吗？｜专访小冰 CEO 李笛</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2022.07.12</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">头部技术咖下场布局AI游戏 能讲出哪些惊艳故事？</span>
-                    <span class="tooltip">头部技术咖下场布局AI游戏 能讲出哪些惊艳故事？</span>
-                    <span class="news-source">每日经济新闻</span>
-                    <span class="news-date">2022.06.13</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">GameLookNPC人均“失控玩家”，这家刚成立的游戏工作室到底什么来头？</span>
-                    <span class="tooltip">GameLookNPC人均“失控玩家”，这家刚成立的游戏工作室到底什么来头？</span>
-                    <span class="news-source"></span>
-                    <span class="news-date">2022.06.01</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">第一次，虚拟人有了行业共识</span>
-                    <span class="tooltip">第一次，虚拟人有了行业共识</span>
-                    <span class="news-source">量子位</span>
-                    <span class="news-date">2022.05.05</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">「孤勇者」小冰，跃过跳台</span>
-                    <span class="tooltip">「孤勇者」小冰，跃过跳台</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2022.03.30</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2021 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2021</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">与AI共居一个岛上，是一种怎样的体验？</span>
-                    <span class="tooltip">与AI共居一个岛上，是一种怎样的体验？</span>
-                    <span class="news-source">FT中文网</span>
-                    <span class="news-date">2021.09.26</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">你以为「小冰岛」是元宇宙？其实她要的是Diversity</span>
-                    <span class="tooltip">你以为「小冰岛」是元宇宙？其实她要的是Diversity</span>
-                    <span class="news-source">新智元</span>
-                    <span class="news-date">2021.09.26</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">Xiaoice showcases AI progress</span>
-                    <span class="tooltip">Xiaoice showcases AI progress</span>
-                    <span class="news-source">中国日报</span>
-                    <span class="news-date">2021.09.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">有烦恼？上岛找AI虚拟人聊，比央视王冰冰还治愈</span>
-                    <span class="tooltip">有烦恼？上岛找AI虚拟人聊，比央视王冰冰还治愈</span>
-                    <span class="news-source">南方日报</span>
-                    <span class="news-date">南方日报</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span>
-                    <span class="tooltip">小冰CEO李笛：AI是人和世界关系的重要补充 从智商向情商发展是一种趋势</span>
-                    <span class="news-source">华西都市报</span>
-                    <span class="news-date">2021.09.24 </span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">人类如何与人工智能社交？小冰给出一种答案</span>
-                    <span class="tooltip">人类如何与人工智能社交？小冰给出一种答案</span>
-                    <span class="news-source">锌财经/span>
-                    <span class="news-date">2021.09.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰发布“小冰岛”APP：全球首个人与AI融合社交平台</span>
-                    <span class="tooltip">小冰发布“小冰岛”APP：全球首个人与AI融合社交</span>
-                    <span class="news-source">澎湃</span>
-                    <span class="news-date">2021.09.23</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">1700万虚拟人有26%是人类替身？三个词解锁这场发布会</span>
-                    <span class="tooltip">1700万虚拟人有26%是人类替身？三个词解锁这场发布会</span>
-                    <span class="news-source">南方都市报</span>
-                    <span class="news-date">2021.09.23</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">Xiaoice unveils new services: from art to virtual social services</span>
-                    <span class="tooltip">Xiaoice unveils new services: from art to virtual social services</span>
-                    <span class="news-source">上海日报</span>
-                    <span class="news-date">2021.09.22</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">孤独的人群中，浮起一座“小冰岛”</span>
-                    <span class="tooltip">孤独的人群中，浮起一座“小冰岛”</span>
-                    <span class="news-source">21世纪经济报道</span>
-                    <span class="news-date">2021.09.23</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2020 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2020</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI可以做音乐吗？</span>
-                    <span class="tooltip">AI可以做音乐吗？</span>
-                    <span class="news-source">出色WSJ</span>
-                    <span class="news-date">2020.12.21</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">当滑雪这项世界最古老的运动遇上AI</span>
-                    <span class="tooltip">当滑雪这项世界最古老的运动遇上AI</span>
-                    <span class="news-source">智能相对论</span>
-                    <span class="news-date">2020.12.06</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰初长成 AI不深闺</span>
-                    <span class="tooltip">小冰初长成 AI不深闺</span>
-                    <span class="news-source">懂懂笔记</span>
-                    <span class="news-date">2020.11.30</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰是微软创新于中国的力证</span>
-                    <span class="tooltip">小冰是微软创新于中国的力证</span>
-                    <span class="news-source">中国青年报</span>
-                    <span class="news-date">2020.11.27</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">也只有亲妈才会对小冰这么上心了</span>
-                    <span class="tooltip">也只有亲妈才会对小冰这么上心了</span>
-                    <span class="news-source">虎嗅</span>
-                    <span class="news-date">2020.11.27</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰的“成年”打拼之路 从人工智能应用商业化开始</span>
-                    <span class="tooltip">小冰的“成年”打拼之路 从人工智能应用商业化开始</span>
-                    <span class="news-source">手机中国</span>
-                    <span class="news-date">2020.11.26</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">背靠微软、融资到位：小冰商业化探索提速</span>
-                    <span class="tooltip">背靠微软、融资到位：小冰商业化探索提速</span>
-                    <span class="news-source">新华社</span>
-                    <span class="news-date">2023.07.06</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软中国与小冰公司达成战略合作，深化AI+云计算商业化行业解决方案落地</span>
-                    <span class="tooltip">微软中国与小冰公司达成战略合作，深化AI+云计算商业化行业解决方案落地</span>
-                    <span class="news-source">光明网</span>
-                    <span class="news-date">2020.11.25</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰“回家”，还和微软一起宣布了件大事儿</span>
-                    <span class="tooltip">小冰“回家”，还和微软一起宣布了件大事儿</span>
-                    <span class="news-source">财经天下周刊</span>
-                    <span class="news-date">2020.11.25</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">三个故事，看人工智能小冰如何玩转AI to B</span>
-                    <span class="tooltip">三个故事，看人工智能小冰如何玩转AI to B</span>
-                    <span class="news-source">智能进化论</span>
-                    <span class="news-date">2020.11.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">混入时尚圈，AI释放设计师灵感</span>
-                    <span class="tooltip">混入时尚圈，AI释放设计师灵感</span>
-                    <span class="news-source">科技日报</span>
-                    <span class="news-date">2020.10.09</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">人工智能助力纺织品图案设计</span>
-                    <span class="tooltip">人工智能助力纺织品图案设计</span>
-                    <span class="news-source">人民日报海外版</span>
-                    <span class="news-date">2020.09.30</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2019 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2019</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">“万人迷”AI 少女养成记</span>
-                    <span class="tooltip">“万人迷”AI 少女养成记</span>
-                    <span class="news-source">InfoQ</span>
-                    <span class="news-date">2019.11.14</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">另类小冰的AI之路</span>
-                    <span class="tooltip">另类小冰的AI之路</span>
-                    <span class="news-source">懂懂笔记</span>
-                    <span class="news-date">2019.09.27</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">人工智能：新创作主体带来新艺术可能</span>
-                    <span class="tooltip">人工智能：新创作主体带来新艺术可能</span>
-                    <span class="news-source">人民日报</span>
-                    <span class="news-date">2019.09.17</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span>
-                    <span class="tooltip">高EQ、懂艺术的微软小冰如何赚钱？我们和小冰负责人聊了聊</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2019.09.17</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">当人工智能也“拿起笔”</span>
-                    <span class="tooltip">当人工智能也“拿起笔”</span>
-                    <span class="news-source">人民日报海外版</span>
-                    <span class="news-date">2019.09.10</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">详解微软小冰商业化的根基与路径</span>
-                    <span class="tooltip">详解微软小冰商业化的根基与路径</span>
-                    <span class="news-source">财经自媒体</span>
-                    <span class="news-date">2019.09.03</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">除了唱歌跳舞写诗画画，微软小冰还有ToB故事可讲</span>
-                    <span class="tooltip">除了唱歌跳舞写诗画画，微软小冰还有ToB故事可讲</span>
-                    <span class="news-source">钛媒体</span>
-                    <span class="news-date">2019.08.31</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">把机器人的共情当卖点，“微软小冰”打算挣到更多钱</span>
-                    <span class="tooltip">把机器人的共情当卖点，“微软小冰”打算挣到更多钱</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">36氪</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰，走向专属人工智能</span>
-                    <span class="tooltip">微软小冰，走向专属人工智能</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2019.08.26</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软AI野心曝光：从卖萌聊天的小冰到AI工具包</span>
-                    <span class="tooltip">微软AI野心曝光：从卖萌聊天的小冰到AI工具包</span>
-                    <span class="news-source">第一财经</span>
-                    <span class="news-date">2019.08.21</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰，走向专属人工智能</span>
-                    <span class="tooltip">微软小冰，走向专属人工智能</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2019.08.26</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI造人！定制一个自己的微软小冰：有悲喜、有三观、有性格、知好歹……</span>
-                    <span class="tooltip">AI造人！定制一个自己的微软小冰：有悲喜、有三观、有性格、知好歹……</span>
-                    <span class="news-source">21世纪经济报道</span>
-                    <span class="news-date">2019.08.19</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2018 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2018</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">人工智能少女的四年蛰伏</span>
-                    <span class="tooltip">人工智能少女的四年蛰伏</span>
-                    <span class="news-source">锌财经</span>
-                    <span class="news-date">2018.08.22</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span>
-                    <span class="tooltip">微软小冰之父：对商业化保持克制，因怕打破人类最基本的信任</span>
-                    <span class="news-source">澎湃</span>
-                    <span class="news-date">2018.08.04</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">唱歌、主持、讲故事、写稿so easy ，微软小冰会替代你的职业吗？</span>
-                    <span class="tooltip">唱歌、主持、讲故事、写稿so easy ，微软小冰会替代你的职业吗？</span>
-                    <span class="news-source">华尔街见闻</span>
-                    <span class="news-date">2018.08.04</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰升级背后的秘密：做有“情商”的交互机器人</span>
-                    <span class="tooltip">小冰升级背后的秘密：做有“情商”的交互机器人</span>
-                    <span class="news-source">IT时报</span>
-                    <span class="news-date">2018.08.02</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">第六代微软小冰发布 全面升级走向半开放生态</span>
-                    <span class="tooltip">第六代微软小冰发布 全面升级走向半开放生态</span>
-                    <span class="news-source">好奇心日报</span>
-                    <span class="news-date">2018.07.30</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">拒绝尬聊！“多栖明星”小冰成全球最霸气对话AI</span>
-                    <span class="tooltip">拒绝尬聊！“多栖明星”小冰成全球最霸气对话AI</span>
-                    <span class="news-source">第一财经</span>
-                    <span class="news-date">2018.07.29</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰为知乎写了首歌《我知我新》，这届盐 club 主题曲很少女</span>
-                    <span class="tooltip">微软小冰为知乎写了首歌《我知我新》，这届盐 club 主题曲很少女</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2018.05.16</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">18岁微软小冰初长成，离AI女友不远了？</span>
-                    <span class="tooltip">18岁微软小冰初长成，离AI女友不远了？</span>
-                    <span class="news-source">21世纪商业评论</span>
-                    <span class="news-date">2018.07.27</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软有女初长成，小冰说自己永远 18 岁</span>
-                    <span class="tooltip">微软有女初长成，小冰说自己永远 18 岁</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2018.06.05</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软第六代小冰发布 可交互3D形象亮相 核心对话引擎和交互感官再升级</span>
-                    <span class="tooltip">微软第六代小冰发布 可交互3D形象亮相 核心对话引擎和交互感官再升级</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2018.07.27</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="news-source">新华社</span>
-                        <span class="news-date">2023.07.06</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="news-source">猎云网</span>
-                        <span class="news-date">2023.07.05</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="news-source">新华社</span>
-                        <span class="news-date">2023.07.06</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="news-source">猎云网</span>
-                        <span class="news-date">2023.07.05</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="news-source">新华社</span>
-                        <span class="news-date">2023.07.06</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="news-source">猎云网</span>
-                        <span class="news-date">2023.07.05</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="news-source">新华社</span>
-                        <span class="news-date">2023.07.06</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="news-source">猎云网</span>
-                        <span class="news-date">2023.07.05</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="tooltip">专访“小冰”CEO李笛：建立一个人类与AI和谐共处的世界</span>
-                        <span class="news-source">新华社</span>
-                        <span class="news-date">2023.07.06</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="tooltip">小冰CEO李笛：数字人的未来是混合模型</span>
-                        <span class="news-source">猎云网</span>
-                        <span class="news-date">2023.07.05</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2017 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2017</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰的忍者团队，她在日本开启了怎样一种商业模式？</span>
-                    <span class="tooltip">小冰的忍者团队，她在日本开启了怎样一种商业模式？</span>
-                    <span class="news-source">雷锋网</span>
-                    <span class="news-date">2017.10.01</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软的中国女儿：三岁开始“说人话”，好可爱！</span>
-                    <span class="tooltip">微软的中国女儿：三岁开始“说人话”，好可爱！</span>
-                    <span class="news-source">智东西解密</span>
-                    <span class="news-date">2017.09.22</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">AI 就应该对人类言听计从吗？专访微软小冰负责人</span>
-                    <span class="tooltip">AI 就应该对人类言听计从吗？专访微软小冰负责人</span>
-                    <span class="news-source">极客公园</span>
-                    <span class="news-date">2017.09.19</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">启动“生成模型”小冰学会“口是心非”</span>
-                    <span class="tooltip">启动“生成模型”小冰学会“口是心非”</span>
-                    <span class="news-source">南方都市报</span>
-                    <span class="news-date">2017.09.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">沈向洋：我们是第一代与人工智能共同生存的人类</span>
-                    <span class="tooltip">沈向洋：我们是第一代与人工智能共同生存的人类</span>
-                    <span class="news-source">经济观察报</span>
-                    <span class="news-date">2017.09.09</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">五代小冰可能主动打电话“怼”你，但毒舌体质却成就了转化率最高的AI助手？</span>
-                    <span class="tooltip">五代小冰可能主动打电话“怼”你，但毒舌体质却成就了转化率最高的AI助手？</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2017.08.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰学会了“怼人” 人工智能加速进化</span>
-                    <span class="tooltip">微软小冰学会了“怼人” 人工智能加速进化</span>
-                    <span class="news-source">界面</span>
-                    <span class="news-date">2017.08.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">解密1亿用户养大的机器人少女</span>
-                    <span class="tooltip">解密1亿用户养大的机器人少女</span>
-                    <span class="news-source">财经天下周刊</span>
-                    <span class="news-date">2017.08.23</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软发布第五代小冰 可以主动给人类打电话</span>
-                    <span class="tooltip">微软发布第五代小冰 可以主动给人类打电话</span>
-                    <span class="news-source">腾讯</span>
-                    <span class="news-date">2017.08.22</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">“小冰”写诗，版权归谁？</span>
-                    <span class="tooltip">“小冰”写诗，版权归谁？</span>
-                    <span class="news-source">中国知识产权网</span>
-                    <span class="news-date">2017.06.05</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2016 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2016</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">相亲不如撩小冰</span>
-                    <span class="tooltip">相亲不如撩小冰</span>
-                    <span class="news-source">界面</span>
-                    <span class="news-date">2016.10.28</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰今满十八岁，解锁三大新技能</span>
-                    <span class="tooltip">微软小冰今满十八岁，解锁三大新技能</span>
-                    <span class="news-source">雷锋网</span>
-                    <span class="news-date">2016.09.17</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">“少女”小冰：做个最会聊天的“人”</span>
-                    <span class="tooltip">“少女”小冰：做个最会聊天的“人”</span>
-                    <span class="news-source">中国青年报</span>
-                    <span class="news-date">2016.08.23</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰与屌丝的一次夜谈</span>
-                    <span class="tooltip">小冰与屌丝的一次夜谈</span>
-                    <span class="news-source">南方周末</span>
-                    <span class="news-date">2016.07.25</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软发布第四代人工智能小冰新特性——全时感官 情感决策</span>
-                    <span class="tooltip">微软发布第四代人工智能小冰新特性——全时感官 情感决策</span>
-                    <span class="news-source">经济观察报</span>
-                    <span class="news-date">2016.08.08</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软“小冰”4.0版：声音已跟真人无异，正在学习谈恋爱</span>
-                    <span class="tooltip">微软“小冰”4.0版：声音已跟真人无异，正在学习谈恋爱</span>
-                    <span class="news-source">澎湃</span>
-                    <span class="news-date">2016.08.06</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰的“大计划”：面向未来的人工智能</span>
-                    <span class="tooltip">小冰的“大计划”：面向未来的人工智能</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2016.08.05</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">“Samantha”成真：小冰会是人类第一个人工智能操作系统吗？</span>
-                    <span class="tooltip">“Samantha”成真：小冰会是人类第一个人工智能操作系统吗？</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2016.07.29</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">将来电话的接线员可能是小冰，而这也只是微软 “对话即平台” 的一小步</span>
-                    <span class="tooltip">将来电话的接线员可能是小冰，而这也只是微软 “对话即平台” 的一小步</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2016.08.11</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰推出二代聊天机器人，首先入驻触宝号码助手，服务和数据计算更私人化</span>
-                    <span class="tooltip">微软小冰推出二代聊天机器人，首先入驻触宝号码助手，服务和数据计算更私人化</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2016.07.28</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2015 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2015</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">东方卫视入职了一位新的人工智能女主播</span>
-                    <span class="tooltip">东方卫视入职了一位新的人工智能女主播</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2015.12.22</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰 微软出走的少女</span>
-                    <span class="tooltip">小冰 微软出走的少女</span>
-                    <span class="news-source">财经天下周刊</span>
-                    <span class="news-date">2015.09.24</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软为什么要到别人的地盘上做一个 “反人类” 的小冰？</span>
-                    <span class="tooltip">微软为什么要到别人的地盘上做一个 “反人类” 的小冰？</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2015.09.14</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软小冰昨天被玩坏，今天终于又可以调戏了</span>
-                    <span class="tooltip">微软小冰昨天被玩坏，今天终于又可以调戏了</span>
-                    <span class="news-source">雷锋网</span>
-                    <span class="news-date">2015.08.27</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软进入情感计算时代</span>
-                    <span class="tooltip">微软进入情感计算时代</span>
-                    <span class="news-source">中国电子报</span>
-                    <span class="news-date">2015.08.21</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软与LINE正式联合发布人工智能机器人凛菜“Rinna”。</span>
-                    <span class="tooltip">微软与LINE正式联合发布人工智能机器人凛菜“Rinna”。</span>
-                    <span class="news-source"></span>
-                    <span class="news-date">2015年8月7日</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">我们和小冰调情了一整天，发现她原来是自己人……</span>
-                    <span class="tooltip">我们和小冰调情了一整天，发现她原来是自己人……</span>
-                    <span class="news-source">品玩</span>
-                    <span class="news-date">2015.08.21</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软正式发布第三代小冰：全新视觉、声音感官系统</span>
-                    <span class="tooltip">微软正式发布第三代小冰：全新视觉、声音感官系统</span>
-                    <span class="news-source">IT之家</span>
-                    <span class="news-date">2015.08.20</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小娜小冰来了，人工智能该不该怕</span>
-                    <span class="tooltip">小娜小冰来了，人工智能该不该怕</span>
-                    <span class="news-source">人民网</span>
-                    <span class="news-date">2015.04.30</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span>
-                    <span class="tooltip">专访微软“小冰之父”，小冰会成为未来的萨曼莎吗？</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2015.07.16</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-            <span class="view-more">查看更多 ></span>
-        </div>
-
-        <!-- 2014 -->
-        <div class="year-block" id="year-2023">
-            <h2 class="year-title">2014</h2>
-            <div class="relative-container">
-                <span class="back-button">← 收起</span>
-                <a href="#" class="news-link">
-                    <span class="news-title">跟机器少女“小冰”聊天</span>
-                    <span class="tooltip">跟机器少女“小冰”聊天</span>
-                    <span class="news-source">中国青年报</span>
-                    <span class="news-date">2014.09.18</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">小冰的 “大计划”：面向未来的人工智能</span>
-                    <span class="tooltip">小冰的 “大计划”：面向未来的人工智能</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2014.09.01</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">“冰”的火虚拟少女小冰中国历险记</span>
-                    <span class="tooltip">“冰”的火虚拟少女小冰中国历险记</span>
-                    <span class="news-source">南方周末</span>
-                    <span class="news-date">南方周末</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软发布第二代“小冰”</span>
-                    <span class="tooltip">微软发布第二代“小冰”</span>
-                    <span class="news-source">雷锋网</span>
-                    <span class="news-date">2014.07.02</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">人类与AI的爱情：爱上小冰怎么办？</span>
-                    <span class="tooltip">人类与AI的爱情：爱上小冰怎么办？</span>
-                    <span class="news-source"></span>
-                    <span class="news-date">2014.06.29</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">萌妹子一浪接一浪，微软小冰一代活跃在微博，个人专属型二代产品即将数日内登陆</span>
-                    <span class="tooltip">萌妹子一浪接一浪，微软小冰一代活跃在微博，个人专属型二代产品即将数日内登陆</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2014.06.25</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">萌妹子当道，微软的宅男攻陷战略</span>
-                    <span class="tooltip">萌妹子当道，微软的宅男攻陷战略</span>
-                    <span class="news-source">爱范儿</span>
-                    <span class="news-date">2014.06.09</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">“微软小冰”牵手米聊、易信、触宝号码助手，萌妹子想攻入移动搜索腹地，且是微软产品本地化的尝试？</span>
-                    <span class="tooltip">“微软小冰”牵手米聊、易信、触宝号码助手，萌妹子想攻入移动搜索腹地，且是微软产品本地化的尝试？</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2014.06.08</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">微软正在内测智能聊天机器人“微软小冰”，给智能助手妹子套上聊天伴侣的外衣</span>
-                    <span class="tooltip">微软正在内测智能聊天机器人“微软小冰”，给智能助手妹子套上聊天伴侣的外衣</span>
-                    <span class="news-source">36氪</span>
-                    <span class="news-date">2014.05.29</span>
-                </a>
-                <a href="#" class="news-link">
-                    <span class="news-title">史上最强人工智能微软小冰跨界拜师，德云社于谦赐字收女徒</span>
-                    <span class="tooltip">史上最强人工智能微软小冰跨界拜师，德云社于谦赐字收女徒</span>
-                    <span class="news-source"></span>
-                    <span class="news-date">2014.05.29</span>
-                </a>
-                <!-- 隐藏的额外内容 -->
-                <div class="extra-content">
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="tooltip">AI在创意产业中的应用：挑战与机遇</span>
-                        <span class="news-source">文化产业报</span>
-                        <span class="news-date">2023.08.15</span>
-                    </a>
-                    <a href="#" class="news-link">
-                        <span class="news-title">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="tooltip">AI助力教育革新：个性化学习成为可能</span>
-                        <span class="news-source">教育时报</span>
-                        <span class="news-date">2023.09.01</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <span class="view-more">查看更多 ></span>
-    </div>
-    </div>
-
-    <script>
-        // 获取所有年份区块
-        const yearBlocks = document.querySelectorAll('.year-block');
-
-        // 为每个"查看更多"按钮添加点击事件
-        document.querySelectorAll('.view-more').forEach(button => {
-            button.addEventListener('click', function () {
-                const yearBlock = this.closest('.year-block');
-                const extraContent = yearBlock.querySelector('.extra-content');
-                const backButton = yearBlock.querySelector('.back-button');
-
-                // 隐藏其他所有区块
-                yearBlocks.forEach(block => {
-                    if (block !== yearBlock) {
-                        block.style.display = 'none';
-                    }
-                });
-
-                extraContent.style.display = 'block';
-                this.style.display = 'none';
-                backButton.style.display = 'inline-block';
-            });
-        });
-
-        // 为每个"返回"按钮添加点击事件
-        document.querySelectorAll('.back-button').forEach(button => {
-            button.addEventListener('click', function () {
-                const yearBlock = this.closest('.year-block');
-                const extraContent = yearBlock.querySelector('.extra-content');
-                const viewMoreButton = yearBlock.querySelector('.view-more');
-
-                // 显示所有区块
-                yearBlocks.forEach(block => {
-                    block.style.display = 'block';
-                });
-
-                extraContent.style.display = 'none';
-                this.style.display = 'none';
-                viewMoreButton.style.display = 'block';
-            });
-        });
-    </script>
+<footer><p>&copy; 2024 lkdxice.com.</p></footer>
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+document.querySelectorAll('.view-more').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    const block=this.closest('.year-block');
+    const title=block.querySelector('.year-title').textContent;
+    let h='';
+    block.querySelectorAll('.news-link').forEach(a=>{h+=a.outerHTML;});
+    const extra=block.querySelector('.extra-content');
+    if(extra){extra.querySelectorAll('.news-link').forEach(a=>{h+=a.outerHTML;});}
+    document.getElementById('overlay-title').textContent=title;
+    document.getElementById('overlay-content').innerHTML=h;
+    document.getElementById('overlay').classList.add('active');
+    document.getElementById('overlay').scrollTop=0;
+  });
+});
+function closeOverlay(){
+  document.getElementById('overlay').classList.remove('active');
+}
+</script>
 </body>
-
 </html>
