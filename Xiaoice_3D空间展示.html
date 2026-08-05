@@ -3120,30 +3120,101 @@
                 board.castShadow = true;
                 board.receiveShadow = true;
                 shelfGroup.add(board);
-// 因Github文件数量及大小限制，仅以部分文件展示效果
-            const noticeCanvas = document.createElement('canvas');
-            noticeCanvas.width = 1024; noticeCanvas.height = 128;
-            const nc = noticeCanvas.getContext('2d');
-            nc.clearRect(0,0,1024,128);
-            nc.fillStyle = 'rgba(200,180,150,0.85)';
-            nc.fillRect(0,0,1024,128);
-            nc.fillStyle = '#1a0f0a';
-            nc.font = 'bold 38px "Microsoft YaHei", "SimHei", sans-serif';
-            nc.textAlign = 'center'; nc.textBaseline = 'middle';
-            nc.fillText('因Github文件数量及大小限制，本网页仅以部分文件展示效果', 512, 64);
-            const noticeTex = new THREE.CanvasTexture(noticeCanvas);
-            noticeTex.needsUpdate = true;
-            const noticeMat = new THREE.MeshBasicMaterial({
-                map: noticeTex, transparent: true, depthWrite: false, side: THREE.DoubleSide
             });
-            const noticeBoard = new THREE.Mesh(
-                new THREE.BoxGeometry(3.8, 0.18, 0.01), noticeMat
-            );
-            // 放在最上层板(y=4.7)正前方，+Z突出，朝相机倾斜
-            noticeBoard.position.set(0, 4.7, 1.21);
-            noticeBoard.rotation.x = -0.15;
-            shelfGroup.add(noticeBoard);
-               clothMesh.renderOrder = -ci;
+
+// 因Github文件数量及大小限制，仅以部分文件展示效果
+            (function(){
+                var nc = document.createElement('canvas');
+                nc.width = 1024; nc.height = 128;
+                var ctx = nc.getContext('2d');
+                ctx.fillStyle = 'rgba(200,180,150,0.88)';
+                ctx.fillRect(0,0,1024,128);
+                ctx.fillStyle = '#1a0f0a';
+                ctx.font = 'bold 36px Microsoft YaHei,SimHei,sans-serif';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText('因Github文件数量及大小限制，本网页仅以部分文件展示效果', 512, 64);
+                var tex = new THREE.CanvasTexture(nc);
+                var mat = new THREE.MeshBasicMaterial({
+                    map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide
+                });
+                var notice = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.18, 0.01), mat);
+                notice.position.set(0, 4.7, 1.22);
+                notice.rotation.x = -0.12;
+                shelfGroup.add(notice);
+            })();
+            const backMat = new THREE.MeshStandardMaterial({
+                color: 0xd4b89c,
+                roughness: 0.8,
+                metalness: 0,
+                transparent: true,
+                opacity: 0.25
+            });
+            const backBoard = new THREE.Mesh(new THREE.BoxGeometry(4.8, 5.0, 0.08), backMat);
+            backBoard.position.set(0, 2.6, -1.26);
+            shelfGroup.add(backBoard);
+
+            // ================================================================
+            //  六、墙壁构建
+            // ================================================================
+            const wallMat = new THREE.MeshStandardMaterial({
+                color: 0xe8d5b8,
+                roughness: 0.9,
+                metalness: 0,
+                side: THREE.DoubleSide
+            });
+            const wallGeo = new THREE.BoxGeometry(0.4, 5.4, 4.0);
+
+            const leftWall = new THREE.Mesh(wallGeo, wallMat);
+            leftWall.position.set(-3.8, 2.7, 0.2);
+            leftWall.castShadow = true;
+            leftWall.receiveShadow = true;
+            scene.add(leftWall);
+
+            const rightWall = new THREE.Mesh(wallGeo, wallMat);
+            rightWall.position.set(3.8, 2.7, 0.2);
+            rightWall.castShadow = true;
+            rightWall.receiveShadow = true;
+            scene.add(rightWall);
+
+            // ================================================================
+            //  七、装饰物品（海报、挂衣、摆件、贴纸）
+            // ================================================================
+            const leftWallDecorGroup = new THREE.Group();
+            scene.add(leftWallDecorGroup);
+            IMG_CONFIG.leftWallDecor.forEach(item => {
+                const tex = safeLoadTexture(item.img);
+                const mesh = new THREE.Mesh(
+                    new THREE.PlaneGeometry(item.size.w, item.size.h),
+                    new THREE.MeshStandardMaterial({
+                        map: tex,
+                        roughness: 0.6,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        alphaTest: 0.01,
+                        depthWrite: true
+                    })
+                );
+                mesh.rotation.y = Math.PI / 2;
+                mesh.position.set(item.pos.x + 0.02, item.pos.y, item.pos.z);
+                leftWallDecorGroup.add(mesh);
+            });
+
+            IMG_CONFIG.clothing.forEach((item, ci) => {
+                const clothTex = safeLoadTexture(item.img);
+                const clothMesh = new THREE.Mesh(
+                    new THREE.PlaneGeometry(item.size.w, item.size.h),
+                    new THREE.MeshStandardMaterial({
+                        map: clothTex,
+                        roughness: 0.6,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        alphaTest: 0.01,
+                        depthWrite: true
+                    })
+                );
+                clothMesh.position.set(item.pos.x + 0.02, item.pos.y, item.pos.z);
+                clothMesh.rotation.y = Math.PI / 2;
+                clothMesh.renderOrder = -ci;
                 scene.add(clothMesh);
             });
 
