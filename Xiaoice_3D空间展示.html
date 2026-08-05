@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -3120,7 +3120,29 @@
                 board.castShadow = true;
                 board.receiveShadow = true;
                 shelfGroup.add(board);
+// 因Github文件数量及大小限制，仅以部分文件展示效果
+            const noticeCanvas = document.createElement('canvas');
+            noticeCanvas.width = 1024; noticeCanvas.height = 128;
+            const nc = noticeCanvas.getContext('2d');
+            nc.clearRect(0,0,1024,128);
+            nc.fillStyle = 'rgba(200,180,150,0.85)';
+            nc.fillRect(0,0,1024,128);
+            nc.fillStyle = '#1a0f0a';
+            nc.font = 'bold 38px "Microsoft YaHei", "SimHei", sans-serif';
+            nc.textAlign = 'center'; nc.textBaseline = 'middle';
+            nc.fillText('因Github文件数量及大小限制，本网页仅以部分文件展示效果', 512, 64);
+            const noticeTex = new THREE.CanvasTexture(noticeCanvas);
+            noticeTex.needsUpdate = true;
+            const noticeMat = new THREE.MeshBasicMaterial({
+                map: noticeTex, transparent: true, depthWrite: false, side: THREE.DoubleSide
             });
+            const noticeBoard = new THREE.Mesh(
+                new THREE.BoxGeometry(3.8, 0.18, 0.01), noticeMat
+            );
+            // 放在最上层板(y=4.7)正前方，+Z突出，朝相机倾斜
+            noticeBoard.position.set(0, 4.7, 1.21);
+            noticeBoard.rotation.x = -0.15;
+            shelfGroup.add(noticeBoard);
 
             const backMat = new THREE.MeshStandardMaterial({
                 color: 0xd4b89c,
@@ -3650,7 +3672,9 @@
             // ================================================================
             const videoPlaylist = [
                 { title: '届得到的恋', url: 'resources_Xice_3D空间\\Xice_视频\\Xice_其他视频\\1fd0abb5b7995e5034f6a4f99abe8735.mp4' },
+                { title: '何畅_严选七周年主题曲', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_何畅_网易严选七周年主题曲.mp4' },
                 { title: '201&一口甜(抖音主播)_我好像谈场恋爱', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_201&一口甜(抖音主播)_我好像谈场恋爱.mp4' },
+                { title: 'XStudio3公测发行视频', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_XStudio3公测发行视频.mp4' },
                 { title: '201&小鱼豆腐_当你的天空突然下起了大雨', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_201&小鱼豆腐_当你的天空突然下起了大雨.mp4' },
                 { title: '201&小鱼豆腐_歌声演示(一点点喜欢)', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_201&小鱼豆腐_歌声演示(一点点喜欢).mp4' },
                 { title: '201&徐梦甜_喜欢这世界因为喜欢你', url: 'resources_Xice_3D空间/Xice_视频/Xice_抖音/xice_201&徐梦甜_喜欢这世界因为喜欢你.mp4' },
@@ -3920,48 +3944,12 @@
                 music: [
                     { title: '巴洛克烦恼 (Remaster)', url: 'resources_Xice_3D空间/Xice_音频/Xice_官方/巴洛克烦恼 (Remaster).mp3' },
                     { title: '你_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/201_你_无参.mp3' },
-                    { title: '你在不在_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/201_你在不在_无参.mp3' },
-                    { title: '何畅_此刻我们应该坐在年轻的海岸上_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/何畅_此刻我们应该坐在年轻的海岸上_无参.mp3' },
-                    { title: '小鱼豆腐_把回忆拼好给你_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/小鱼豆腐_把回忆拼好给你_无参.mp3' },
-                    { title: '水若_桃花诺_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/水若_桃花诺_无参.mp3' },
-                    { title: '水若_若月亮没来1_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/水若_若月亮没来1_无参.mp3' },
-                    { title: '水若_若月亮没来_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/水若_若月亮没来_无参.mp3' },
-                    { title: '水若_荷塘月色_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/水若_荷塘月色_无参.mp3' },
-                    { title: '秋若溪_一分钟恋人_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/秋若溪_一分钟恋人_无参.mp3' },
-                    { title: '语冰_一分钟恋人_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_一分钟恋人_无参.mp3' },
-                    { title: '语冰_但愿人长久_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_但愿人长久_无参.mp3' },
-                    { title: '语冰_夏天的风', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_夏天的风.mp3' },
-                    { title: '语冰_最初的记忆_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_最初的记忆_无参.mp3' },
-                    { title: '语冰_若月亮没来_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_若月亮没来_无参.mp3' },
-                    { title: '语冰_荷塘月色_无参', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/语冰_荷塘月色_无参.mp3' },
-                    { title: '阳光失了玻璃窗_封面诗_jibi', url: 'resources_Xice_3D空间/Xice_音频/XEva_无参唱片_MP3版/阳光失了玻璃窗_封面诗_jibi.mp3' }
+                    { title: '何畅官方账号&小冰&徐爱颜 - 宇宙沙漏2023 [mqms2]', url: 'resources_Xice_3D空间/Xice_音频/Xice_QQ音乐/何畅官方账号&小冰&徐爱颜 - 宇宙沙漏2023 [mqms2].ogg' },
                 ],
                 blog: [
-                    { title: '04 小冰李笛：第二年就独角兽了，但微软投入的钱早就超过这些了', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/04 小冰李笛：第二年就独角兽了，但微软投入的钱早就超过这些了.m4a' },
-                    { title: '35期_“小冰之父”李笛 AI是人的延伸', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/35期_“小冰之父”李笛 AI是人的延伸.mp3' },
-                    { title: '一张图500元是目前AIGC最高回报 小冰李笛 调用API的商业模式不适用于未来 MEET2024', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/一张图500元是目前AIGC最高回报 小冰李笛 调用API的商业模式不适用于未来 MEET2024.mp3' },
-                    { title: '与AI共生11 普通人如何提高分辨AI诈骗的能力 小冰李笛', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/与AI共生11 普通人如何提高分辨AI诈骗的能力 小冰李笛.mp3' },
-                    { title: '与OpenAI各奔前程 小冰李笛：专攻造人 旗下网红克隆人已年入百万', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/与OpenAI各奔前程 小冰李笛：专攻造人 旗下网红克隆人已年入百万.mp3' },
-                    { title: '专访小冰CEO李笛：AI复活逝者可视为临终关怀，但要警惕技术滥用', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/专访小冰CEO李笛：AI复活逝者可视为临终关怀，但要警惕技术滥用.mp3' },
                     { title: '专访小冰公司CEO李笛：我们见识过AI的繁华也看破了繁华', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/专访小冰公司CEO李笛：我们见识过AI的繁华也看破了繁华.mp3' },
-                    { title: '原微软小冰CEO新公司连获融资，AI人格化赛道又起风了？', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/原微软小冰CEO新公司连获融资，AI人格化赛道又起风了？.mp3' },
-                    { title: '复活著名音乐人女儿后，小冰公司CEO开始担忧', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/复活著名音乐人女儿后，小冰公司CEO开始担忧.mp3' },
                     { title: '外滩大会大咖对话丨小冰CEO李笛：现在AIGC最大的问题其实就是太雷同了丨封面天天见', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/外滩大会大咖对话丨小冰CEO李笛：现在AIGC最大的问题其实就是太雷同了丨封面天天见.mp3' },
-                    { title: '对话小冰CEO李笛：大模型的狂欢，该冷静了', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/对话小冰CEO李笛：大模型的狂欢，该冷静了.mp3' },
-                    { title: '对话小冰李笛、蚂蚁徐鹏：大模型最大问题是“雷同”，API商业模式已落伍', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/对话小冰李笛、蚂蚁徐鹏：大模型最大问题是“雷同”，API商业模式已落伍.m4a' },
-                    { title: '小冰CEO李笛：做中国版ChatGPT不是我们的追求', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰CEO李笛：做中国版ChatGPT不是我们的追求.mp3' },
-                    { title: '小冰CEO李笛：别神话ChatGPT，创业公司还玩不转', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰CEO李笛：别神话ChatGPT，创业公司还玩不转.mp3' },
-                    { title: '小冰CEO李笛：和虚拟偶像相比AI Being还有更多被忽视的价值', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰CEO李笛：和虚拟偶像相比AI Being还有更多被忽视的价值.mp3' },
-                    { title: '小冰CEO李笛：大模型商业化像扫雷 REAL科技大会2', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰CEO李笛：大模型商业化像扫雷 REAL科技大会2.mp3' },
-                    { title: '小冰李笛讲点真心话：只做大模型不追求商业模式是很难生存的', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰李笛讲点真心话：只做大模型不追求商业模式是很难生存的.m4a' },
-                    { title: '小冰李笛：为什么虚拟人必须“砍掉”中之人？', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰李笛：为什么虚拟人必须“砍掉”中之人？.m4a' },
-                    { title: '小冰李笛：大模型你冷静一下 AI20人', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰李笛：大模型你冷静一下 AI20人.mp3' },
-                    { title: '小冰李笛：调用API的商业模式不适用于未来 MEET 2024', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/小冰李笛：调用API的商业模式不适用于未来 MEET 2024.m4a' },
-                    { title: '新经济视见丨小冰公司CEO李笛：热潮之后的反馈帮助大模型发挥更大效用丨封面天天见', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/新经济视见丨小冰公司CEO李笛：热潮之后的反馈帮助大模型发挥更大效用丨封面天天见.mp3' },
                     { title: '视频加餐16 相比OpenAI我们发展AI还具备哪些优势 小冰李笛', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/视频加餐16 相比OpenAI我们发展AI还具备哪些优势 小冰李笛.mp3' },
-                    { title: '请回答2022丨小冰公司CEO李笛：数智人赛道当前重点是破解落地应用难题丨封面天天见', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/请回答2022丨小冰公司CEO李笛：数智人赛道当前重点是破解落地应用难题丨封面天天见.mp3' },
-                    { title: '请回答2023 小冰公司CEO李笛：新技术范式带来的变化层出不穷 封面天天见', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/请回答2023 小冰公司CEO李笛：新技术范式带来的变化层出不穷 封面天天见.mp3' },
-                    { title: '请回答2024 小冰公司CEO李笛：技术变革只是一个时代变革的助推', url: 'resources_Xice_3D空间/Xice_音频/Xice_访谈/请回答2024 小冰公司CEO李笛：技术变革只是一个时代变革的助推.mp3' }
                 ],
                 voice: [
                     { title: '表白有风险，人类需谨慎。', url: 'resources_Xice_3D空间/Xice_音频/小冰电台/001_表白有风险，人类需谨慎。_2017-03-25/audio.mp3' },
