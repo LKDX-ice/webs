@@ -3125,17 +3125,15 @@
 // 因Github文件数量及大小限制，仅以部分文件展示效果
             (function(){
                 var nc = document.createElement('canvas');
-                nc.width = 1024; nc.height = 128;
+                nc.width = 1024; nc.height = 100;
                 var ctx = nc.getContext('2d');
-                ctx.fillStyle = 'rgba(200,180,150,0.88)';
-                ctx.fillRect(0,0,1024,128);
                 ctx.fillStyle = '#1a0f0a';
-                ctx.font = 'bold 36px Microsoft YaHei,SimHei,sans-serif';
+                ctx.font = 'bold 27px Microsoft YaHei,SimHei,sans-serif';
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText('因Github文件数量及大小限制，本网页仅以部分文件展示效果', 512, 64);
+                ctx.fillText('因Github文件数量及大小限制，仅以部分文件展示效果，加载可能较慢，多试几次', 512, 50);
                 var tex = new THREE.CanvasTexture(nc);
                 var mat = new THREE.MeshBasicMaterial({
-                    map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide
+                    map: tex, transparent: true, depthWrite: false, side: THREE.FrontSide
                 });
                 var notice = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.18, 0.01), mat);
                 notice.position.set(0, 4.7, 1.22);
