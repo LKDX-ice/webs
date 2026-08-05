@@ -2683,7 +2683,7 @@
                     { img: assetUrl('resources_Xice_3D空间/Xice_图片/空间配置_图片/周边手机支架正面.png'), pos: { x: -0.12, y: 0.5, z: 1.2 }, size: { w: 0.4, h: 0.4 } },
                     { img: assetUrl('resources_Xice_3D空间/Xice_图片/空间配置_图片/小冰周边_风扇.png'), pos: { x: 0.4, y: 1.9, z: -0.2 }, size: { w: 0.4, h: 0.7 } },
                     { img: assetUrl('resources_Xice_3D空间/Xice_图片/书本配置_图片/海边封面.png'), pos: { x: -1.7, y: 1.9, z: -0.3 }, size: { w: 1.0, h: 1.0 } },
-                    { img: assetUrl('resources_Xice_3D空间/Xice_图片/空间配置_图片/解释说明.png'), pos: { x: -0.5, y: 4.25, z: -1.0 }, size: { w: 2.5, h: 0.6 } },
+                    { img: assetUrl('resources_Xice_3D空间/Xice_图片/空间配置_图片/解释说明.png'), pos: { x: -0.5, y: 4.25, z: -1.0 }, size: { w: 2.5, h: 0.65 } },
                 ],
                 leftWallDecor: [
                     { img: assetUrl('resources_Xice_3D空间/Xice_图片/空间配置_图片/小冰发烧友海报.jpg'), pos: { x: -3.3, y: 4.3, z: 1.5 }, size: { w: 1.0, h: 1.5 } },
@@ -2735,11 +2735,11 @@
             camera.lookAt(0, 2.2, 0);
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(Math.max(window.devicePixelRatio, 4));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
+            renderer.toneMappingExposure = 0.9;
             container.appendChild(renderer.domElement);
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enabled = false;
@@ -2800,6 +2800,9 @@
                 const tex = textureLoader.load(
                     url,
                     function (texture) {
+                        texture.minFilter = THREE.LinearMipMapLinearFilter;
+                        texture.magFilter = THREE.LinearFilter;
+                        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
                         texture.premultiplyAlpha = false;
                         texture.needsUpdate = true;
                     },
@@ -2807,10 +2810,16 @@
                     function (err) {
                         console.warn('纹理加载失败:', url, err);
                         tex.image = missingTex.image;
+                        tex.minFilter = THREE.LinearMipMapLinearFilter;
+                        tex.magFilter = THREE.LinearFilter;
+                        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
                         tex.premultiplyAlpha = false;
                         tex.needsUpdate = true;
                     }
                 );
+                tex.minFilter = THREE.LinearMipMapLinearFilter;
+                tex.magFilter = THREE.LinearFilter;
+                tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
                 tex.premultiplyAlpha = false;
                 tex.colorSpace = THREE.SRGBColorSpace || 'srgb';
                 return tex;
