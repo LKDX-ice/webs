@@ -3086,16 +3086,16 @@
                 roughness: 0.7,
                 metalness: 0.05
             });
-            const sideGeo = new THREE.BoxGeometry(0.3, 5.2, 2.6);
+            const sideGeo = new THREE.BoxGeometry(0.3, 4.8, 2.6);
 
             const leftSide = new THREE.Mesh(sideGeo, sideMat);
-            leftSide.position.set(-2.4, 2.6, 0);
+            leftSide.position.set(-2.401, 2.6, 0);
             leftSide.castShadow = true;
             leftSide.receiveShadow = true;
             shelfGroup.add(leftSide);
 
             const rightSide = new THREE.Mesh(sideGeo, sideMat);
-            rightSide.position.set(2.4, 2.6, 0);
+            rightSide.position.set(2.401, 2.6, 0);
             rightSide.castShadow = true;
             rightSide.receiveShadow = true;
             shelfGroup.add(rightSide);
@@ -3159,7 +3159,10 @@
                 opacity: 0.25
             });
             const backBoard = new THREE.Mesh(new THREE.BoxGeometry(4.8, 5.0, 0.08), backMat);
-            backBoard.position.set(0, 2.6, -1.26);
+            backBoard.position.set(0, 2.6, -1.28);
+            backBoard.material.polygonOffset = true;
+            backBoard.material.polygonOffsetFactor = 2;
+            backBoard.material.polygonOffsetUnits = 2;
             shelfGroup.add(backBoard);
 
             // ================================================================
