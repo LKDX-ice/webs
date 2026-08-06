@@ -2735,7 +2735,8 @@
             camera.lookAt(0, 2.2, 0);
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.max(window.devicePixelRatio, 4));
+            // 动态DPR：正常显示限制为2倍，降低GPU负载；浏览器放大时提升到4倍
+            renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -5534,11 +5535,23 @@
 
             document.getElementById('close-hotzone').addEventListener('mouseenter', triggerClose);
 
+            function updateRendererDPR() {
+                const zoom = window.visualViewport ? window.visualViewport.scale : 1;
+                const dpr = zoom > 1.25
+                    ? Math.max(window.devicePixelRatio * zoom, 4)
+                    : Math.max(window.devicePixelRatio, 2);
+                renderer.setPixelRatio(dpr);
+            }
+
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                updateRendererDPR();
             });
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', updateRendererDPR);
+            }
             window.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
                     if (videoMode) exitVideoMode();
